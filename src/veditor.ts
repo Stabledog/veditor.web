@@ -13,7 +13,11 @@ import { hashTarget } from './util';
 
 export interface VEditorCallbacks {
   onSave: () => Promise<void>;
-  onQuit: (force: boolean) => void;
+  /** Called when the quit is confirmed (or forced). The app should navigate away / close. */
+  onQuit: () => void;
+  /** Called before dirty-check on non-forced quit. Return false to veto the close.
+   *  The app can also call markDirty() here to influence the dirty check. */
+  onCloseRequest?: () => boolean | void;
 }
 
 export interface VEditorOptions {
@@ -80,11 +84,69 @@ function setWrapPref(prefix: string, on: boolean): void {
 // ---------------------------------------------------------------------------
 
 let editorView: EditorView | null = null;
+let dirtyFlag = false;
 const wrapCompartment = new Compartment();
+
+// ---------------------------------------------------------------------------
+// Quit flow
+// ---------------------------------------------------------------------------
+
+function handleQuitRequest(
+  force: boolean,
+  originalContent: string,
+  parent: HTMLElement,
+  callbacks: VEditorCallbacks,
+): void {
+  if (force) {
+    callbacks.onQuit();
+    return;
+  }
+  // Let the app vote on the close
+  if (callbacks.onCloseRequest) {
+    const result = callbacks.onCloseRequest();
+    if (result === false) return; // vetoed
+  }
+  // Check dirty (editor content OR app-set flag)
+  if (dirtyFlag || isEditorDirty(originalContent)) {
+    showConfirmBar(parent, 'Unsaved changes. Discard?', () => callbacks.onQuit());
+    return;
+  }
+  callbacks.onQuit();
+}
+
+function showConfirmBar(parent: HTMLElement, message: string, onConfirm: () => void): void {
+  parent.querySelector('.veditor-confirm-bar')?.remove();
+
+  const bar = document.createElement('div');
+  bar.className = 'veditor-confirm-bar';
+  bar.innerHTML = `
+    <span>${message}</span>
+    <button class="veditor-confirm-btn veditor-confirm-yes">Yes</button>
+    <button class="veditor-confirm-btn veditor-confirm-no">No</button>
+  `;
+  parent.prepend(bar);
+
+  const dismiss = () => { bar.remove(); document.removeEventListener('keydown', onKey, true); };
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === 'y' || e.key === 'Enter') { e.stopPropagation(); e.preventDefault(); dismiss(); onConfirm(); }
+    else if (e.key === 'n' || e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); dismiss(); }
+  };
+  // Capture phase so we intercept before CodeMirror consumes the keystroke
+  document.addEventListener('keydown', onKey, true);
+
+  bar.querySelector('.veditor-confirm-yes')!.addEventListener('click', () => { dismiss(); onConfirm(); });
+  bar.querySelector('.veditor-confirm-no')!.addEventListener('click', () => { dismiss(); });
+}
 
 // ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
+
+/** Mark the editor as dirty from external state (e.g. a changed title field).
+ *  Typically called from onCloseRequest. Resets after each quit flow. */
+export function markDirty(): void {
+  dirtyFlag = true;
+}
 
 export function createEditor(
   parent: HTMLElement,
@@ -93,6 +155,7 @@ export function createEditor(
   options?: VEditorOptions,
 ): EditorView {
   destroyEditor();
+  dirtyFlag = false;
 
   const prefix = options?.storagePrefix ?? 'veditor';
   const enableLinks = options?.clickableLinks ?? true;
@@ -105,12 +168,12 @@ export function createEditor(
 
   Vim.defineEx('q', 'q', (_cm: unknown, params: { argString?: string; bang?: boolean }) => {
     const force = params?.bang ?? false;
-    callbacks.onQuit(force);
+    handleQuitRequest(force, content, parent, callbacks);
   });
 
   Vim.defineEx('wq', 'wq', async () => {
     await callbacks.onSave();
-    callbacks.onQuit(false);
+    handleQuitRequest(false, content, parent, callbacks);
   });
 
   Vim.defineEx('wrap', 'wrap', () => {

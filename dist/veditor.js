@@ -9174,21 +9174,55 @@ function Ga(e) {
 function Ka(e, t) {
 	localStorage.setItem(Wa(e), String(t));
 }
-var $ = null, qa = new Ee();
-function Ja(e, t, n, r) {
-	Qa();
+var $ = null, qa = !1, Ja = new Ee();
+function Ya(e, t, n, r) {
+	if (e) {
+		r.onQuit();
+		return;
+	}
+	if (!(r.onCloseRequest && r.onCloseRequest() === !1)) {
+		if (qa || eo(t)) {
+			Xa(n, "Unsaved changes. Discard?", () => r.onQuit());
+			return;
+		}
+		r.onQuit();
+	}
+}
+function Xa(e, t, n) {
+	e.querySelector(".veditor-confirm-bar")?.remove();
+	let r = document.createElement("div");
+	r.className = "veditor-confirm-bar", r.innerHTML = `
+    <span>${t}</span>
+    <button class="veditor-confirm-btn veditor-confirm-yes">Yes</button>
+    <button class="veditor-confirm-btn veditor-confirm-no">No</button>
+  `, e.prepend(r);
+	let i = () => {
+		r.remove(), document.removeEventListener("keydown", a, !0);
+	}, a = (e) => {
+		e.key === "y" || e.key === "Enter" ? (e.stopPropagation(), e.preventDefault(), i(), n()) : (e.key === "n" || e.key === "Escape") && (e.stopPropagation(), e.preventDefault(), i());
+	};
+	document.addEventListener("keydown", a, !0), r.querySelector(".veditor-confirm-yes").addEventListener("click", () => {
+		i(), n();
+	}), r.querySelector(".veditor-confirm-no").addEventListener("click", () => {
+		i();
+	});
+}
+function Za() {
+	qa = !0;
+}
+function Qa(e, t, n, r) {
+	no(), qa = !1;
 	let i = r?.storagePrefix ?? "veditor", o = r?.clickableLinks ?? !0;
 	if (X.defineEx("w", "w", () => {
 		n.onSave();
-	}), X.defineEx("q", "q", (e, t) => {
-		let r = t?.bang ?? !1;
-		n.onQuit(r);
+	}), X.defineEx("q", "q", (r, i) => {
+		Ya(i?.bang ?? !1, t, e, n);
 	}), X.defineEx("wq", "wq", async () => {
-		await n.onSave(), n.onQuit(!1);
+		await n.onSave(), Ya(!1, t, e, n);
 	}), X.defineEx("wrap", "wrap", () => {
 		if (!$) return;
 		let e = !Ga(i);
-		Ka(i, e), $.dispatch({ effects: qa.reconfigure(e ? v.lineWrapping : []) });
+		Ka(i, e), $.dispatch({ effects: Ja.reconfigure(e ? v.lineWrapping : []) });
 	}), X.map("jk", "<Esc>", "insert"), r?.exCommands) for (let [e, t] of Object.entries(r.exCommands)) X.defineEx(e, e, t);
 	if (r?.normalMappings) for (let [e, t] of Object.entries(r.normalMappings)) {
 		let n = `veditor_${e}`;
@@ -9204,7 +9238,7 @@ function Ja(e, t, n, r) {
 		je({ codeLanguages: Ji }),
 		za,
 		se.of([]),
-		qa.of(Ga(i) ? v.lineWrapping : []),
+		Ja.of(Ga(i) ? v.lineWrapping : []),
 		v.theme({
 			"&": { height: "100%" },
 			".cm-scroller": { overflow: "auto" },
@@ -9237,27 +9271,27 @@ function Ja(e, t, n, r) {
 		}).catch(() => {});
 	}), $.focus(), $;
 }
-function Ya() {
+function $a() {
 	return $ ? $.state.doc.toString() : "";
 }
-function Xa(e) {
-	return Ya() !== e;
+function eo(e) {
+	return $a() !== e;
 }
-function Za() {
+function to() {
 	$?.focus();
 }
-function Qa() {
+function no() {
 	$ &&= ($.destroy(), null);
 }
-function $a() {
+function ro() {
 	$ && $.contentDOM.dispatchEvent(new KeyboardEvent("keydown", {
 		key: "Escape",
 		code: "Escape",
 		bubbles: !0
 	}));
 }
-function eo(e) {
+function io(e) {
 	$ && X.handleEx($, e);
 }
 //#endregion
-export { Ja as createEditor, Qa as destroyEditor, eo as executeExCommand, $a as exitInsertMode, Za as focusEditor, Ya as getEditorContent, Va as hashTarget, Xa as isEditorDirty };
+export { Qa as createEditor, no as destroyEditor, io as executeExCommand, ro as exitInsertMode, to as focusEditor, $a as getEditorContent, Va as hashTarget, eo as isEditorDirty, Za as markDirty };
