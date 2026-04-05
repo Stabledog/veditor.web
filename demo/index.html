@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>veditor demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1e1e2e;
+      color: #cdd6f4;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      background: #181825;
+      border-bottom: 1px solid #313244;
+    }
+    header h1 { font-size: 1rem; color: #89b4fa; }
+    #status { font-size: 0.875rem; margin-left: auto; }
+    #status.success { color: #a6e3a1; }
+    #status.error { color: #f38ba8; }
+    #editor-container { flex: 1; overflow: hidden; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>veditor demo</h1>
+    <span id="status"></span>
+  </header>
+  <div id="editor-container"></div>
+
+  <script type="module">
+    // In production, host apps import from the Pages CDN URL.
+    // For local dev, import from the source directly via Vite.
+    import { createEditor, getEditorContent, isEditorDirty } from '../src/index.ts';
+
+    const sampleContent = `# veditor demo
+
+This is a standalone test of the veditor component.
+
+## Vim commands
+
+- \`:w\` — save (logs to console)
+- \`:q\` — quit (logs to console)
+- \`:wq\` — save and quit
+- \`:wrap\` — toggle line wrapping
+- \`jk\` — escape from insert mode
+- \`Ctrl+Click\` — open URL: https://example.com
+
+## Test
+
+Try editing this text and using the vim commands above.
+`;
+
+    const status = document.getElementById('status');
+    let originalContent = sampleContent;
+
+    function showStatus(msg, isError = false) {
+      status.textContent = msg;
+      status.className = isError ? 'error' : 'success';
+      if (!isError) {
+        setTimeout(() => { if (status.textContent === msg) status.textContent = ''; }, 2000);
+      }
+    }
+
+    createEditor(document.getElementById('editor-container'), sampleContent, {
+      onSave: async () => {
+        const content = getEditorContent();
+        if (content === originalContent) {
+          showStatus('No changes');
+          return;
+        }
+        console.log('Save:', content);
+        originalContent = content;
+        showStatus('Saved (to console)');
+      },
+      onQuit: (force) => {
+        if (!force && isEditorDirty(originalContent)) {
+          showStatus('Unsaved changes! Use :q! to force quit', true);
+          return;
+        }
+        showStatus('Quit (nowhere to go in demo)');
+      },
+    }, {
+      storagePrefix: 'veditor_demo',
+    });
+  </script>
+</body>
+</html>

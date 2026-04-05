@@ -1,0 +1,16 @@
+//#region node_modules/@codemirror/legacy-modes/mode/diff.js
+var e = {
+	"+": "inserted",
+	"-": "deleted",
+	"@": "meta"
+}, t = {
+	name: "diff",
+	token: function(t) {
+		var n = t.string.search(/[\t ]+?$/);
+		if (!t.sol() || n === 0) return t.skipToEnd(), ("error " + (e[t.string.charAt(0)] || "")).replace(/ $/, "");
+		var r = e[t.peek()] || t.skipToEnd();
+		return n === -1 ? t.skipToEnd() : t.pos = n, r;
+	}
+};
+//#endregion
+export { t as diff };
