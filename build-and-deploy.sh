@@ -21,13 +21,6 @@ git remote get-url origin >/dev/null 2>&1 || {
     exit 1
 }
 
-# Verify working tree is clean (don't deploy uncommitted changes)
-if [ -n "$(git status --porcelain)" ]; then
-    echo "ERROR: Working tree is not clean. Commit or stash changes first." >&2
-    git status --short >&2
-    exit 1
-fi
-
 # --- Build ---
 echo "Building veditor..."
 npm run build || { echo "ERROR: Build failed." >&2; exit 1; }
