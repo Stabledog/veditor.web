@@ -4,7 +4,6 @@ export {
   createEditor,
   getEditorContent,
   isEditorDirty,
-  markDirty,
   focusEditor,
   destroyEditor,
   exitInsertMode,

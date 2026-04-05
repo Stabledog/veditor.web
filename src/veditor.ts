@@ -15,9 +15,9 @@ export interface VEditorCallbacks {
   onSave: () => Promise<void>;
   /** Called when the quit is confirmed (or forced). The app should navigate away / close. */
   onQuit: () => void;
-  /** Called before dirty-check on non-forced quit. Return false to veto the close.
-   *  The app can also call markDirty() here to influence the dirty check. */
-  onCloseRequest?: () => boolean | void;
+  /** If provided, the quit flow checks this alongside the editor's own dirty state.
+   *  Return true if the app has unsaved state the editor doesn't know about. */
+  isAppDirty?: () => boolean;
 }
 
 export interface VEditorOptions {
@@ -84,7 +84,7 @@ function setWrapPref(prefix: string, on: boolean): void {
 // ---------------------------------------------------------------------------
 
 let editorView: EditorView | null = null;
-let dirtyFlag = false;
+let savedContent = '';  // baseline for dirty-checking; updated on save
 const wrapCompartment = new Compartment();
 
 // ---------------------------------------------------------------------------
@@ -93,7 +93,6 @@ const wrapCompartment = new Compartment();
 
 function handleQuitRequest(
   force: boolean,
-  originalContent: string,
   parent: HTMLElement,
   callbacks: VEditorCallbacks,
 ): void {
@@ -101,13 +100,7 @@ function handleQuitRequest(
     callbacks.onQuit();
     return;
   }
-  // Let the app vote on the close
-  if (callbacks.onCloseRequest) {
-    const result = callbacks.onCloseRequest();
-    if (result === false) return; // vetoed
-  }
-  // Check dirty (editor content OR app-set flag)
-  if (dirtyFlag || isEditorDirty(originalContent)) {
+  if (isEditorDirty(savedContent) || callbacks.isAppDirty?.()) {
     showConfirmBar(parent, 'Unsaved changes. Discard?', () => callbacks.onQuit());
     return;
   }
@@ -142,12 +135,6 @@ function showConfirmBar(parent: HTMLElement, message: string, onConfirm: () => v
 // Public API
 // ---------------------------------------------------------------------------
 
-/** Mark the editor as dirty from external state (e.g. a changed title field).
- *  Typically called from onCloseRequest. Resets after each quit flow. */
-export function markDirty(): void {
-  dirtyFlag = true;
-}
-
 export function createEditor(
   parent: HTMLElement,
   content: string,
@@ -155,25 +142,27 @@ export function createEditor(
   options?: VEditorOptions,
 ): EditorView {
   destroyEditor();
-  dirtyFlag = false;
+  savedContent = content;
 
   const prefix = options?.storagePrefix ?? 'veditor';
   const enableLinks = options?.clickableLinks ?? true;
 
   // --- Vim ex commands ---
 
-  Vim.defineEx('w', 'w', () => {
-    callbacks.onSave();
+  Vim.defineEx('w', 'w', async () => {
+    await callbacks.onSave();
+    savedContent = getEditorContent();
   });
 
   Vim.defineEx('q', 'q', (_cm: unknown, params: { argString?: string; bang?: boolean }) => {
     const force = params?.bang ?? false;
-    handleQuitRequest(force, content, parent, callbacks);
+    handleQuitRequest(force, parent, callbacks);
   });
 
   Vim.defineEx('wq', 'wq', async () => {
     await callbacks.onSave();
-    handleQuitRequest(false, content, parent, callbacks);
+    savedContent = getEditorContent();
+    handleQuitRequest(false, parent, callbacks);
   });
 
   Vim.defineEx('wrap', 'wrap', () => {
