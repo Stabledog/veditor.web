@@ -9174,19 +9174,17 @@ function Ga(e) {
 function Ka(e, t) {
 	localStorage.setItem(Wa(e), String(t));
 }
-var $ = null, qa = !1, Ja = new Ee();
-function Ya(e, t, n, r) {
+var $ = null, qa = "", Ja = new Ee();
+function Ya(e, t, n) {
 	if (e) {
-		r.onQuit();
+		n.onQuit();
 		return;
 	}
-	if (!(r.onCloseRequest && r.onCloseRequest() === !1)) {
-		if (qa || eo(t)) {
-			Xa(n, "Unsaved changes. Discard?", () => r.onQuit());
-			return;
-		}
-		r.onQuit();
+	if ($a(qa) || n.isAppDirty?.()) {
+		Xa(t, "Unsaved changes. Discard?", () => n.onQuit());
+		return;
 	}
+	n.onQuit();
 }
 function Xa(e, t, n) {
 	e.querySelector(".veditor-confirm-bar")?.remove();
@@ -9207,18 +9205,15 @@ function Xa(e, t, n) {
 		i();
 	});
 }
-function Za() {
-	qa = !0;
-}
-function Qa(e, t, n, r) {
-	no(), qa = !1;
+function Za(e, t, n, r) {
+	to(), qa = t;
 	let i = r?.storagePrefix ?? "veditor", o = r?.clickableLinks ?? !0;
-	if (X.defineEx("w", "w", () => {
-		n.onSave();
-	}), X.defineEx("q", "q", (r, i) => {
-		Ya(i?.bang ?? !1, t, e, n);
+	if (X.defineEx("w", "w", async () => {
+		await n.onSave(), qa = Qa();
+	}), X.defineEx("q", "q", (t, r) => {
+		Ya(r?.bang ?? !1, e, n);
 	}), X.defineEx("wq", "wq", async () => {
-		await n.onSave(), Ya(!1, t, e, n);
+		await n.onSave(), qa = Qa(), Ya(!1, e, n);
 	}), X.defineEx("wrap", "wrap", () => {
 		if (!$) return;
 		let e = !Ga(i);
@@ -9271,27 +9266,27 @@ function Qa(e, t, n, r) {
 		}).catch(() => {});
 	}), $.focus(), $;
 }
-function $a() {
+function Qa() {
 	return $ ? $.state.doc.toString() : "";
 }
-function eo(e) {
-	return $a() !== e;
+function $a(e) {
+	return Qa() !== e;
 }
-function to() {
+function eo() {
 	$?.focus();
 }
-function no() {
+function to() {
 	$ &&= ($.destroy(), null);
 }
-function ro() {
+function no() {
 	$ && $.contentDOM.dispatchEvent(new KeyboardEvent("keydown", {
 		key: "Escape",
 		code: "Escape",
 		bubbles: !0
 	}));
 }
-function io(e) {
+function ro(e) {
 	$ && X.handleEx($, e);
 }
 //#endregion
-export { Qa as createEditor, no as destroyEditor, io as executeExCommand, ro as exitInsertMode, to as focusEditor, $a as getEditorContent, Va as hashTarget, eo as isEditorDirty, Za as markDirty };
+export { Za as createEditor, to as destroyEditor, ro as executeExCommand, no as exitInsertMode, eo as focusEditor, Qa as getEditorContent, Va as hashTarget, $a as isEditorDirty };
