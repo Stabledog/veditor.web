@@ -1,0 +1,55 @@
+name: Deploy veditor.web
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'vite.config.ts'
+      - 'tsconfig.json'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          npx gh-pages -d dist
+
+  notify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger notehub.web rebuild
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.DISPATCH_TOKEN }}" \
+            https://api.github.com/repos/Stabledog/notehub.web/dispatches \
+            -d '{"event_type": "veditor-updated"}'
+
+      - name: Trigger metabrowse rebuild
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.DISPATCH_TOKEN }}" \
+            https://api.github.com/repos/Stabledog/metabrowse/dispatches \
+            -d '{"event_type": "veditor-updated"}'
