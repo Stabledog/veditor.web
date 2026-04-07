@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorState, type Extension } from '@codemirror/state';
-import { vim, Vim } from '@replit/codemirror-vim';
+import { vim, Vim, getCM } from '@replit/codemirror-vim';
 import { oneDark } from '@codemirror/theme-one-dark';
 
 // ---------------------------------------------------------------------------
@@ -133,11 +133,6 @@ export function createVimInput(
 
   const view = new EditorView({ state, parent: wrapper });
 
-  // Enter insert mode if requested
-  if (options?.initialInsert) {
-    Vim.handleKey(view as any, 'i', 'mapping');
-  }
-
   const handle: VimInputHandle = {
     getValue() {
       return view.state.doc.toString();
@@ -149,6 +144,11 @@ export function createVimInput(
     },
     focus() {
       view.focus();
+      // Enter insert mode after focus so the vim adapter is initialized
+      if (options?.initialInsert) {
+        const cm = getCM(view);
+        if (cm) Vim.handleKey(cm, 'i', 'mapping');
+      }
     },
     destroy() {
       view.destroy();
