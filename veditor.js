@@ -9181,31 +9181,31 @@ function Ya(e, t, n) {
 		return;
 	}
 	if ($a(qa) || n.isAppDirty?.()) {
-		Xa(t, "Unsaved changes — [s]ave & quit, [y]es discard, [n]o cancel", () => n.onQuit(), async () => {
+		Xa(t, () => n.onQuit(), async () => {
 			await n.onSave(), n.onQuit();
 		});
 		return;
 	}
 	n.onQuit();
 }
-function Xa(e, t, n, r) {
+function Xa(e, t, n) {
 	e.querySelector(".veditor-confirm-bar")?.remove();
-	let i = document.createElement("div");
+	let r = (e, t) => e.slice(0, t) + `<u>${e[t]}</u>` + e.slice(t + 1), i = document.createElement("div");
 	i.className = "veditor-confirm-bar", i.innerHTML = `
-    <span>${t}</span>
-    ${r ? "<button class=\"veditor-confirm-btn veditor-confirm-save\">Save &amp; Quit</button>" : ""}
-    <button class="veditor-confirm-btn veditor-confirm-yes">Discard</button>
-    <button class="veditor-confirm-btn veditor-confirm-no">Cancel</button>
+    <span>Unsaved changes —</span>
+    ${n ? `<button class="veditor-confirm-btn veditor-confirm-save">${r("Save & Quit", 0)}</button>` : ""}
+    <button class="veditor-confirm-btn veditor-confirm-yes">${r("Discard", 0)}</button>
+    <button class="veditor-confirm-btn veditor-confirm-no">${r("Cancel", 0)}</button>
   `, e.prepend(i);
 	let a = () => {
 		i.remove(), document.removeEventListener("keydown", o, !0);
 	}, o = (e) => {
-		e.key === "s" && r ? (e.stopPropagation(), e.preventDefault(), a(), r()) : e.key === "y" || e.key === "Enter" ? (e.stopPropagation(), e.preventDefault(), a(), n()) : (e.key === "n" || e.key === "Escape") && (e.stopPropagation(), e.preventDefault(), a());
+		e.key === "s" && n ? (e.stopPropagation(), e.preventDefault(), a(), n()) : e.key === "d" ? (e.stopPropagation(), e.preventDefault(), a(), t()) : (e.key === "c" || e.key === "Escape") && (e.stopPropagation(), e.preventDefault(), a());
 	};
-	document.addEventListener("keydown", o, !0), r && i.querySelector(".veditor-confirm-save").addEventListener("click", () => {
-		a(), r();
-	}), i.querySelector(".veditor-confirm-yes").addEventListener("click", () => {
+	document.addEventListener("keydown", o, !0), n && i.querySelector(".veditor-confirm-save").addEventListener("click", () => {
 		a(), n();
+	}), i.querySelector(".veditor-confirm-yes").addEventListener("click", () => {
+		a(), t();
 	}), i.querySelector(".veditor-confirm-no").addEventListener("click", () => {
 		a();
 	});
