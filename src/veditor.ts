@@ -1,6 +1,6 @@
 import { EditorView, keymap } from '@codemirror/view';
 import { EditorState, Compartment, type Extension } from '@codemirror/state';
-import { vim, Vim } from '@replit/codemirror-vim';
+import { vim, Vim, getCM } from '@replit/codemirror-vim';
 import { markdown } from '@codemirror/lang-markdown';
 import { languages } from '@codemirror/language-data';
 import { basicSetup } from 'codemirror';
@@ -294,7 +294,10 @@ export function exitInsertMode(): void {
 /** Execute a vim ex command programmatically (e.g., 'w', 'q', 'wq'). */
 export function executeExCommand(cmd: string): void {
   if (!editorView) return;
-  (Vim as Record<string, unknown> as { handleEx: (cm: EditorView, cmd: string) => void }).handleEx(editorView, cmd);
+  const cm = getCM(editorView);
+  if (!cm) return;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (Vim as any).handleEx(cm, cmd);
 }
 
 // ---------------------------------------------------------------------------
