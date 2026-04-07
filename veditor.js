@@ -9299,14 +9299,7 @@ function ro(e) {
 //#region src/vim-input.ts
 function io(e, t) {
 	let n = document.createElement("div");
-	if (n.className = "vim-input", e.appendChild(n), t?.onEnter) {
-		let e = t.onEnter;
-		X.defineAction("vimInput_onEnter", () => e()), X.mapCommand("<CR>", "action", "vimInput_onEnter", {}, { context: "normal" });
-	}
-	if (t?.onEscape) {
-		let e = t.onEscape;
-		X.defineAction("vimInput_onEscape", () => e()), X.mapCommand("<Esc>", "action", "vimInput_onEscape", {}, { context: "normal" });
-	}
+	n.className = "vim-input", e.appendChild(n);
 	let r = v.updateListener.of((e) => {
 		e.docChanged && t?.onChange?.(e.state.doc.toString());
 	}), i = a.transactionFilter.of((e) => e.newDoc.lines > 1 ? {
@@ -9359,7 +9352,9 @@ function io(e, t) {
 		}),
 		parent: n
 	});
-	return {
+	return s.dom.addEventListener("keydown", (e) => {
+		e.key === "Enter" && t?.onEnter ? (e.preventDefault(), e.stopImmediatePropagation(), t.onEnter()) : e.key === "Escape" && t?.onEscape && (e.preventDefault(), e.stopImmediatePropagation(), t.onEscape());
+	}, { capture: !0 }), {
 		getValue() {
 			return s.state.doc.toString();
 		},
