@@ -9292,27 +9292,26 @@ function ro(e) {
 //#region src/vim-input.ts
 function io(e, t) {
 	let n = document.createElement("div");
-	n.className = "vim-input", e.appendChild(n);
-	let r = !0, i = se.of([{
-		key: "Enter",
-		run: () => (t?.onEnter?.(), !0)
-	}]), o = v.updateListener.of((e) => {
-		let t = e.view.dom;
-		r = t.classList.contains("cm-vim-mode-normal") || !t.classList.contains("cm-vim-mode-insert");
-	}), s = v.updateListener.of((e) => {
+	if (n.className = "vim-input", e.appendChild(n), t?.onEnter) {
+		let e = t.onEnter;
+		X.defineAction("vimInput_onEnter", () => e()), X.mapCommand("<CR>", "action", "vimInput_onEnter", {}, { context: "normal" });
+	}
+	if (t?.onEscape) {
+		let e = t.onEscape;
+		X.defineAction("vimInput_onEscape", () => e()), X.mapCommand("<Esc>", "action", "vimInput_onEscape", {}, { context: "normal" });
+	}
+	let r = v.updateListener.of((e) => {
 		e.docChanged && t?.onChange?.(e.state.doc.toString());
-	}), c = a.transactionFilter.of((e) => e.newDoc.lines > 1 ? {
+	}), i = a.transactionFilter.of((e) => e.newDoc.lines > 1 ? {
 		...e,
 		changes: void 0
 	} : e);
 	X.map("jk", "<Esc>", "insert");
-	let l = [
+	let o = [
 		Gi(),
 		za,
+		r,
 		i,
-		o,
-		s,
-		c,
 		v.theme({
 			"&": {
 				height: "auto",
@@ -9345,32 +9344,30 @@ function io(e, t) {
 			"&.cm-focused": { outline: "none" }
 		})
 	];
-	t?.extensions && l.push(...t.extensions);
-	let u = new v({
+	t?.extensions && o.push(...t.extensions);
+	let s = new v({
 		state: a.create({
 			doc: t?.value ?? "",
-			extensions: l
+			extensions: o
 		}),
 		parent: n
 	});
-	return n.addEventListener("keydown", (e) => {
-		e.key === "Escape" && r && t?.onEscape?.();
-	}), {
+	return {
 		getValue() {
-			return u.state.doc.toString();
+			return s.state.doc.toString();
 		},
 		setValue(e) {
-			u.dispatch({ changes: {
+			s.dispatch({ changes: {
 				from: 0,
-				to: u.state.doc.length,
+				to: s.state.doc.length,
 				insert: e
 			} });
 		},
 		focus() {
-			u.focus();
+			s.focus();
 		},
 		destroy() {
-			u.destroy(), n.remove();
+			s.destroy(), n.remove();
 		},
 		dom: n
 	};
