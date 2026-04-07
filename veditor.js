@@ -9359,7 +9359,7 @@ function io(e, t) {
 		}),
 		parent: n
 	});
-	return {
+	return t?.initialInsert && X.handleKey(s, "i", "mapping"), {
 		getValue() {
 			return s.state.doc.toString();
 		},
