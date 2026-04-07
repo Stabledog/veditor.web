@@ -35,6 +35,11 @@
   background: #585b70;
 }
 
+.veditor-confirm-save {
+  border-color: #a6e3a1;
+  color: #a6e3a1;
+}
+
 .veditor-confirm-yes {
   border-color: #f38ba8;
   color: #f38ba8;

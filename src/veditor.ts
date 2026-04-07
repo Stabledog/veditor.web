@@ -101,33 +101,44 @@ function handleQuitRequest(
     return;
   }
   if (isEditorDirty(savedContent) || callbacks.isAppDirty?.()) {
-    showConfirmBar(parent, 'Unsaved changes. Discard?', () => callbacks.onQuit());
+    showConfirmBar(parent, 'Unsaved changes — [s]ave & quit, [y]es discard, [n]o cancel',
+      () => callbacks.onQuit(),
+      async () => { await callbacks.onSave(); callbacks.onQuit(); },
+    );
     return;
   }
   callbacks.onQuit();
 }
 
-function showConfirmBar(parent: HTMLElement, message: string, onConfirm: () => void): void {
+function showConfirmBar(
+  parent: HTMLElement,
+  message: string,
+  onDiscard: () => void,
+  onSaveQuit?: () => void,
+): void {
   parent.querySelector('.veditor-confirm-bar')?.remove();
 
   const bar = document.createElement('div');
   bar.className = 'veditor-confirm-bar';
   bar.innerHTML = `
     <span>${message}</span>
-    <button class="veditor-confirm-btn veditor-confirm-yes">Yes</button>
-    <button class="veditor-confirm-btn veditor-confirm-no">No</button>
+    ${onSaveQuit ? '<button class="veditor-confirm-btn veditor-confirm-save">Save &amp; Quit</button>' : ''}
+    <button class="veditor-confirm-btn veditor-confirm-yes">Discard</button>
+    <button class="veditor-confirm-btn veditor-confirm-no">Cancel</button>
   `;
   parent.prepend(bar);
 
   const dismiss = () => { bar.remove(); document.removeEventListener('keydown', onKey, true); };
   const onKey = (e: KeyboardEvent) => {
-    if (e.key === 'y' || e.key === 'Enter') { e.stopPropagation(); e.preventDefault(); dismiss(); onConfirm(); }
+    if (e.key === 's' && onSaveQuit) { e.stopPropagation(); e.preventDefault(); dismiss(); onSaveQuit(); }
+    else if (e.key === 'y' || e.key === 'Enter') { e.stopPropagation(); e.preventDefault(); dismiss(); onDiscard(); }
     else if (e.key === 'n' || e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); dismiss(); }
   };
   // Capture phase so we intercept before CodeMirror consumes the keystroke
   document.addEventListener('keydown', onKey, true);
 
-  bar.querySelector('.veditor-confirm-yes')!.addEventListener('click', () => { dismiss(); onConfirm(); });
+  if (onSaveQuit) bar.querySelector('.veditor-confirm-save')!.addEventListener('click', () => { dismiss(); onSaveQuit(); });
+  bar.querySelector('.veditor-confirm-yes')!.addEventListener('click', () => { dismiss(); onDiscard(); });
   bar.querySelector('.veditor-confirm-no')!.addEventListener('click', () => { dismiss(); });
 }
 
