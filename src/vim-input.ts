@@ -49,19 +49,6 @@ export function createVimInput(
   wrapper.className = 'vim-input';
   parent.appendChild(wrapper);
 
-  // Register Enter and Escape as vim normal-mode actions so they work
-  // regardless of vim's own bindings for those keys.
-  if (options?.onEnter) {
-    const cb = options.onEnter;
-    Vim.defineAction('vimInput_onEnter', () => cb());
-    Vim.mapCommand('<CR>', 'action', 'vimInput_onEnter', {}, { context: 'normal' });
-  }
-  if (options?.onEscape) {
-    const cb = options.onEscape;
-    Vim.defineAction('vimInput_onEscape', () => cb());
-    Vim.mapCommand('<Esc>', 'action', 'vimInput_onEscape', {}, { context: 'normal' });
-  }
-
   const notifyChange = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
       options?.onChange?.(update.state.doc.toString());
@@ -132,6 +119,22 @@ export function createVimInput(
   });
 
   const view = new EditorView({ state, parent: wrapper });
+
+  // Handle Enter and Escape in capture phase so they fire from any vim mode.
+  // Vim's own domEventHandlers run in the bubble phase on view.dom — capture
+  // fires first and stopImmediatePropagation prevents vim from seeing the key.
+  // This is per-instance (no global Vim action names to collide across instances).
+  view.dom.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Enter' && options?.onEnter) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      options.onEnter();
+    } else if (e.key === 'Escape' && options?.onEscape) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      options.onEscape();
+    }
+  }, { capture: true });
 
   const handle: VimInputHandle = {
     getValue() {
