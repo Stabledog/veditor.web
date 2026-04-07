@@ -18,6 +18,8 @@ export interface VimInputOptions {
   onEscape?: () => void;
   /** Called whenever the value changes */
   onChange?: (value: string) => void;
+  /** Start in insert mode (default: false — starts in normal mode) */
+  initialInsert?: boolean;
   /** Additional CodeMirror extensions */
   extensions?: Extension[];
 }
@@ -130,6 +132,11 @@ export function createVimInput(
   });
 
   const view = new EditorView({ state, parent: wrapper });
+
+  // Enter insert mode if requested
+  if (options?.initialInsert) {
+    Vim.handleKey(view as any, 'i', 'mapping');
+  }
 
   const handle: VimInputHandle = {
     getValue() {
