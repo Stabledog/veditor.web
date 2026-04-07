@@ -13,3 +13,9 @@ export {
 } from './veditor';
 
 export { hashTarget } from './util';
+
+export {
+  createVimInput,
+  type VimInputOptions,
+  type VimInputHandle,
+} from './vim-input';

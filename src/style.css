@@ -39,3 +39,26 @@
   border-color: #f38ba8;
   color: #f38ba8;
 }
+
+/* Vim input — single-line CodeMirror with vim keybindings */
+
+.vim-input {
+  display: inline-block;
+  width: 100%;
+}
+
+.vim-input .cm-editor {
+  height: auto;
+  font-size: inherit;
+  border: 1px solid #585b70;
+  border-radius: 4px;
+  background: #1e1e2e;
+}
+
+.vim-input .cm-editor.cm-focused {
+  border-color: #89b4fa;
+}
+
+.vim-input .cm-content {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
