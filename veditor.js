@@ -9289,4 +9289,91 @@ function ro(e) {
 	$ && X.handleEx($, e);
 }
 //#endregion
-export { Za as createEditor, to as destroyEditor, ro as executeExCommand, no as exitInsertMode, eo as focusEditor, Qa as getEditorContent, Va as hashTarget, $a as isEditorDirty };
+//#region src/vim-input.ts
+function io(e, t) {
+	let n = document.createElement("div");
+	n.className = "vim-input", e.appendChild(n);
+	let r = !0, i = se.of([{
+		key: "Enter",
+		run: () => (t?.onEnter?.(), !0)
+	}]), o = v.updateListener.of((e) => {
+		let t = e.view.dom;
+		r = t.classList.contains("cm-vim-mode-normal") || !t.classList.contains("cm-vim-mode-insert");
+	}), s = v.updateListener.of((e) => {
+		e.docChanged && t?.onChange?.(e.state.doc.toString());
+	}), c = a.transactionFilter.of((e) => e.newDoc.lines > 1 ? {
+		...e,
+		changes: void 0
+	} : e);
+	X.map("jk", "<Esc>", "insert");
+	let l = [
+		Gi(),
+		za,
+		i,
+		o,
+		s,
+		c,
+		v.theme({
+			"&": {
+				height: "auto",
+				maxHeight: "1.8em",
+				overflow: "hidden"
+			},
+			".cm-scroller": {
+				overflow: "hidden",
+				lineHeight: "1.6"
+			},
+			".cm-content": { padding: "2px 4px" },
+			".cm-gutters": { display: "none" },
+			".cm-vim-panel": {
+				background: "#45475a",
+				color: "#cdd6f4",
+				padding: "1px 4px",
+				fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
+				fontSize: "13px"
+			},
+			".cm-vim-panel input": {
+				background: "transparent",
+				border: "none",
+				outline: "none",
+				color: "#cdd6f4",
+				fontFamily: "inherit",
+				fontSize: "inherit"
+			},
+			".cm-activeLine": { backgroundColor: "transparent" },
+			".cm-activeLineGutter": { backgroundColor: "transparent" },
+			"&.cm-focused": { outline: "none" }
+		})
+	];
+	t?.extensions && l.push(...t.extensions);
+	let u = new v({
+		state: a.create({
+			doc: t?.value ?? "",
+			extensions: l
+		}),
+		parent: n
+	});
+	return n.addEventListener("keydown", (e) => {
+		e.key === "Escape" && r && t?.onEscape?.();
+	}), {
+		getValue() {
+			return u.state.doc.toString();
+		},
+		setValue(e) {
+			u.dispatch({ changes: {
+				from: 0,
+				to: u.state.doc.length,
+				insert: e
+			} });
+		},
+		focus() {
+			u.focus();
+		},
+		destroy() {
+			u.destroy(), n.remove();
+		},
+		dom: n
+	};
+}
+//#endregion
+export { Za as createEditor, io as createVimInput, to as destroyEditor, ro as executeExCommand, no as exitInsertMode, eo as focusEditor, Qa as getEditorContent, Va as hashTarget, $a as isEditorDirty };
