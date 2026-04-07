@@ -9286,7 +9286,9 @@ function no() {
 	}));
 }
 function ro(e) {
-	$ && X.handleEx($, e);
+	if (!$) return;
+	let t = Ki($);
+	t && X.handleEx(t, e);
 }
 //#endregion
 //#region src/vim-input.ts
