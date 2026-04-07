@@ -1,4 +1,4 @@
-import { EditorView, keymap } from '@codemirror/view';
+import { EditorView } from '@codemirror/view';
 import { EditorState, type Extension } from '@codemirror/state';
 import { vim, Vim } from '@replit/codemirror-vim';
 import { oneDark } from '@codemirror/theme-one-dark';
@@ -47,26 +47,18 @@ export function createVimInput(
   wrapper.className = 'vim-input';
   parent.appendChild(wrapper);
 
-  // Track whether we're in normal mode to distinguish "first Escape" (exit
-  // insert) from "second Escape" (app-level escape via onEscape callback).
-  let inNormalMode = true;
-
-  const handleEnterEscape = keymap.of([
-    {
-      key: 'Enter',
-      run: () => {
-        options?.onEnter?.();
-        return true;
-      },
-    },
-  ]);
-
-  const listenForModeChange = EditorView.updateListener.of((update) => {
-    // Detect vim mode changes by checking the cm-vim-mode class on the wrapper
-    const cmDom = update.view.dom;
-    inNormalMode = cmDom.classList.contains('cm-vim-mode-normal')
-      || !cmDom.classList.contains('cm-vim-mode-insert');
-  });
+  // Register Enter and Escape as vim normal-mode actions so they work
+  // regardless of vim's own bindings for those keys.
+  if (options?.onEnter) {
+    const cb = options.onEnter;
+    Vim.defineAction('vimInput_onEnter', () => cb());
+    Vim.mapCommand('<CR>', 'action', 'vimInput_onEnter', {}, { context: 'normal' });
+  }
+  if (options?.onEscape) {
+    const cb = options.onEscape;
+    Vim.defineAction('vimInput_onEscape', () => cb());
+    Vim.mapCommand('<Esc>', 'action', 'vimInput_onEscape', {}, { context: 'normal' });
+  }
 
   const notifyChange = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
@@ -88,8 +80,6 @@ export function createVimInput(
   const exts: Extension[] = [
     vim(),
     oneDark,
-    handleEnterEscape,
-    listenForModeChange,
     notifyChange,
     suppressNewline,
     EditorView.theme({
@@ -140,13 +130,6 @@ export function createVimInput(
   });
 
   const view = new EditorView({ state, parent: wrapper });
-
-  // Handle Escape in normal mode → call onEscape
-  wrapper.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && inNormalMode) {
-      options?.onEscape?.();
-    }
-  });
 
   const handle: VimInputHandle = {
     getValue() {
