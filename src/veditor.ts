@@ -101,7 +101,7 @@ function handleQuitRequest(
     return;
   }
   if (isEditorDirty(savedContent) || callbacks.isAppDirty?.()) {
-    showConfirmBar(parent, 'Unsaved changes — [s]ave & quit, [y]es discard, [n]o cancel',
+    showConfirmBar(parent,
       () => callbacks.onQuit(),
       async () => { await callbacks.onSave(); callbacks.onQuit(); },
     );
@@ -112,27 +112,29 @@ function handleQuitRequest(
 
 function showConfirmBar(
   parent: HTMLElement,
-  message: string,
   onDiscard: () => void,
   onSaveQuit?: () => void,
 ): void {
   parent.querySelector('.veditor-confirm-bar')?.remove();
 
+  const underline = (label: string, idx: number) =>
+    label.slice(0, idx) + `<u>${label[idx]}</u>` + label.slice(idx + 1);
+
   const bar = document.createElement('div');
   bar.className = 'veditor-confirm-bar';
   bar.innerHTML = `
-    <span>${message}</span>
-    ${onSaveQuit ? '<button class="veditor-confirm-btn veditor-confirm-save">Save &amp; Quit</button>' : ''}
-    <button class="veditor-confirm-btn veditor-confirm-yes">Discard</button>
-    <button class="veditor-confirm-btn veditor-confirm-no">Cancel</button>
+    <span>Unsaved changes —</span>
+    ${onSaveQuit ? `<button class="veditor-confirm-btn veditor-confirm-save">${underline('Save & Quit', 0)}</button>` : ''}
+    <button class="veditor-confirm-btn veditor-confirm-yes">${underline('Discard', 0)}</button>
+    <button class="veditor-confirm-btn veditor-confirm-no">${underline('Cancel', 0)}</button>
   `;
   parent.prepend(bar);
 
   const dismiss = () => { bar.remove(); document.removeEventListener('keydown', onKey, true); };
   const onKey = (e: KeyboardEvent) => {
     if (e.key === 's' && onSaveQuit) { e.stopPropagation(); e.preventDefault(); dismiss(); onSaveQuit(); }
-    else if (e.key === 'y' || e.key === 'Enter') { e.stopPropagation(); e.preventDefault(); dismiss(); onDiscard(); }
-    else if (e.key === 'n' || e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); dismiss(); }
+    else if (e.key === 'd') { e.stopPropagation(); e.preventDefault(); dismiss(); onDiscard(); }
+    else if (e.key === 'c' || e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); dismiss(); }
   };
   // Capture phase so we intercept before CodeMirror consumes the keystroke
   document.addEventListener('keydown', onKey, true);
