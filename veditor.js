@@ -9181,28 +9181,33 @@ function Ya(e, t, n) {
 		return;
 	}
 	if ($a(qa) || n.isAppDirty?.()) {
-		Xa(t, "Unsaved changes. Discard?", () => n.onQuit());
+		Xa(t, "Unsaved changes — [s]ave & quit, [y]es discard, [n]o cancel", () => n.onQuit(), async () => {
+			await n.onSave(), n.onQuit();
+		});
 		return;
 	}
 	n.onQuit();
 }
-function Xa(e, t, n) {
+function Xa(e, t, n, r) {
 	e.querySelector(".veditor-confirm-bar")?.remove();
-	let r = document.createElement("div");
-	r.className = "veditor-confirm-bar", r.innerHTML = `
+	let i = document.createElement("div");
+	i.className = "veditor-confirm-bar", i.innerHTML = `
     <span>${t}</span>
-    <button class="veditor-confirm-btn veditor-confirm-yes">Yes</button>
-    <button class="veditor-confirm-btn veditor-confirm-no">No</button>
-  `, e.prepend(r);
-	let i = () => {
-		r.remove(), document.removeEventListener("keydown", a, !0);
-	}, a = (e) => {
-		e.key === "y" || e.key === "Enter" ? (e.stopPropagation(), e.preventDefault(), i(), n()) : (e.key === "n" || e.key === "Escape") && (e.stopPropagation(), e.preventDefault(), i());
+    ${r ? "<button class=\"veditor-confirm-btn veditor-confirm-save\">Save &amp; Quit</button>" : ""}
+    <button class="veditor-confirm-btn veditor-confirm-yes">Discard</button>
+    <button class="veditor-confirm-btn veditor-confirm-no">Cancel</button>
+  `, e.prepend(i);
+	let a = () => {
+		i.remove(), document.removeEventListener("keydown", o, !0);
+	}, o = (e) => {
+		e.key === "s" && r ? (e.stopPropagation(), e.preventDefault(), a(), r()) : e.key === "y" || e.key === "Enter" ? (e.stopPropagation(), e.preventDefault(), a(), n()) : (e.key === "n" || e.key === "Escape") && (e.stopPropagation(), e.preventDefault(), a());
 	};
-	document.addEventListener("keydown", a, !0), r.querySelector(".veditor-confirm-yes").addEventListener("click", () => {
-		i(), n();
-	}), r.querySelector(".veditor-confirm-no").addEventListener("click", () => {
-		i();
+	document.addEventListener("keydown", o, !0), r && i.querySelector(".veditor-confirm-save").addEventListener("click", () => {
+		a(), r();
+	}), i.querySelector(".veditor-confirm-yes").addEventListener("click", () => {
+		a(), n();
+	}), i.querySelector(".veditor-confirm-no").addEventListener("click", () => {
+		a();
 	});
 }
 function Za(e, t, n, r) {
