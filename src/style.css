@@ -12,7 +12,7 @@
 /* Dirty indicator — applied to the parent container when content is modified */
 
 .veditor-dirty {
-  border-left: 3px solid #f9e2af;
+  border: 5 px solid red;
 }
 
 /* Confirm bar (shown on dirty quit) */
