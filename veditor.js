@@ -1,6 +1,6 @@
-import { $ as e, Bt as t, C as n, Ct as r, Dt as i, Et as a, F as o, Ft as s, Ht as c, It as l, L as u, Lt as d, M as f, N as p, Nt as m, O as h, Ot as g, Pt as _, Q as v, R as y, Rt as b, S as x, St as ee, T as S, Tt as C, U as w, V as T, Vt as E, X as D, Z as O, _ as te, _t as ne, a as re, at as ie, b as k, bt as ae, ct as oe, dt as se, et as A, f as ce, ft as le, gt as j, ht as ue, it as de, j as fe, jt as pe, k as me, kt as he, l as M, lt as ge, m as _e, mt as N, nt as ve, o as ye, p as be, rt as xe, st as Se, tt as Ce, u as we, ut as Te, wt as Ee, xt as De, yt as P, zt as Oe } from "./dist-C56v8Vz7.js";
-import { i as ke, n as F, o as Ae, r as I } from "./dist-BwfSJsrB.js";
-import { n as je } from "./dist-D9dQhCAz.js";
+import { $ as e, Bt as t, C as n, Ct as r, Dt as i, Et as a, F as o, Ft as s, Ht as c, It as l, L as u, Lt as d, M as f, N as p, Nt as m, O as h, Ot as g, Pt as _, Q as v, R as y, Rt as b, S as x, St as ee, T as S, Tt as C, U as w, V as T, Vt as E, X as D, Z as O, _ as te, _t as ne, a as re, at as ie, b as k, bt as ae, ct as oe, dt as se, et as A, f as ce, ft as le, gt as j, ht as ue, it as de, j as fe, jt as pe, k as me, kt as he, l as M, lt as ge, m as _e, mt as N, nt as ve, o as ye, p as be, rt as xe, st as Se, tt as Ce, u as we, ut as Te, wt as Ee, xt as De, yt as P, zt as Oe } from "./dist-CK9QBJOt.js";
+import { i as ke, n as F, o as Ae, r as I } from "./dist-KlkOukDQ.js";
+import { n as je } from "./dist-C4f5DzeA.js";
 //#region node_modules/@codemirror/search/dist/index.js
 var Me = typeof String.prototype.normalize == "function" ? (e) => e.normalize("NFKD") : (e) => e, Ne = class {
 	constructor(e, t, n = 0, r = e.length, i, a) {
@@ -76,7 +76,7 @@ var Pe = {
 			let t = this.matchPos <= this.to && this.re.exec(this.curLine);
 			if (t) {
 				let n = this.curLineStart + t.index, r = n + t[0].length;
-				if (this.matchPos = V(this.text, r + (n == r ? 1 : 0)), n == this.curLineStart + this.curLine.length && this.nextLine(), (n < r || n > this.value.to) && (!this.test || this.test(n, r, t))) return this.value = {
+				if (this.matchPos = V(this.text, r + +(n == r)), n == this.curLineStart + this.curLine.length && this.nextLine(), (n < r || n > this.value.to) && (!this.test || this.test(n, r, t))) return this.value = {
 					from: n,
 					to: r,
 					match: t
@@ -119,7 +119,7 @@ var Pe = {
 					from: e,
 					to: n,
 					match: t
-				}, this.matchPos = V(this.text, n + (e == n ? 1 : 0)), this;
+				}, this.matchPos = V(this.text, n + +(e == n)), this;
 			}
 			if (this.flat.to == this.to) return this.done = !0, this;
 			this.flat = B.get(this.text, this.flat.from, this.chunkEnd(this.flat.from + this.flat.text.length * 2));
@@ -778,11 +778,11 @@ function Vt(e, { open: t, close: n }, r, i) {
 	return u.slice(f, f + t.length) == t && d.slice(m, m + n.length) == n ? {
 		open: {
 			pos: r + f + t.length,
-			margin: /\s/.test(u.charAt(f + t.length)) ? 1 : 0
+			margin: +!!/\s/.test(u.charAt(f + t.length))
 		},
 		close: {
 			pos: i - p - n.length,
-			margin: /\s/.test(d.charAt(m - 1)) ? 1 : 0
+			margin: +!!/\s/.test(d.charAt(m - 1))
 		}
 	} : null;
 }
@@ -4260,7 +4260,7 @@ function ri(e) {
 			return c ? e.state.vim.visualMode ? Ge(e, c.start, c.end, l) : [c.start, c.end] : null;
 		},
 		repeatLastCharacterSearch: function(e, t, n) {
-			var r = k.lastCharacterSearch, i = n.repeat, a = n.forward === r.forward, o = (r.increment ? 1 : 0) * (a ? -1 : 1);
+			var r = k.lastCharacterSearch, i = n.repeat, a = n.forward === r.forward, o = !!r.increment * (a ? -1 : 1);
 			e.moveH(-o, "char"), n.inclusive = !!a;
 			var s = ct(e, i, a, r.selectedCharacter);
 			return s ? (s.ch += o, s) : (e.moveH(o, "char"), t);
@@ -4531,8 +4531,8 @@ function ri(e) {
 				if (h) {
 					p && h.pop();
 					for (var g = 0; g < h.length; g++) h[g] = h[g] == "" ? " " : h[g];
-					o.ch += n.after ? 1 : 0, o.ch = Math.min(V(e, o.line), o.ch);
-				} else p ? r.visualMode ? i = r.visualLine ? i.slice(0, -1) : "\n" + i.slice(0, i.length - 1) + "\n" : n.after ? (i = "\n" + i.slice(0, i.length - 1), o.ch = V(e, o.line)) : o.ch = 0 : o.ch += n.after ? 1 : 0;
+					o.ch += +!!n.after, o.ch = Math.min(V(e, o.line), o.ch);
+				} else p ? r.visualMode ? i = r.visualLine ? i.slice(0, -1) : "\n" + i.slice(0, i.length - 1) + "\n" : n.after ? (i = "\n" + i.slice(0, i.length - 1), o.ch = V(e, o.line)) : o.ch = 0 : o.ch += +!!n.after;
 				var _;
 				if (r.visualMode) {
 					r.lastPastedText = i;
@@ -4548,7 +4548,7 @@ function ri(e) {
 				} else if (e.replaceRange(i, o), p) {
 					var w = n.after ? o.line + 1 : o.line;
 					_ = new t(w, H(e.getLine(w)));
-				} else _ = L(o), /\n/.test(i) || (_.ch += i.length - (n.after ? 1 : 0));
+				} else _ = L(o), /\n/.test(i) || (_.ch += i.length - +!!n.after);
 				r.visualMode && Ye(e, !1), e.setCursor(_);
 			}
 		},
@@ -4778,7 +4778,7 @@ function ri(e) {
 	function qe(e, n, r, i) {
 		var a = L(n.head), o = L(n.anchor);
 		if (r == "char") {
-			var s = !i && !z(n.head, n.anchor) ? 1 : 0, c = z(n.head, n.anchor) ? 1 : 0;
+			var s = +(!i && !z(n.head, n.anchor)), c = +!!z(n.head, n.anchor);
 			return a = I(n.head, 0, s), o = I(n.anchor, 0, c), {
 				ranges: [{
 					anchor: o,
@@ -5250,7 +5250,7 @@ function ri(e) {
 			"}": "{",
 			"<": "<",
 			">": "<"
-		}[r], c = e.getLine(a.line).charAt(a.ch) === s ? 1 : 0, l = e.scanForBracket(new t(a.line, a.ch + c), -1, void 0, { bracketRegex: o }), u = e.scanForBracket(new t(a.line, a.ch + c), 1, void 0, { bracketRegex: o });
+		}[r], c = +(e.getLine(a.line).charAt(a.ch) === s), l = e.scanForBracket(new t(a.line, a.ch + c), -1, void 0, { bracketRegex: o }), u = e.scanForBracket(new t(a.line, a.ch + c), 1, void 0, { bracketRegex: o });
 		if (!l || !u) return null;
 		var d = l.pos, f = u.pos;
 		if (d.line == f.line && d.ch > f.ch || d.line > f.line) {
@@ -6834,7 +6834,7 @@ function Si(e, t, n, r, i) {
 		var d = e.getLine(u);
 		if (d) {
 			var f = n > 0 ? 0 : d.length - 1, p = n > 0 ? d.length : -1;
-			if (!(d.length > a)) for (u == t.line && (f = t.ch - (n < 0 ? 1 : 0)); f != p; f += n) {
+			if (!(d.length > a)) for (u == t.line && (f = t.ch - +(n < 0)); f != p; f += n) {
 				var m = d.charAt(f);
 				if (c.test(m)) {
 					var h = bi[m];
@@ -7251,7 +7251,7 @@ function Z(e) {
 	return new we(ce.define(e));
 }
 function qi(e) {
-	return import("./dist-Ds21qCLx.js").then((t) => t.sql({ dialect: t[e] }));
+	return import("./dist-BAGwuVHZ.js").then((t) => t.sql({ dialect: t[e] }));
 }
 var Ji = [
 	/* @__PURE__ */ M.of({
@@ -7262,7 +7262,7 @@ var Ji = [
 			"ino"
 		],
 		load() {
-			return import("./dist-Dqqd_SjG.js").then((e) => e.cpp());
+			return import("./dist-BvgxJFSi.js").then((e) => e.cpp());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7279,7 +7279,7 @@ var Ji = [
 			"hxx"
 		],
 		load() {
-			return import("./dist-Dqqd_SjG.js").then((e) => e.cpp());
+			return import("./dist-BvgxJFSi.js").then((e) => e.cpp());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7294,14 +7294,14 @@ var Ji = [
 		name: "CSS",
 		extensions: ["css"],
 		load() {
-			return import("./dist-BKR2rOQp.js").then((e) => e.i).then((e) => e.css());
+			return import("./dist-CRgIQ-6c.js").then((e) => e.i).then((e) => e.css());
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "Go",
 		extensions: ["go"],
 		load() {
-			return import("./dist-CjIsWhw6.js").then((e) => e.go());
+			return import("./dist-BglWUZ1s.js").then((e) => e.go());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7314,14 +7314,14 @@ var Ji = [
 			"hbs"
 		],
 		load() {
-			return import("./dist-CppJM0lj.js").then((e) => e.t).then((e) => e.html());
+			return import("./dist-vWw5T2gM.js").then((e) => e.t).then((e) => e.html());
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "Java",
 		extensions: ["java"],
 		load() {
-			return import("./dist-m5_nTqRI.js").then((e) => e.java());
+			return import("./dist-ndiCxR9U.js").then((e) => e.java());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7337,7 +7337,7 @@ var Ji = [
 			"cjs"
 		],
 		load() {
-			return import("./dist-N5bAzVUW.js").then((e) => e.t).then((e) => e.javascript());
+			return import("./dist-DXJvOlIy.js").then((e) => e.t).then((e) => e.javascript());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7348,7 +7348,7 @@ var Ji = [
 			"jinja2"
 		],
 		load() {
-			return import("./dist-Cr7EPOtY.js").then((e) => e.jinja());
+			return import("./dist-3cPvdrue.js").then((e) => e.jinja());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7356,28 +7356,28 @@ var Ji = [
 		alias: ["json5"],
 		extensions: ["json", "map"],
 		load() {
-			return import("./dist-BE9w8mF-.js").then((e) => e.json());
+			return import("./dist-D26YqCd5.js").then((e) => e.json());
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "JSX",
 		extensions: ["jsx"],
 		load() {
-			return import("./dist-N5bAzVUW.js").then((e) => e.t).then((e) => e.javascript({ jsx: !0 }));
+			return import("./dist-DXJvOlIy.js").then((e) => e.t).then((e) => e.javascript({ jsx: !0 }));
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "LESS",
 		extensions: ["less"],
 		load() {
-			return import("./dist-Du9T0iLk.js").then((e) => e.less());
+			return import("./dist-xTnKw8dg.js").then((e) => e.less());
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "Liquid",
 		extensions: ["liquid"],
 		load() {
-			return import("./dist-BosSwN_s.js").then((e) => e.liquid());
+			return import("./dist-BIzFn0ba.js").then((e) => e.liquid());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7394,7 +7394,7 @@ var Ji = [
 			"mkd"
 		],
 		load() {
-			return import("./dist-D9dQhCAz.js").then((e) => e.t).then((e) => e.markdown());
+			return import("./dist-C4f5DzeA.js").then((e) => e.t).then((e) => e.markdown());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7420,7 +7420,7 @@ var Ji = [
 			"phtml"
 		],
 		load() {
-			return import("./dist-iRse80E6.js").then((e) => e.php());
+			return import("./dist-SyUTRAEc.js").then((e) => e.php());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7446,28 +7446,28 @@ var Ji = [
 		],
 		filename: /^(BUCK|BUILD)$/,
 		load() {
-			return import("./dist-ne2530lX.js").then((e) => e.python());
+			return import("./dist-DHiOvpma.js").then((e) => e.python());
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "Rust",
 		extensions: ["rs"],
 		load() {
-			return import("./dist-CZkqIz4p.js").then((e) => e.rust());
+			return import("./dist-BVhgY_rW.js").then((e) => e.rust());
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "Sass",
 		extensions: ["sass"],
 		load() {
-			return import("./dist-D0awLuZg.js").then((e) => e.sass({ indented: !0 }));
+			return import("./dist-Dc5JS0hj.js").then((e) => e.sass({ indented: !0 }));
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "SCSS",
 		extensions: ["scss"],
 		load() {
-			return import("./dist-D0awLuZg.js").then((e) => e.sass());
+			return import("./dist-Dc5JS0hj.js").then((e) => e.sass());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7487,7 +7487,7 @@ var Ji = [
 		name: "TSX",
 		extensions: ["tsx"],
 		load() {
-			return import("./dist-N5bAzVUW.js").then((e) => e.t).then((e) => e.javascript({
+			return import("./dist-DXJvOlIy.js").then((e) => e.t).then((e) => e.javascript({
 				jsx: !0,
 				typescript: !0
 			}));
@@ -7502,14 +7502,14 @@ var Ji = [
 			"cts"
 		],
 		load() {
-			return import("./dist-N5bAzVUW.js").then((e) => e.t).then((e) => e.javascript({ typescript: !0 }));
+			return import("./dist-DXJvOlIy.js").then((e) => e.t).then((e) => e.javascript({ typescript: !0 }));
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "WebAssembly",
 		extensions: ["wat", "wast"],
 		load() {
-			return import("./dist-CUOA9t9f.js").then((e) => e.wast());
+			return import("./dist-B9oId31z.js").then((e) => e.wast());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7526,7 +7526,7 @@ var Ji = [
 			"svg"
 		],
 		load() {
-			return import("./dist-CvVaTbhs.js").then((e) => e.xml());
+			return import("./dist-DY8u_ySH.js").then((e) => e.xml());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7534,7 +7534,7 @@ var Ji = [
 		alias: ["yml"],
 		extensions: ["yaml", "yml"],
 		load() {
-			return import("./dist-Cffd3v50.js").then((e) => e.yaml());
+			return import("./dist-CS1ZpsQJ.js").then((e) => e.yaml());
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7589,7 +7589,7 @@ var Ji = [
 		alias: ["csharp", "cs"],
 		extensions: ["cs"],
 		load() {
-			return import("./clike-CXfgVuNV.js").then((e) => Z(e.csharp));
+			return import("./clike-BRfujg7B.js").then((e) => Z(e.csharp));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7630,7 +7630,7 @@ var Ji = [
 		alias: ["coffee", "coffee-script"],
 		extensions: ["coffee"],
 		load() {
-			return import("./coffeescript-DNS_tvmg.js").then((e) => Z(e.coffeeScript));
+			return import("./coffeescript-Bo_-E1Fn.js").then((e) => Z(e.coffeeScript));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7649,7 +7649,7 @@ var Ji = [
 		name: "Cypher",
 		extensions: ["cyp", "cypher"],
 		load() {
-			return import("./cypher-jponBgmu.js").then((e) => Z(e.cypher));
+			return import("./cypher-U-Hy2qy1.js").then((e) => Z(e.cypher));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7660,7 +7660,7 @@ var Ji = [
 			"pxi"
 		],
 		load() {
-			return import("./python-98eLONeK.js").then((e) => Z(e.cython));
+			return import("./python-B2ksBFAV.js").then((e) => Z(e.cython));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7674,14 +7674,14 @@ var Ji = [
 		name: "D",
 		extensions: ["d"],
 		load() {
-			return import("./d-DJgtxR8h.js").then((e) => Z(e.d));
+			return import("./d-DmPVrjyh.js").then((e) => Z(e.d));
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "Dart",
 		extensions: ["dart"],
 		load() {
-			return import("./clike-CXfgVuNV.js").then((e) => Z(e.dart));
+			return import("./clike-BRfujg7B.js").then((e) => Z(e.dart));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7726,7 +7726,7 @@ var Ji = [
 		name: "ECL",
 		extensions: ["ecl"],
 		load() {
-			return import("./ecl-CVcB9XOJ.js").then((e) => Z(e.ecl));
+			return import("./ecl-DlikNOCl.js").then((e) => Z(e.ecl));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7760,7 +7760,7 @@ var Ji = [
 	/* @__PURE__ */ M.of({
 		name: "Esper",
 		load() {
-			return import("./sql-_ZRNYlXI.js").then((e) => Z(e.esper));
+			return import("./sql-DeJ-YETY.js").then((e) => Z(e.esper));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7773,7 +7773,7 @@ var Ji = [
 	/* @__PURE__ */ M.of({
 		name: "FCL",
 		load() {
-			return import("./fcl-CGrd0Cdc.js").then((e) => Z(e.fcl));
+			return import("./fcl-BdLoe1w9.js").then((e) => Z(e.fcl));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7827,7 +7827,7 @@ var Ji = [
 		extensions: ["groovy", "gradle"],
 		filename: /^Jenkinsfile$/,
 		load() {
-			return import("./groovy-BY6webwU.js").then((e) => Z(e.groovy));
+			return import("./groovy-Cc8tNndJ.js").then((e) => Z(e.groovy));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7841,14 +7841,14 @@ var Ji = [
 		name: "Haxe",
 		extensions: ["hx"],
 		load() {
-			return import("./haxe-JCCWAi3f.js").then((e) => Z(e.haxe));
+			return import("./haxe-ByNy2nVM.js").then((e) => Z(e.haxe));
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "HXML",
 		extensions: ["hxml"],
 		load() {
-			return import("./haxe-JCCWAi3f.js").then((e) => Z(e.hxml));
+			return import("./haxe-ByNy2nVM.js").then((e) => Z(e.hxml));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7869,7 +7869,7 @@ var Ji = [
 		alias: ["jsonld"],
 		extensions: ["jsonld"],
 		load() {
-			return import("./javascript-C4GhSr-l.js").then((e) => Z(e.jsonld));
+			return import("./javascript-CkVIuUyP.js").then((e) => Z(e.jsonld));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7883,7 +7883,7 @@ var Ji = [
 		name: "Kotlin",
 		extensions: ["kt", "kts"],
 		load() {
-			return import("./clike-CXfgVuNV.js").then((e) => Z(e.kotlin));
+			return import("./clike-BRfujg7B.js").then((e) => Z(e.kotlin));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7898,7 +7898,7 @@ var Ji = [
 		name: "Lua",
 		extensions: ["lua"],
 		load() {
-			return import("./lua-CAhcsB6Z.js").then((e) => Z(e.lua));
+			return import("./lua-CECMVgo8.js").then((e) => Z(e.lua));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7967,7 +7967,7 @@ var Ji = [
 		alias: ["objective-c", "objc"],
 		extensions: ["m"],
 		load() {
-			return import("./clike-CXfgVuNV.js").then((e) => Z(e.objectiveC));
+			return import("./clike-BRfujg7B.js").then((e) => Z(e.objectiveC));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -7975,7 +7975,7 @@ var Ji = [
 		alias: ["objective-c++", "objc++"],
 		extensions: ["mm"],
 		load() {
-			return import("./clike-CXfgVuNV.js").then((e) => Z(e.objectiveCpp));
+			return import("./clike-BRfujg7B.js").then((e) => Z(e.objectiveCpp));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8060,7 +8060,7 @@ var Ji = [
 		alias: ["jade"],
 		extensions: ["pug", "jade"],
 		load() {
-			return import("./pug-CXwBB7lM.js").then((e) => Z(e.pug));
+			return import("./pug-DnYYgLTd.js").then((e) => Z(e.pug));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8074,7 +8074,7 @@ var Ji = [
 		name: "Q",
 		extensions: ["q"],
 		load() {
-			return import("./q-p7T42adv.js").then((e) => Z(e.q));
+			return import("./q-CQAFm9wr.js").then((e) => Z(e.q));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8082,7 +8082,7 @@ var Ji = [
 		alias: ["rscript"],
 		extensions: ["r", "R"],
 		load() {
-			return import("./r-Bnv2l-SS.js").then((e) => Z(e.r));
+			return import("./r-TuJk497E.js").then((e) => Z(e.r));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8124,7 +8124,7 @@ var Ji = [
 		name: "Scala",
 		extensions: ["scala"],
 		load() {
-			return import("./clike-CXfgVuNV.js").then((e) => Z(e.scala));
+			return import("./clike-BRfujg7B.js").then((e) => Z(e.scala));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8188,7 +8188,7 @@ var Ji = [
 		alias: ["sparul"],
 		extensions: ["rq", "sparql"],
 		load() {
-			return import("./sparql-DtI32QO6.js").then((e) => Z(e.sparql));
+			return import("./sparql-C7VZ2_xN.js").then((e) => Z(e.sparql));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8202,7 +8202,7 @@ var Ji = [
 		name: "Squirrel",
 		extensions: ["nut"],
 		load() {
-			return import("./clike-CXfgVuNV.js").then((e) => Z(e.squirrel));
+			return import("./clike-BRfujg7B.js").then((e) => Z(e.squirrel));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8216,7 +8216,7 @@ var Ji = [
 		name: "Swift",
 		extensions: ["swift"],
 		load() {
-			return import("./swift-C6bv4Ziz.js").then((e) => Z(e.swift));
+			return import("./swift-DeEbr0j8.js").then((e) => Z(e.swift));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8245,7 +8245,7 @@ var Ji = [
 			"svh"
 		],
 		load() {
-			return import("./verilog-Cxfw81VZ.js").then((e) => Z(e.verilog));
+			return import("./verilog-DhPg3LuH.js").then((e) => Z(e.verilog));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8320,7 +8320,7 @@ var Ji = [
 		name: "Turtle",
 		extensions: ["ttl"],
 		load() {
-			return import("./turtle-CUXsgg9A.js").then((e) => Z(e.turtle));
+			return import("./turtle-DibV1pol.js").then((e) => Z(e.turtle));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8355,14 +8355,14 @@ var Ji = [
 		name: "Verilog",
 		extensions: ["v"],
 		load() {
-			return import("./verilog-Cxfw81VZ.js").then((e) => Z(e.verilog));
+			return import("./verilog-DhPg3LuH.js").then((e) => Z(e.verilog));
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "VHDL",
 		extensions: ["vhd", "vhdl"],
 		load() {
-			return import("./vhdl-D7mHwF38.js").then((e) => Z(e.vhdl));
+			return import("./vhdl-CJUc9HHg.js").then((e) => Z(e.vhdl));
 		}
 	}),
 	/* @__PURE__ */ M.of({
@@ -8421,13 +8421,13 @@ var Ji = [
 		name: "Vue",
 		extensions: ["vue"],
 		load() {
-			return import("./dist-BDtsKqzQ.js").then((e) => e.vue());
+			return import("./dist-ClNMMcTA.js").then((e) => e.vue());
 		}
 	}),
 	/* @__PURE__ */ M.of({
 		name: "Angular Template",
 		load() {
-			return import("./dist-DNwOppbt.js").then((e) => e.angular());
+			return import("./dist-CHnBxvJA.js").then((e) => e.angular());
 		}
 	})
 ], Yi = class {
@@ -8533,7 +8533,7 @@ var ea = /* @__PURE__ */ m.define(), ta = /* @__PURE__ */ m.define(), na = /* @_
 }), ra = /* @__PURE__ */ D.mark({ class: "cm-lintRange cm-lintRange-active" });
 function ia(e, t, n) {
 	let { diagnostics: r } = e.state.field(Q), i, a = -1, o = -1;
-	r.between(t - (n < 0 ? 1 : 0), t + (n > 0 ? 1 : 0), (e, r, { spec: s }) => {
+	r.between(t - +(n < 0), t + +(n > 0), (e, r, { spec: s }) => {
 		if (t >= e && t <= r && (e == r || (t > e || n > 0) && (t < r || n < 0))) return i = s.diagnostics, a = e, o = r, !1;
 	});
 	let s = e.state.facet(la).tooltipFilter;
@@ -8649,33 +8649,31 @@ var pa = class extends A {
 	}
 }, ha = class e {
 	constructor(e) {
-		this.view = e, this.items = [];
-		let t = (t) => {
-			if (!(t.ctrlKey || t.altKey || t.metaKey)) {
-				if (t.keyCode == 27) sa(this.view), this.view.focus();
-				else if (t.keyCode == 38 || t.keyCode == 33) this.moveSelection((this.selectedIndex - 1 + this.items.length) % this.items.length);
-				else if (t.keyCode == 40 || t.keyCode == 34) this.moveSelection((this.selectedIndex + 1) % this.items.length);
-				else if (t.keyCode == 36) this.moveSelection(0);
-				else if (t.keyCode == 35) this.moveSelection(this.items.length - 1);
-				else if (t.keyCode == 13) this.view.focus();
-				else if (t.keyCode >= 65 && t.keyCode <= 90 && this.selectedIndex >= 0) {
-					let { diagnostic: n } = this.items[this.selectedIndex], r = da(n.actions);
-					for (let i = 0; i < r.length; i++) if (r[i].toUpperCase().charCodeAt(0) == t.keyCode) {
-						let t = Zi(this.view.state.field(Q).diagnostics, n);
-						t && n.actions[i].apply(e, t.from, t.to);
-					}
-				} else return;
-				t.preventDefault();
-			}
-		}, n = (e) => {
-			for (let t = 0; t < this.items.length; t++) this.items[t].dom.contains(e.target) && this.moveSelection(t);
-		};
-		this.list = P("ul", {
+		this.view = e, this.items = [], this.list = P("ul", {
 			tabIndex: 0,
 			role: "listbox",
 			"aria-label": this.view.state.phrase("Diagnostics"),
-			onkeydown: t,
-			onclick: n
+			onkeydown: (t) => {
+				if (!(t.ctrlKey || t.altKey || t.metaKey)) {
+					if (t.keyCode == 27) sa(this.view), this.view.focus();
+					else if (t.keyCode == 38 || t.keyCode == 33) this.moveSelection((this.selectedIndex - 1 + this.items.length) % this.items.length);
+					else if (t.keyCode == 40 || t.keyCode == 34) this.moveSelection((this.selectedIndex + 1) % this.items.length);
+					else if (t.keyCode == 36) this.moveSelection(0);
+					else if (t.keyCode == 35) this.moveSelection(this.items.length - 1);
+					else if (t.keyCode == 13) this.view.focus();
+					else if (t.keyCode >= 65 && t.keyCode <= 90 && this.selectedIndex >= 0) {
+						let { diagnostic: n } = this.items[this.selectedIndex], r = da(n.actions);
+						for (let i = 0; i < r.length; i++) if (r[i].toUpperCase().charCodeAt(0) == t.keyCode) {
+							let t = Zi(this.view.state.field(Q).diagnostics, n);
+							t && n.actions[i].apply(e, t.from, t.to);
+						}
+					} else return;
+					t.preventDefault();
+				}
+			},
+			onclick: (e) => {
+				for (let t = 0; t < this.items.length; t++) this.items[t].dom.contains(e.target) && this.moveSelection(t);
+			}
 		}), this.dom = P("div", { class: "cm-panel-lint" }, this.list, P("button", {
 			type: "button",
 			name: "close",
@@ -9174,21 +9172,26 @@ function Ga(e) {
 function Ka(e, t) {
 	localStorage.setItem(Wa(e), String(t));
 }
-var $ = null, qa = "", Ja = new Ee();
-function Ya(e, t, n) {
+var $ = null, qa = "", Ja = null, Ya = new Ee();
+function Xa() {
+	if (!Ja) return;
+	let e = to(qa);
+	Ja.classList.toggle("veditor-dirty", e);
+}
+function Za(e, t, n) {
 	if (e) {
 		n.onQuit();
 		return;
 	}
-	if ($a(qa) || n.isAppDirty?.()) {
-		Xa(t, () => n.onQuit(), async () => {
+	if (to(qa) || n.isAppDirty?.()) {
+		Qa(t, () => n.onQuit(), async () => {
 			await n.onSave(), n.onQuit();
 		});
 		return;
 	}
 	n.onQuit();
 }
-function Xa(e, t, n) {
+function Qa(e, t, n) {
 	e.querySelector(".veditor-confirm-bar")?.remove();
 	let r = (e, t) => e.slice(0, t) + `<u>${e[t]}</u>` + e.slice(t + 1), i = document.createElement("div");
 	i.className = "veditor-confirm-bar", i.innerHTML = `
@@ -9210,19 +9213,19 @@ function Xa(e, t, n) {
 		a();
 	});
 }
-function Za(e, t, n, r) {
-	to(), qa = t;
+function $a(e, t, n, r) {
+	ro(), qa = t, Ja = e, e.classList.remove("veditor-dirty");
 	let i = r?.storagePrefix ?? "veditor", o = r?.clickableLinks ?? !0;
 	if (X.defineEx("w", "w", async () => {
-		await n.onSave(), qa = Qa();
+		await n.onSave(), qa = eo(), Xa();
 	}), X.defineEx("q", "q", (t, r) => {
-		Ya(r?.bang ?? !1, e, n);
+		Za(r?.bang ?? !1, e, n);
 	}), X.defineEx("wq", "wq", async () => {
-		await n.onSave(), qa = Qa(), Ya(!1, e, n);
+		await n.onSave(), qa = eo(), Xa(), Za(!1, e, n);
 	}), X.defineEx("wrap", "wrap", () => {
 		if (!$) return;
 		let e = !Ga(i);
-		Ka(i, e), $.dispatch({ effects: Ja.reconfigure(e ? v.lineWrapping : []) });
+		Ka(i, e), $.dispatch({ effects: Ya.reconfigure(e ? v.lineWrapping : []) });
 	}), X.map("jk", "<Esc>", "insert"), r?.exCommands) for (let [e, t] of Object.entries(r.exCommands)) X.defineEx(e, e, t);
 	if (r?.normalMappings) for (let [e, t] of Object.entries(r.normalMappings)) {
 		let n = `veditor_${e}`;
@@ -9238,7 +9241,7 @@ function Za(e, t, n, r) {
 		je({ codeLanguages: Ji }),
 		za,
 		se.of([]),
-		Ja.of(Ga(i) ? v.lineWrapping : []),
+		Ya.of(Ga(i) ? v.lineWrapping : []),
 		v.theme({
 			"&": { height: "100%" },
 			".cm-scroller": { overflow: "auto" },
@@ -9259,7 +9262,9 @@ function Za(e, t, n, r) {
 			}
 		})
 	];
-	return o && l.push(Ua), r?.extensions && l.push(...r.extensions), $ = new v({
+	return l.push(v.updateListener.of((e) => {
+		e.docChanged && Xa();
+	})), o && l.push(Ua), r?.extensions && l.push(...r.extensions), $ = new v({
 		state: a.create({
 			doc: t,
 			extensions: l
@@ -9271,33 +9276,33 @@ function Za(e, t, n, r) {
 		}).catch(() => {});
 	}), $.focus(), $;
 }
-function Qa() {
+function eo() {
 	return $ ? $.state.doc.toString() : "";
 }
-function $a(e) {
-	return Qa() !== e;
-}
-function eo() {
-	$?.focus();
-}
-function to() {
-	$ &&= ($.destroy(), null);
+function to(e) {
+	return eo() !== e;
 }
 function no() {
+	$?.focus();
+}
+function ro() {
+	$ &&= ($.destroy(), null), Ja &&= (Ja.classList.remove("veditor-dirty"), null);
+}
+function io() {
 	$ && $.contentDOM.dispatchEvent(new KeyboardEvent("keydown", {
 		key: "Escape",
 		code: "Escape",
 		bubbles: !0
 	}));
 }
-function ro(e) {
+function ao(e) {
 	if (!$) return;
 	let t = Ki($);
 	t && X.handleEx(t, e);
 }
 //#endregion
 //#region src/vim-input.ts
-function io(e, t) {
+function oo(e, t) {
 	let n = document.createElement("div");
 	n.className = "vim-input", e.appendChild(n);
 	let r = v.updateListener.of((e) => {
@@ -9378,4 +9383,4 @@ function io(e, t) {
 	};
 }
 //#endregion
-export { Za as createEditor, io as createVimInput, to as destroyEditor, ro as executeExCommand, no as exitInsertMode, eo as focusEditor, Qa as getEditorContent, Va as hashTarget, $a as isEditorDirty };
+export { $a as createEditor, oo as createVimInput, ro as destroyEditor, ao as executeExCommand, io as exitInsertMode, no as focusEditor, eo as getEditorContent, Va as hashTarget, to as isEditorDirty };
