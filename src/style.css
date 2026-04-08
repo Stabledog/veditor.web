@@ -9,6 +9,12 @@
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 }
 
+/* Dirty indicator — applied to the parent container when content is modified */
+
+.veditor-dirty {
+  border-left: 3px solid #f9e2af;
+}
+
 /* Confirm bar (shown on dirty quit) */
 
 .veditor-confirm-bar {

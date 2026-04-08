@@ -85,7 +85,14 @@ function setWrapPref(prefix: string, on: boolean): void {
 
 let editorView: EditorView | null = null;
 let savedContent = '';  // baseline for dirty-checking; updated on save
+let editorParent: HTMLElement | null = null;
 const wrapCompartment = new Compartment();
+
+function updateDirtyClass(): void {
+  if (!editorParent) return;
+  const dirty = isEditorDirty(savedContent);
+  editorParent.classList.toggle('veditor-dirty', dirty);
+}
 
 // ---------------------------------------------------------------------------
 // Quit flow
@@ -156,6 +163,8 @@ export function createEditor(
 ): EditorView {
   destroyEditor();
   savedContent = content;
+  editorParent = parent;
+  parent.classList.remove('veditor-dirty');
 
   const prefix = options?.storagePrefix ?? 'veditor';
   const enableLinks = options?.clickableLinks ?? true;
@@ -165,6 +174,7 @@ export function createEditor(
   Vim.defineEx('w', 'w', async () => {
     await callbacks.onSave();
     savedContent = getEditorContent();
+    updateDirtyClass();
   });
 
   Vim.defineEx('q', 'q', (_cm: unknown, params: { argString?: string; bang?: boolean }) => {
@@ -175,6 +185,7 @@ export function createEditor(
   Vim.defineEx('wq', 'wq', async () => {
     await callbacks.onSave();
     savedContent = getEditorContent();
+    updateDirtyClass();
     handleQuitRequest(false, parent, callbacks);
   });
 
@@ -250,6 +261,10 @@ export function createEditor(
     }),
   ];
 
+  exts.push(EditorView.updateListener.of((update) => {
+    if (update.docChanged) updateDirtyClass();
+  }));
+
   if (enableLinks) {
     exts.push(clickableLinks);
   }
@@ -292,6 +307,10 @@ export function destroyEditor(): void {
   if (editorView) {
     editorView.destroy();
     editorView = null;
+  }
+  if (editorParent) {
+    editorParent.classList.remove('veditor-dirty');
+    editorParent = null;
   }
 }
 
