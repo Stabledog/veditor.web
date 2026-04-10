@@ -520,3 +520,5 @@ var Z = /* @__PURE__ */ J.define({}), je = /* @__PURE__ */ J.define({
 });
 //#endregion
 export { Ie as Cassandra, Pe as MSSQL, Ne as MariaSQL, Me as MySQL, Le as PLSQL, je as PostgreSQL, J as SQLDialect, Fe as SQLite, Z as StandardSQL, Y as keywordCompletionSource, X as schemaCompletionSource, Ae as sql };
+
+//# sourceMappingURL=dist-BAGwuVHZ.js.map

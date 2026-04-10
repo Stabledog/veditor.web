@@ -164,3 +164,5 @@ var t = e({
 });
 //#endregion
 export { t as factor };
+
+//# sourceMappingURL=factor-Dca7rzuK.js.map

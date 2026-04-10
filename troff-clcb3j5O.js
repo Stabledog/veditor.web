@@ -28,3 +28,5 @@ var r = {
 };
 //#endregion
 export { r as troff };
+
+//# sourceMappingURL=troff-clcb3j5O.js.map

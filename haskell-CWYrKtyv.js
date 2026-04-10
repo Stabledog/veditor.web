@@ -84,3 +84,5 @@ var m = (function() {
 };
 //#endregion
 export { h as haskell };
+
+//# sourceMappingURL=haskell-CWYrKtyv.js.map

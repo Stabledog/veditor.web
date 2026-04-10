@@ -58,3 +58,5 @@ var h = {
 };
 //#endregion
 export { h as cobol };
+
+//# sourceMappingURL=cobol-De7jV7cN.js.map

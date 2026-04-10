@@ -25,3 +25,5 @@ var e = "><+-.,[]".split(""), t = {
 };
 //#endregion
 export { t as brainfuck };
+
+//# sourceMappingURL=brainfuck-DbCW0rY6.js.map

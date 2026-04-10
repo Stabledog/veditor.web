@@ -79,3 +79,5 @@ var m = {
 };
 //#endregion
 export { m as ttcnCfg };
+
+//# sourceMappingURL=ttcn-cfg-CCZh5xuZ.js.map

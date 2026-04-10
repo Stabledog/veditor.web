@@ -13,3 +13,5 @@ var a = {
 };
 //#endregion
 export { a as protobuf };
+
+//# sourceMappingURL=protobuf-DxdMJAcE.js.map

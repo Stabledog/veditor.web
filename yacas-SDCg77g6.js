@@ -71,3 +71,5 @@ var f = {
 };
 //#endregion
 export { f as yacas };
+
+//# sourceMappingURL=yacas-SDCg77g6.js.map

@@ -38,3 +38,5 @@ var e = /^-+$/, t = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul
 };
 //#endregion
 export { r as rpmChanges, u as rpmSpec };
+
+//# sourceMappingURL=rpm-CXcOeVj_.js.map

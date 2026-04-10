@@ -73,3 +73,5 @@ function x(e = {}) {
 }
 //#endregion
 export { x as vue };
+
+//# sourceMappingURL=dist-ClNMMcTA.js.map

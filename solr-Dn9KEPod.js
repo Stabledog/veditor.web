@@ -35,3 +35,5 @@ var c = {
 };
 //#endregion
 export { c as solr };
+
+//# sourceMappingURL=solr-Dn9KEPod.js.map

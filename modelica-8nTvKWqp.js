@@ -81,3 +81,5 @@ var h = {
 };
 //#endregion
 export { h as modelica };
+
+//# sourceMappingURL=modelica-8nTvKWqp.js.map

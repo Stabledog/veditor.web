@@ -77,3 +77,5 @@ var p = {
 };
 //#endregion
 export { p as sparql };
+
+//# sourceMappingURL=sparql-C7VZ2_xN.js.map

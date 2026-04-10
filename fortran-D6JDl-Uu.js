@@ -39,3 +39,5 @@ var c = {
 };
 //#endregion
 export { c as fortran };
+
+//# sourceMappingURL=fortran-D6JDl-Uu.js.map

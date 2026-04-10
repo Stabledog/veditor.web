@@ -65,3 +65,5 @@ var i = {
 };
 //#endregion
 export { i as asterisk };
+
+//# sourceMappingURL=asterisk-BbNj4rRL.js.map

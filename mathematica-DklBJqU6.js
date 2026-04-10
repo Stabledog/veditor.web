@@ -36,3 +36,5 @@ var d = {
 };
 //#endregion
 export { d as mathematica };
+
+//# sourceMappingURL=mathematica-DklBJqU6.js.map

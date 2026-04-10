@@ -195,3 +195,5 @@ var t = "from", n = RegExp("^(\\s*)\\b(" + t + ")\\b", "i"), r = [
 });
 //#endregion
 export { u as dockerFile };
+
+//# sourceMappingURL=dockerfile-DoslQzSE.js.map

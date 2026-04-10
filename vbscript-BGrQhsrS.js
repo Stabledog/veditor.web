@@ -207,3 +207,5 @@ var t = e({});
 e({ isASP: !0 });
 //#endregion
 export { t as vbScript };
+
+//# sourceMappingURL=vbscript-BGrQhsrS.js.map

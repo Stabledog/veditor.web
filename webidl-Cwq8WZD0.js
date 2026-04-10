@@ -101,3 +101,5 @@ var x = {
 };
 //#endregion
 export { x as webIDL };
+
+//# sourceMappingURL=webidl-Cwq8WZD0.js.map

@@ -286,3 +286,5 @@ function c(e) {
 }
 //#endregion
 export { t as mscgen, n as msgenny, r as xu };
+
+//# sourceMappingURL=mscgen-Wj53llQf.js.map

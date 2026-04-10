@@ -101,3 +101,5 @@ var h = {
 };
 //#endregion
 export { h as vhdl };
+
+//# sourceMappingURL=vhdl-CJUc9HHg.js.map

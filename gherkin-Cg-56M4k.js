@@ -28,3 +28,5 @@ var e = {
 };
 //#endregion
 export { e as gherkin };
+
+//# sourceMappingURL=gherkin-Cg-56M4k.js.map

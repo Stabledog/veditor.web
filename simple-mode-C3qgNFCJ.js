@@ -94,3 +94,5 @@ function o(e, t) {
 }
 //#endregion
 export { e as t };
+
+//# sourceMappingURL=simple-mode-C3qgNFCJ.js.map

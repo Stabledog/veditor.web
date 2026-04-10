@@ -142,3 +142,5 @@ var t = e({
 });
 //#endregion
 export { t as nsis };
+
+//# sourceMappingURL=nsis-DT9qtSHL.js.map

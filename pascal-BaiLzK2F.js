@@ -65,3 +65,5 @@ var c = {
 };
 //#endregion
 export { c as pascal };
+
+//# sourceMappingURL=pascal-BaiLzK2F.js.map

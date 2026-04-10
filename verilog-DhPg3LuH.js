@@ -217,3 +217,5 @@ e({ hooks: {
 } });
 //#endregion
 export { t as verilog };
+
+//# sourceMappingURL=verilog-DhPg3LuH.js.map

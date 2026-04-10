@@ -116,3 +116,5 @@ function N(e = {}) {
 }
 //#endregion
 export { N as angular };
+
+//# sourceMappingURL=dist-CHnBxvJA.js.map

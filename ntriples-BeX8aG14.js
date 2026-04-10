@@ -75,3 +75,5 @@ var n = {
 };
 //#endregion
 export { n as ntriples };
+
+//# sourceMappingURL=ntriples-BeX8aG14.js.map

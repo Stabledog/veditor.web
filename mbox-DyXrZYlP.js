@@ -64,3 +64,5 @@ var p = {
 };
 //#endregion
 export { p as mbox };
+
+//# sourceMappingURL=mbox-DyXrZYlP.js.map

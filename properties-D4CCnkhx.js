@@ -18,3 +18,5 @@ var e = {
 };
 //#endregion
 export { e as properties };
+
+//# sourceMappingURL=properties-D4CCnkhx.js.map

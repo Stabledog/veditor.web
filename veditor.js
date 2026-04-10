@@ -9384,3 +9384,5 @@ function oo(e, t) {
 }
 //#endregion
 export { $a as createEditor, oo as createVimInput, ro as destroyEditor, ao as executeExCommand, io as exitInsertMode, no as focusEditor, eo as getEditorContent, Va as hashTarget, to as isEditorDirty };
+
+//# sourceMappingURL=veditor.js.map

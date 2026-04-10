@@ -60,3 +60,5 @@ var l = {
 };
 //#endregion
 export { l as mirc };
+
+//# sourceMappingURL=mirc-Cp0tJODu.js.map

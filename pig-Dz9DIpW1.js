@@ -48,3 +48,5 @@ var f = {
 };
 //#endregion
 export { f as pig };
+
+//# sourceMappingURL=pig-Dz9DIpW1.js.map

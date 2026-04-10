@@ -217,3 +217,5 @@ a({});
 var s = a({ extra_keywords: o("by cdef cimport cpdef ctypedef enum except extern gil include nogil property public readonly struct union DEF IF ELIF ELSE") });
 //#endregion
 export { s as cython };
+
+//# sourceMappingURL=python-B2ksBFAV.js.map
