@@ -9240,7 +9240,13 @@ function $a(e, t, n, r) {
 		Sa,
 		je({ codeLanguages: Ji }),
 		za,
-		se.of([]),
+		se.of([{
+			key: "Tab",
+			run: Zr
+		}, {
+			key: "Shift-Tab",
+			run: Qr
+		}]),
 		Ya.of(Ga(i) ? v.lineWrapping : []),
 		v.theme({
 			"&": { height: "100%" },
