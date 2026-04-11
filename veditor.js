@@ -9329,7 +9329,9 @@ function uo(e, t, n, r) {
 		Ua(Qa) && navigator.clipboard.readText().then((e) => {
 			e && c.unnamedRegister.setText(e);
 		}).catch(() => {});
-	}), so(e, s), $.focus(), $;
+	}), $.dom.addEventListener("keydown", (e) => {
+		e.key === "M" && e.ctrlKey && e.shiftKey && !e.altKey && (e.preventDefault(), e.stopImmediatePropagation(), vo());
+	}, { capture: !0 }), so(e, s), $.focus(), $;
 }
 function fo() {
 	return $ ? $.state.doc.toString() : "";
