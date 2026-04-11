@@ -7,6 +7,7 @@ import { indentMore, indentLess } from '@codemirror/commands';
 import { basicSetup } from 'codemirror';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { hashTarget } from './util';
+import { getVimModePref, setVimModePref, getWrapPref, setWrapPref } from './prefs';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -64,21 +65,8 @@ const clickableLinks = EditorView.domEventHandlers({
   },
 });
 
-// ---------------------------------------------------------------------------
-// Line wrap preference
-// ---------------------------------------------------------------------------
-
-function wrapKey(prefix: string): string {
-  return `${prefix}_line_wrap`;
-}
-
-function getWrapPref(prefix: string): boolean {
-  return localStorage.getItem(wrapKey(prefix)) !== 'false'; // default on
-}
-
-function setWrapPref(prefix: string, on: boolean): void {
-  localStorage.setItem(wrapKey(prefix), String(on));
-}
+// Preferences (getVimModePref, setVimModePref, getWrapPref, setWrapPref)
+// are imported from ./prefs.ts
 
 // ---------------------------------------------------------------------------
 // Editor state
@@ -87,12 +75,96 @@ function setWrapPref(prefix: string, on: boolean): void {
 let editorView: EditorView | null = null;
 let savedContent = '';  // baseline for dirty-checking; updated on save
 let editorParent: HTMLElement | null = null;
+let currentPrefix = 'veditor';
+let currentCallbacks: VEditorCallbacks | null = null;
 const wrapCompartment = new Compartment();
+const vimCompartment = new Compartment();
+const cuaCompartment = new Compartment();
+let modeToggleEl: HTMLButtonElement | null = null;
 
 function updateDirtyClass(): void {
   if (!editorParent) return;
   const dirty = isEditorDirty(savedContent);
   editorParent.classList.toggle('veditor-dirty', dirty);
+}
+
+// ---------------------------------------------------------------------------
+// CUA keymap (active when vim is off)
+// ---------------------------------------------------------------------------
+
+function buildCuaKeymap(
+  callbacks: VEditorCallbacks,
+  parent: HTMLElement,
+  prefix: string,
+): Extension {
+  return keymap.of([
+    {
+      key: 'Mod-s',
+      run: () => {
+        (async () => {
+          await callbacks.onSave();
+          savedContent = getEditorContent();
+          updateDirtyClass();
+        })();
+        return true;
+      },
+    },
+    {
+      key: 'Escape',
+      run: () => {
+        handleQuitRequest(false, parent, callbacks);
+        return true;
+      },
+    },
+    {
+      key: 'Mod-Shift-s',
+      run: () => {
+        (async () => {
+          await callbacks.onSave();
+          savedContent = getEditorContent();
+          updateDirtyClass();
+          handleQuitRequest(false, parent, callbacks);
+        })();
+        return true;
+      },
+    },
+    {
+      key: 'Mod-Shift-w',
+      run: () => {
+        if (!editorView) return false;
+        const nowOn = !getWrapPref(prefix);
+        setWrapPref(prefix, nowOn);
+        editorView.dispatch({
+          effects: wrapCompartment.reconfigure(nowOn ? EditorView.lineWrapping : []),
+        });
+        return true;
+      },
+    },
+  ]);
+}
+
+// ---------------------------------------------------------------------------
+// Mode toggle indicator
+// ---------------------------------------------------------------------------
+
+function updateToggleIndicator(vimOn: boolean): void {
+  if (modeToggleEl) {
+    modeToggleEl.textContent = vimOn ? 'VIM' : 'CUA';
+    modeToggleEl.title = vimOn
+      ? 'Vim mode active — click to switch to standard editing'
+      : 'Standard editing — click to switch to Vim mode';
+  }
+}
+
+function createToggleIndicator(parent: HTMLElement, vimOn: boolean): void {
+  modeToggleEl?.remove();
+  const btn = document.createElement('button');
+  btn.className = 'veditor-mode-toggle';
+  btn.type = 'button';
+  btn.addEventListener('click', () => toggleVimMode());
+  parent.appendChild(btn);
+  modeToggleEl = btn;
+  updateToggleIndicator(vimOn);
 }
 
 // ---------------------------------------------------------------------------
@@ -168,7 +240,10 @@ export function createEditor(
   parent.classList.remove('veditor-dirty');
 
   const prefix = options?.storagePrefix ?? 'veditor';
+  currentPrefix = prefix;
+  currentCallbacks = callbacks;
   const enableLinks = options?.clickableLinks ?? true;
+  const vimOn = getVimModePref(prefix);
 
   // --- Vim ex commands ---
 
@@ -233,9 +308,13 @@ export function createEditor(
     }
   };
 
+  // --- CUA keymap (active when vim is off) ---
+  const cuaKeymap = buildCuaKeymap(callbacks, parent, prefix);
+
   // --- Build extensions ---
   const exts: Extension[] = [
-    vim(),
+    vimCompartment.of(vimOn ? vim() : []),
+    cuaCompartment.of(vimOn ? [] : cuaKeymap),
     basicSetup,
     markdown({ codeLanguages: languages }),
     oneDark,
@@ -281,14 +360,18 @@ export function createEditor(
   const state = EditorState.create({ doc: content, extensions: exts });
   editorView = new EditorView({ state, parent });
 
-  // Pull system clipboard into unnamed register on focus
+  // Pull system clipboard into unnamed register on focus (vim mode only)
   editorView.contentDOM.addEventListener('focus', () => {
+    if (!getVimModePref(currentPrefix)) return;
     navigator.clipboard.readText().then((text) => {
       if (text) {
         rc.unnamedRegister.setText(text);
       }
     }).catch(() => {});
   });
+
+  // --- Mode toggle indicator ---
+  createToggleIndicator(parent, vimOn);
 
   editorView.focus();
   return editorView;
@@ -312,28 +395,74 @@ export function destroyEditor(): void {
     editorView.destroy();
     editorView = null;
   }
+  if (modeToggleEl) {
+    modeToggleEl.remove();
+    modeToggleEl = null;
+  }
   if (editorParent) {
     editorParent.classList.remove('veditor-dirty');
     editorParent = null;
   }
+  currentCallbacks = null;
 }
 
-/** Send an Escape key to the editor, exiting insert mode. */
+/** Send an Escape key to the editor, exiting insert mode.
+ *  No-op when vim mode is off. */
 export function exitInsertMode(): void {
   if (!editorView) return;
-  // Simulate Escape keydown on the editor's content DOM
+  if (!getVimModePref(currentPrefix)) return;
   editorView.contentDOM.dispatchEvent(
     new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', bubbles: true }),
   );
 }
 
-/** Execute a vim ex command programmatically (e.g., 'w', 'q', 'wq'). */
+/** Execute a vim ex command programmatically (e.g., 'w', 'q', 'wq').
+ *  No-op when vim mode is off. */
 export function executeExCommand(cmd: string): void {
   if (!editorView) return;
+  if (!getVimModePref(currentPrefix)) return;
   const cm = getCM(editorView);
   if (!cm) return;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (Vim as any).handleEx(cm, cmd);
+}
+
+/** Toggle vim mode on/off. Returns the new state (true = vim). */
+export function toggleVimMode(): boolean {
+  if (!editorView) return getVimModePref(currentPrefix);
+  const nowVim = !getVimModePref(currentPrefix);
+  setVimModePref(currentPrefix, nowVim);
+  const cuaKeymap = currentCallbacks && editorParent
+    ? buildCuaKeymap(currentCallbacks, editorParent, currentPrefix)
+    : [];
+  editorView.dispatch({
+    effects: [
+      vimCompartment.reconfigure(nowVim ? vim() : []),
+      cuaCompartment.reconfigure(nowVim ? [] : cuaKeymap),
+    ],
+  });
+  updateToggleIndicator(nowVim);
+  editorView.focus();
+  return nowVim;
+}
+
+/** Returns true if vim mode is currently enabled. */
+export function isVimMode(): boolean {
+  return getVimModePref(currentPrefix);
+}
+
+/** Trigger a save directly (works in both vim and CUA mode). */
+export async function requestSave(): Promise<void> {
+  if (!currentCallbacks) return;
+  await currentCallbacks.onSave();
+  savedContent = getEditorContent();
+  updateDirtyClass();
+}
+
+/** Trigger the quit flow directly (works in both vim and CUA mode). */
+export function requestQuit(force?: boolean): void {
+  if (!currentCallbacks || !editorParent) return;
+  handleQuitRequest(force ?? false, editorParent, currentCallbacks);
 }
 
 // ---------------------------------------------------------------------------

@@ -1,7 +1,8 @@
 import { EditorView } from '@codemirror/view';
-import { EditorState, type Extension } from '@codemirror/state';
+import { EditorState, Compartment, type Extension } from '@codemirror/state';
 import { vim, Vim, getCM } from '@replit/codemirror-vim';
 import { oneDark } from '@codemirror/theme-one-dark';
+import { getVimModePref } from './prefs';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -22,6 +23,8 @@ export interface VimInputOptions {
   initialInsert?: boolean;
   /** Additional CodeMirror extensions */
   extensions?: Extension[];
+  /** localStorage key prefix for reading vim mode preference (default: 'veditor') */
+  storagePrefix?: string;
 }
 
 export interface VimInputHandle {
@@ -49,6 +52,10 @@ export function createVimInput(
   wrapper.className = 'vim-input';
   parent.appendChild(wrapper);
 
+  const prefix = options?.storagePrefix ?? 'veditor';
+  const vimOn = getVimModePref(prefix);
+  const inputVimCompartment = new Compartment();
+
   const notifyChange = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
       options?.onChange?.(update.state.doc.toString());
@@ -67,7 +74,7 @@ export function createVimInput(
   Vim.map('jk', '<Esc>', 'insert');
 
   const exts: Extension[] = [
-    vim(),
+    inputVimCompartment.of(vimOn ? vim() : []),
     oneDark,
     notifyChange,
     suppressNewline,
@@ -148,7 +155,7 @@ export function createVimInput(
     focus() {
       view.focus();
       // Enter insert mode after focus so the vim adapter is initialized
-      if (options?.initialInsert) {
+      if (options?.initialInsert && getVimModePref(prefix)) {
         const cm = getCM(view);
         if (cm) Vim.handleKey(cm, 'i', 'mapping');
       }

@@ -8,6 +8,10 @@ export {
   destroyEditor,
   exitInsertMode,
   executeExCommand,
+  toggleVimMode,
+  isVimMode,
+  requestSave,
+  requestQuit,
   type VEditorCallbacks,
   type VEditorOptions,
 } from './veditor';
