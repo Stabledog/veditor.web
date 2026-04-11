@@ -265,6 +265,10 @@ export function createEditor(
     handleQuitRequest(false, parent, callbacks);
   });
 
+  Vim.defineEx('cua', 'cua', () => {
+    if (getVimModePref(currentPrefix)) toggleVimMode();
+  });
+
   Vim.defineEx('wrap', 'wrap', () => {
     if (!editorView) return;
     const nowOn = !getWrapPref(prefix);
@@ -369,15 +373,6 @@ export function createEditor(
       }
     }).catch(() => {});
   });
-
-  // --- Ctrl+Shift+M toggles vim/CUA (capture phase to bypass vim) ---
-  editorView.dom.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'M' && e.ctrlKey && e.shiftKey && !e.altKey) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      toggleVimMode();
-    }
-  }, { capture: true });
 
   // --- Mode toggle indicator ---
   createToggleIndicator(parent, vimOn);

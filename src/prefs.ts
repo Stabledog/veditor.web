@@ -9,7 +9,7 @@ function vimModeKey(prefix: string): string {
 }
 
 export function getVimModePref(prefix: string): boolean {
-  return localStorage.getItem(vimModeKey(prefix)) !== 'false'; // default on
+  return localStorage.getItem(vimModeKey(prefix)) === 'true'; // default off (CUA)
 }
 
 export function setVimModePref(prefix: string, on: boolean): void {
