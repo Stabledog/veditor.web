@@ -370,6 +370,15 @@ export function createEditor(
     }).catch(() => {});
   });
 
+  // --- Ctrl+Shift+M toggles vim/CUA (capture phase to bypass vim) ---
+  editorView.dom.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'M' && e.ctrlKey && e.shiftKey && !e.altKey) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      toggleVimMode();
+    }
+  }, { capture: true });
+
   // --- Mode toggle indicator ---
   createToggleIndicator(parent, vimOn);
 
