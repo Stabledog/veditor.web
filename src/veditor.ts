@@ -3,6 +3,7 @@ import { EditorState, Compartment, type Extension } from '@codemirror/state';
 import { vim, Vim, getCM } from '@replit/codemirror-vim';
 import { markdown } from '@codemirror/lang-markdown';
 import { languages } from '@codemirror/language-data';
+import { indentMore, indentLess } from '@codemirror/commands';
 import { basicSetup } from 'codemirror';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { hashTarget } from './util';
@@ -238,7 +239,10 @@ export function createEditor(
     basicSetup,
     markdown({ codeLanguages: languages }),
     oneDark,
-    keymap.of([]),
+    keymap.of([
+      { key: 'Tab', run: indentMore },
+      { key: 'Shift-Tab', run: indentLess },
+    ]),
     wrapCompartment.of(getWrapPref(prefix) ? EditorView.lineWrapping : []),
     EditorView.theme({
       '&': { height: '100%' },
