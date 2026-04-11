@@ -1,13 +1,13 @@
-import { $ as e, Bt as t, C as n, Ct as r, Dt as i, Et as a, F as o, Ft as s, Ht as c, It as l, L as u, Lt as d, M as f, N as p, Nt as m, O as h, Ot as g, Pt as _, Q as v, R as y, Rt as b, S as x, St as ee, T as S, Tt as C, U as w, V as T, Vt as E, X as D, Z as O, _ as te, _t as ne, a as re, at as ie, b as k, bt as ae, ct as oe, dt as se, et as A, f as ce, ft as le, gt as j, ht as ue, it as de, j as fe, jt as pe, k as me, kt as he, l as M, lt as ge, m as _e, mt as N, nt as ve, o as ye, p as be, rt as xe, st as Se, tt as Ce, u as we, ut as Te, wt as Ee, xt as De, yt as P, zt as Oe } from "./dist-CK9QBJOt.js";
-import { i as ke, n as F, o as Ae, r as I } from "./dist-KlkOukDQ.js";
-import { n as je } from "./dist-C4f5DzeA.js";
+import { $ as e, Bt as t, C as n, Ct as r, Dt as i, Et as a, F as o, Ft as s, Ht as c, It as l, L as u, Lt as d, M as f, N as p, Nt as m, O as h, Ot as g, Pt as _, Q as v, R as y, Rt as b, S as x, St as ee, T as S, Tt as C, U as w, V as T, Vt as E, X as D, Z as O, _ as te, _t as ne, a as re, at as ie, b as k, bt as ae, ct as oe, dt as se, et as A, f as ce, ft as le, gt as j, ht as ue, it as de, j as fe, jt as pe, k as me, kt as he, l as M, lt as ge, m as _e, mt as N, nt as ve, o as P, p as ye, rt as be, st as xe, tt as Se, u as Ce, ut as we, wt as Te, xt as Ee, yt as F, zt as De } from "./dist-CK9QBJOt.js";
+import { i as Oe, n as I, o as ke, r as L } from "./dist-KlkOukDQ.js";
+import { n as Ae } from "./dist-C4f5DzeA.js";
 //#region node_modules/@codemirror/search/dist/index.js
-var Me = typeof String.prototype.normalize == "function" ? (e) => e.normalize("NFKD") : (e) => e, Ne = class {
+var je = typeof String.prototype.normalize == "function" ? (e) => e.normalize("NFKD") : (e) => e, Me = class {
 	constructor(e, t, n = 0, r = e.length, i, a) {
 		this.test = a, this.value = {
 			from: 0,
 			to: 0
-		}, this.done = !1, this.matches = [], this.buffer = "", this.bufferPos = 0, this.iter = e.iterRange(n, r), this.bufferStart = n, this.normalize = i ? (e) => i(Me(e)) : Me, this.query = this.normalize(t);
+		}, this.done = !1, this.matches = [], this.buffer = "", this.bufferPos = 0, this.iter = e.iterRange(n, r), this.bufferStart = n, this.normalize = i ? (e) => i(je(e)) : je, this.query = this.normalize(t);
 	}
 	peek() {
 		if (this.bufferPos == this.buffer.length) {
@@ -52,17 +52,17 @@ var Me = typeof String.prototype.normalize == "function" ? (e) => e.normalize("N
 		} : this.matches.push(1, t)), r && this.test && !this.test(r.from, r.to, this.buffer, this.bufferStart) && (r = null), r;
 	}
 };
-typeof Symbol < "u" && (Ne.prototype[Symbol.iterator] = function() {
+typeof Symbol < "u" && (Me.prototype[Symbol.iterator] = function() {
 	return this;
 });
-var Pe = {
+var Ne = {
 	from: -1,
 	to: -1,
 	match: /* @__PURE__ */ /.*/.exec("")
-}, L = "gm" + (/x/.unicode == null ? "" : "u"), R = class {
+}, R = "gm" + (/x/.unicode == null ? "" : "u"), z = class {
 	constructor(e, t, n, r = 0, i = e.length) {
-		if (this.text = e, this.to = i, this.curLine = "", this.done = !1, this.value = Pe, /\\[sWDnr]|\n|\r|\[\^/.test(t)) return new Fe(e, t, n, r, i);
-		this.re = new RegExp(t, L + (n?.ignoreCase ? "i" : "")), this.test = n?.test, this.iter = e.iter(), this.curLineStart = e.lineAt(r).from, this.matchPos = V(e, r), this.getLine(this.curLineStart);
+		if (this.text = e, this.to = i, this.curLine = "", this.done = !1, this.value = Ne, /\\[sWDnr]|\n|\r|\[\^/.test(t)) return new Pe(e, t, n, r, i);
+		this.re = new RegExp(t, R + (n?.ignoreCase ? "i" : "")), this.test = n?.test, this.iter = e.iter(), this.curLineStart = e.lineAt(r).from, this.matchPos = H(e, r), this.getLine(this.curLineStart);
 	}
 	getLine(e) {
 		this.iter.next(e), this.iter.lineBreak ? this.curLine = "" : (this.curLine = this.iter.value, this.curLineStart + this.curLine.length > this.to && (this.curLine = this.curLine.slice(0, this.to - this.curLineStart)), this.iter.next());
@@ -76,7 +76,7 @@ var Pe = {
 			let t = this.matchPos <= this.to && this.re.exec(this.curLine);
 			if (t) {
 				let n = this.curLineStart + t.index, r = n + t[0].length;
-				if (this.matchPos = V(this.text, r + +(n == r)), n == this.curLineStart + this.curLine.length && this.nextLine(), (n < r || n > this.value.to) && (!this.test || this.test(n, r, t))) return this.value = {
+				if (this.matchPos = H(this.text, r + +(n == r)), n == this.curLineStart + this.curLine.length && this.nextLine(), (n < r || n > this.value.to) && (!this.test || this.test(n, r, t))) return this.value = {
 					from: n,
 					to: r,
 					match: t
@@ -86,7 +86,7 @@ var Pe = {
 			else return this.done = !0, this;
 		}
 	}
-}, z = /* @__PURE__ */ new WeakMap(), B = class e {
+}, B = /* @__PURE__ */ new WeakMap(), V = class e {
 	constructor(e, t) {
 		this.from = e, this.text = t;
 	}
@@ -94,18 +94,18 @@ var Pe = {
 		return this.from + this.text.length;
 	}
 	static get(t, n, r) {
-		let i = z.get(t);
+		let i = B.get(t);
 		if (!i || i.from >= r || i.to <= n) {
 			let i = new e(n, t.sliceString(n, r));
-			return z.set(t, i), i;
+			return B.set(t, i), i;
 		}
 		if (i.from == n && i.to == r) return i;
 		let { text: a, from: o } = i;
-		return o > n && (a = t.sliceString(n, o) + a, o = n), i.to < r && (a += t.sliceString(i.to, r)), z.set(t, new e(o, a)), new e(n, a.slice(n - o, r - o));
+		return o > n && (a = t.sliceString(n, o) + a, o = n), i.to < r && (a += t.sliceString(i.to, r)), B.set(t, new e(o, a)), new e(n, a.slice(n - o, r - o));
 	}
-}, Fe = class {
+}, Pe = class {
 	constructor(e, t, n, r, i) {
-		this.text = e, this.to = i, this.done = !1, this.value = Pe, this.matchPos = V(e, r), this.re = new RegExp(t, L + (n?.ignoreCase ? "i" : "")), this.test = n?.test, this.flat = B.get(e, r, this.chunkEnd(r + 5e3));
+		this.text = e, this.to = i, this.done = !1, this.value = Ne, this.matchPos = H(e, r), this.re = new RegExp(t, R + (n?.ignoreCase ? "i" : "")), this.test = n?.test, this.flat = V.get(e, r, this.chunkEnd(r + 5e3));
 	}
 	chunkEnd(e) {
 		return e >= this.to ? this.to : this.text.lineAt(e).to;
@@ -119,30 +119,30 @@ var Pe = {
 					from: e,
 					to: n,
 					match: t
-				}, this.matchPos = V(this.text, n + +(e == n)), this;
+				}, this.matchPos = H(this.text, n + +(e == n)), this;
 			}
 			if (this.flat.to == this.to) return this.done = !0, this;
-			this.flat = B.get(this.text, this.flat.from, this.chunkEnd(this.flat.from + this.flat.text.length * 2));
+			this.flat = V.get(this.text, this.flat.from, this.chunkEnd(this.flat.from + this.flat.text.length * 2));
 		}
 	}
 };
-typeof Symbol < "u" && (R.prototype[Symbol.iterator] = Fe.prototype[Symbol.iterator] = function() {
+typeof Symbol < "u" && (z.prototype[Symbol.iterator] = Pe.prototype[Symbol.iterator] = function() {
 	return this;
 });
-function Ie(e) {
+function Fe(e) {
 	try {
-		return new RegExp(e, L), !0;
+		return new RegExp(e, R), !0;
 	} catch {
 		return !1;
 	}
 }
-function V(e, t) {
+function H(e, t) {
 	if (t >= e.length) return t;
 	let n = e.lineAt(t), r;
 	for (; t < n.to && (r = n.text.charCodeAt(t - n.from)) >= 56320 && r < 57344;) t++;
 	return t;
 }
-var Le = (e) => {
+var Ie = (e) => {
 	let { state: t } = e, n = String(t.doc.lineAt(e.state.selection.main.head).number), { close: r, result: i } = j(e, {
 		label: t.phrase("Go to line"),
 		input: {
@@ -170,30 +170,30 @@ var Le = (e) => {
 			selection: p
 		});
 	}), !0;
-}, Re = {
+}, Le = {
 	highlightWordAroundCursor: !1,
 	minSelectionLength: 1,
 	maxMatches: 100,
 	wholeWords: !1
-}, ze = /* @__PURE__ */ i.define({ combine(e) {
-	return Oe(e, Re, {
+}, Re = /* @__PURE__ */ i.define({ combine(e) {
+	return De(e, Le, {
 		highlightWordAroundCursor: (e, t) => e || t,
 		minSelectionLength: Math.min,
 		maxMatches: Math.min
 	});
 } });
-function Be(e) {
-	let t = [Ke, Ge];
-	return e && t.push(ze.of(e)), t;
+function ze(e) {
+	let t = [Ge, We];
+	return e && t.push(Re.of(e)), t;
 }
-var Ve = /* @__PURE__ */ D.mark({ class: "cm-selectionMatch" }), He = /* @__PURE__ */ D.mark({ class: "cm-selectionMatch cm-selectionMatch-main" });
-function Ue(e, t, n, i) {
+var Be = /* @__PURE__ */ D.mark({ class: "cm-selectionMatch" }), Ve = /* @__PURE__ */ D.mark({ class: "cm-selectionMatch cm-selectionMatch-main" });
+function He(e, t, n, i) {
 	return (n == 0 || e(t.sliceDoc(n - 1, n)) != r.Word) && (i == t.doc.length || e(t.sliceDoc(i, i + 1)) != r.Word);
 }
-function We(e, t, n, i) {
+function Ue(e, t, n, i) {
 	return e(t.sliceDoc(n, n + 1)) == r.Word && e(t.sliceDoc(i - 1, i)) == r.Word;
 }
-var Ge = /* @__PURE__ */ e.fromClass(class {
+var We = /* @__PURE__ */ e.fromClass(class {
 	constructor(e) {
 		this.decorations = this.getDeco(e);
 	}
@@ -201,7 +201,7 @@ var Ge = /* @__PURE__ */ e.fromClass(class {
 		(e.selectionSet || e.docChanged || e.viewportChanged) && (this.decorations = this.getDeco(e.view));
 	}
 	getDeco(e) {
-		let t = e.state.facet(ze), { state: n } = e, r = n.selection;
+		let t = e.state.facet(Re), { state: n } = e, r = n.selection;
 		if (r.ranges.length > 1) return D.none;
 		let i = r.main, a, o = null;
 		if (i.empty) {
@@ -213,31 +213,31 @@ var Ge = /* @__PURE__ */ e.fromClass(class {
 			let e = i.to - i.from;
 			if (e < t.minSelectionLength || e > 200) return D.none;
 			if (t.wholeWords) {
-				if (a = n.sliceDoc(i.from, i.to), o = n.charCategorizer(i.head), !(Ue(o, n, i.from, i.to) && We(o, n, i.from, i.to))) return D.none;
+				if (a = n.sliceDoc(i.from, i.to), o = n.charCategorizer(i.head), !(He(o, n, i.from, i.to) && Ue(o, n, i.from, i.to))) return D.none;
 			} else if (a = n.sliceDoc(i.from, i.to), !a) return D.none;
 		}
 		let s = [];
 		for (let r of e.visibleRanges) {
-			let e = new Ne(n.doc, a, r.from, r.to);
+			let e = new Me(n.doc, a, r.from, r.to);
 			for (; !e.next().done;) {
 				let { from: r, to: a } = e.value;
-				if ((!o || Ue(o, n, r, a)) && (i.empty && r <= i.from && a >= i.to ? s.push(He.range(r, a)) : (r >= i.to || a <= i.from) && s.push(Ve.range(r, a)), s.length > t.maxMatches)) return D.none;
+				if ((!o || He(o, n, r, a)) && (i.empty && r <= i.from && a >= i.to ? s.push(Ve.range(r, a)) : (r >= i.to || a <= i.from) && s.push(Be.range(r, a)), s.length > t.maxMatches)) return D.none;
 			}
 		}
 		return D.set(s);
 	}
-}, { decorations: (e) => e.decorations }), Ke = /* @__PURE__ */ v.baseTheme({
+}, { decorations: (e) => e.decorations }), Ge = /* @__PURE__ */ v.baseTheme({
 	".cm-selectionMatch": { backgroundColor: "#99ff7780" },
 	".cm-searchMatch .cm-selectionMatch": { backgroundColor: "transparent" }
-}), qe = ({ state: e, dispatch: t }) => {
+}), Ke = ({ state: e, dispatch: t }) => {
 	let { selection: n } = e, r = C.create(n.ranges.map((t) => e.wordAt(t.head) || C.cursor(t.head)), n.mainIndex);
 	return r.eq(n) ? !1 : (t(e.update({ selection: r })), !0);
 };
-function Je(e, t) {
+function qe(e, t) {
 	let { main: n, ranges: r } = e.selection, i = e.wordAt(n.head), a = i && i.from == n.from && i.to == n.to;
-	for (let n = !1, i = new Ne(e.doc, t, r[r.length - 1].to);;) if (i.next(), i.done) {
+	for (let n = !1, i = new Me(e.doc, t, r[r.length - 1].to);;) if (i.next(), i.done) {
 		if (n) return null;
-		i = new Ne(e.doc, t, 0, Math.max(0, r[r.length - 1].from - 1)), n = !0;
+		i = new Me(e.doc, t, 0, Math.max(0, r[r.length - 1].from - 1)), n = !0;
 	} else {
 		if (n && r.some((e) => e.from == i.value.from)) continue;
 		if (a) {
@@ -247,21 +247,21 @@ function Je(e, t) {
 		return i.value;
 	}
 }
-var Ye = ({ state: e, dispatch: t }) => {
+var Je = ({ state: e, dispatch: t }) => {
 	let { ranges: n } = e.selection;
-	if (n.some((e) => e.from === e.to)) return qe({
+	if (n.some((e) => e.from === e.to)) return Ke({
 		state: e,
 		dispatch: t
 	});
 	let r = e.sliceDoc(n[0].from, n[0].to);
 	if (e.selection.ranges.some((t) => e.sliceDoc(t.from, t.to) != r)) return !1;
-	let i = Je(e, r);
+	let i = qe(e, r);
 	return i ? (t(e.update({
 		selection: e.selection.addRange(C.range(i.from, i.to), !1),
 		effects: v.scrollIntoView(i.to)
 	})), !0) : !1;
-}, Xe = /* @__PURE__ */ i.define({ combine(e) {
-	return Oe(e, {
+}, Ye = /* @__PURE__ */ i.define({ combine(e) {
+	return De(e, {
 		top: !1,
 		caseSensitive: !1,
 		literal: !1,
@@ -270,9 +270,9 @@ var Ye = ({ state: e, dispatch: t }) => {
 		createPanel: (e) => new Ot(e),
 		scrollToMatch: (e) => v.scrollIntoView(e)
 	});
-} }), Ze = class {
+} }), Xe = class {
 	constructor(e) {
-		this.search = e.search, this.caseSensitive = !!e.caseSensitive, this.literal = !!e.literal, this.regexp = !!e.regexp, this.replace = e.replace || "", this.valid = !!this.search && (!this.regexp || Ie(this.search)), this.unquoted = this.unquote(this.search), this.wholeWord = !!e.wholeWord, this.test = e.test;
+		this.search = e.search, this.caseSensitive = !!e.caseSensitive, this.literal = !!e.literal, this.regexp = !!e.regexp, this.replace = e.replace || "", this.valid = !!this.search && (!this.regexp || Fe(this.search)), this.unquoted = this.unquote(this.search), this.wholeWord = !!e.wholeWord, this.test = e.test;
 	}
 	unquote(e) {
 		return this.literal ? e : e.replace(/\\([nrt\\])/g, (e, t) => t == "n" ? "\n" : t == "r" ? "\r" : t == "t" ? "	" : "\\");
@@ -287,7 +287,7 @@ var Ye = ({ state: e, dispatch: t }) => {
 		let r = e.doc ? e : a.create({ doc: e });
 		return n ??= r.doc.length, this.regexp ? rt(this, r, t, n) : $e(this, r, t, n);
 	}
-}, H = class {
+}, Ze = class {
 	constructor(e) {
 		this.spec = e;
 	}
@@ -297,12 +297,12 @@ function Qe(e, t, n) {
 }
 function $e(e, t, n, r) {
 	let i;
-	return e.wholeWord && (i = et(t.doc, t.charCategorizer(t.selection.main.head))), e.test && (i = Qe(e.test, t, i)), new Ne(t.doc, e.unquoted, n, r, e.caseSensitive ? void 0 : (e) => e.toLowerCase(), i);
+	return e.wholeWord && (i = et(t.doc, t.charCategorizer(t.selection.main.head))), e.test && (i = Qe(e.test, t, i)), new Me(t.doc, e.unquoted, n, r, e.caseSensitive ? void 0 : (e) => e.toLowerCase(), i);
 }
 function et(e, t) {
 	return (n, i, a, o) => ((o > n || o + a.length < i) && (o = Math.max(0, n - 2), a = e.sliceString(o, Math.min(e.length, i + 2))), (t(it(a, n - o)) != r.Word || t(at(a, n - o)) != r.Word) && (t(at(a, i - o)) != r.Word || t(it(a, i - o)) != r.Word));
 }
-var tt = class extends H {
+var tt = class extends Ze {
 	constructor(e) {
 		super(e);
 	}
@@ -348,7 +348,7 @@ function nt(e, t, n) {
 }
 function rt(e, t, n, r) {
 	let i;
-	return e.wholeWord && (i = ot(t.charCategorizer(t.selection.main.head))), e.test && (i = nt(e.test, t, i)), new R(t.doc, e.search, {
+	return e.wholeWord && (i = ot(t.charCategorizer(t.selection.main.head))), e.test && (i = nt(e.test, t, i)), new z(t.doc, e.search, {
 		ignoreCase: !e.caseSensitive,
 		test: i
 	}, n, r);
@@ -362,7 +362,7 @@ function at(e, t) {
 function ot(e) {
 	return (t, n, i) => !i[0].length || (e(it(i.input, i.index)) != r.Word || e(at(i.input, i.index)) != r.Word) && (e(at(i.input, i.index + i[0].length)) != r.Word || e(it(i.input, i.index + i[0].length)) != r.Word);
 }
-var st = class extends H {
+var st = class extends Ze {
 	nextMatch(e, t, n) {
 		let r = rt(this.spec, e, n, e.doc.length).next();
 		return r.done && (r = rt(this.spec, e, 0, t).next()), r.done ? null : r.value;
@@ -445,7 +445,7 @@ function mt(e) {
 var ht = /* @__PURE__ */ mt((e, { query: t }) => {
 	let { to: n } = e.state.selection.main, r = t.nextMatch(e.state, n, n);
 	if (!r) return !1;
-	let i = C.single(r.from, r.to), a = e.state.facet(Xe);
+	let i = C.single(r.from, r.to), a = e.state.facet(Ye);
 	return e.dispatch({
 		selection: i,
 		effects: [jt(e, r), a.scrollToMatch(i.main, e)],
@@ -454,7 +454,7 @@ var ht = /* @__PURE__ */ mt((e, { query: t }) => {
 }), gt = /* @__PURE__ */ mt((e, { query: t }) => {
 	let { state: n } = e, { from: r } = n.selection.main, i = t.prevMatch(n, r, r);
 	if (!i) return !1;
-	let a = C.single(i.from, i.to), o = e.state.facet(Xe);
+	let a = C.single(i.from, i.to), o = e.state.facet(Ye);
 	return e.dispatch({
 		selection: a,
 		effects: [jt(e, i), o.scrollToMatch(a.main, e)],
@@ -470,7 +470,7 @@ var ht = /* @__PURE__ */ mt((e, { query: t }) => {
 	let n = e.selection;
 	if (n.ranges.length > 1 || n.main.empty) return !1;
 	let { from: r, to: i } = n.main, a = [], o = 0;
-	for (let t = new Ne(e.doc, e.sliceDoc(r, i)); !t.next().done;) {
+	for (let t = new Me(e.doc, e.sliceDoc(r, i)); !t.next().done;) {
 		if (a.length > 1e3) return !1;
 		t.value.from == r && (o = a.length), a.push(C.range(t.value.from, t.value.to));
 	}
@@ -490,7 +490,7 @@ var ht = /* @__PURE__ */ mt((e, { query: t }) => {
 		insert: l
 	}), o = t.nextMatch(n, o.from, o.to), u.push(v.announce.of(n.phrase("replaced match on line $", n.doc.lineAt(r).number) + ".")));
 	let d = e.state.changes(s);
-	return o && (c = C.single(o.from, o.to).map(d), u.push(jt(e, o)), u.push(n.facet(Xe).scrollToMatch(c.main, e))), e.dispatch({
+	return o && (c = C.single(o.from, o.to).map(d), u.push(jt(e, o)), u.push(n.facet(Ye).scrollToMatch(c.main, e))), e.dispatch({
 		changes: d,
 		selection: c,
 		effects: u,
@@ -515,13 +515,13 @@ var ht = /* @__PURE__ */ mt((e, { query: t }) => {
 	}), !0;
 });
 function xt(e) {
-	return e.state.facet(Xe).createPanel(e);
+	return e.state.facet(Ye).createPanel(e);
 }
 function St(e, t) {
 	let n = e.selection.main, r = n.empty || n.to > n.from + 100 ? "" : e.sliceDoc(n.from, n.to);
 	if (t && !r) return t;
-	let i = e.facet(Xe);
-	return new Ze({
+	let i = e.facet(Ye);
+	return new Xe({
 		search: t?.literal ?? i.literal ? r : r.replace(/\n/g, "\\n"),
 		caseSensitive: t?.caseSensitive ?? i.caseSensitive,
 		literal: t?.literal ?? i.literal,
@@ -583,18 +583,18 @@ var Tt = (e) => {
 	},
 	{
 		key: "Mod-Alt-g",
-		run: Le
+		run: Ie
 	},
 	{
 		key: "Mod-d",
-		run: Ye,
+		run: Je,
 		preventDefault: !0
 	}
 ], Ot = class {
 	constructor(e) {
 		this.view = e;
 		let t = this.query = e.state.field(U).query.spec;
-		this.commit = this.commit.bind(this), this.searchField = P("input", {
+		this.commit = this.commit.bind(this), this.searchField = F("input", {
 			value: t.search,
 			placeholder: W(e, "Find"),
 			"aria-label": W(e, "Find"),
@@ -604,7 +604,7 @@ var Tt = (e) => {
 			"main-field": "true",
 			onchange: this.commit,
 			onkeyup: this.commit
-		}), this.replaceField = P("input", {
+		}), this.replaceField = F("input", {
 			value: t.replace,
 			placeholder: W(e, "Replace"),
 			"aria-label": W(e, "Replace"),
@@ -613,19 +613,19 @@ var Tt = (e) => {
 			form: "",
 			onchange: this.commit,
 			onkeyup: this.commit
-		}), this.caseField = P("input", {
+		}), this.caseField = F("input", {
 			type: "checkbox",
 			name: "case",
 			form: "",
 			checked: t.caseSensitive,
 			onchange: this.commit
-		}), this.reField = P("input", {
+		}), this.reField = F("input", {
 			type: "checkbox",
 			name: "re",
 			form: "",
 			checked: t.regexp,
 			onchange: this.commit
-		}), this.wordField = P("input", {
+		}), this.wordField = F("input", {
 			type: "checkbox",
 			name: "word",
 			form: "",
@@ -633,14 +633,14 @@ var Tt = (e) => {
 			onchange: this.commit
 		});
 		function n(e, t, n) {
-			return P("button", {
+			return F("button", {
 				class: "cm-button",
 				name: e,
 				onclick: t,
 				type: "button"
 			}, n);
 		}
-		this.dom = P("div", {
+		this.dom = F("div", {
 			onkeydown: (e) => this.keydown(e),
 			class: "cm-search"
 		}, [
@@ -648,16 +648,16 @@ var Tt = (e) => {
 			n("next", () => ht(e), [W(e, "next")]),
 			n("prev", () => gt(e), [W(e, "previous")]),
 			n("select", () => _t(e), [W(e, "all")]),
-			P("label", null, [this.caseField, W(e, "match case")]),
-			P("label", null, [this.reField, W(e, "regexp")]),
-			P("label", null, [this.wordField, W(e, "by word")]),
+			F("label", null, [this.caseField, W(e, "match case")]),
+			F("label", null, [this.reField, W(e, "regexp")]),
+			F("label", null, [this.wordField, W(e, "by word")]),
 			...e.state.readOnly ? [] : [
-				P("br"),
+				F("br"),
 				this.replaceField,
 				n("replace", () => yt(e), [W(e, "replace")]),
 				n("replaceAll", () => bt(e), [W(e, "replace all")])
 			],
-			P("button", {
+			F("button", {
 				name: "close",
 				onclick: () => Et(e),
 				"aria-label": W(e, "close"),
@@ -666,7 +666,7 @@ var Tt = (e) => {
 		]);
 	}
 	commit() {
-		let e = new Ze({
+		let e = new Xe({
 			search: this.searchField.value,
 			caseSensitive: this.caseField.checked,
 			regexp: this.reField.checked,
@@ -691,7 +691,7 @@ var Tt = (e) => {
 		return 80;
 	}
 	get top() {
-		return this.view.state.facet(Xe).top;
+		return this.view.state.facet(Ye).top;
 	}
 };
 function W(e, t) {
@@ -875,7 +875,7 @@ function Wt(e, t, n = t.selection.ranges) {
 	return null;
 }
 var G = /* @__PURE__ */ ae.define(), Gt = /* @__PURE__ */ ae.define(), Kt = /* @__PURE__ */ i.define(), qt = /* @__PURE__ */ i.define({ combine(e) {
-	return Oe(e, {
+	return De(e, {
 		minDepth: 100,
 		newGroupDelay: 500,
 		joinToEvent: (e, t) => t
@@ -944,7 +944,7 @@ var Zt = /* @__PURE__ */ Xt(0, !1), Qt = /* @__PURE__ */ Xt(1, !1), $t = /* @__P
 		};
 	}
 	static fromJSON(t) {
-		return new e(t.changes && ee.fromJSON(t.changes), [], t.mapped && De.fromJSON(t.mapped), t.startSelection && C.fromJSON(t.startSelection), t.selectionsAfter.map(C.fromJSON));
+		return new e(t.changes && ee.fromJSON(t.changes), [], t.mapped && Ee.fromJSON(t.mapped), t.startSelection && C.fromJSON(t.startSelection), t.selectionsAfter.map(C.fromJSON));
 	}
 	static fromTransaction(t, n) {
 		let r = K;
@@ -1460,7 +1460,7 @@ function Jr(e) {
 		let i = n.changeByRange((r) => {
 			let { from: i, to: a } = r, o = n.doc.lineAt(i), c = !e && i == a && Gr(n, i);
 			e && (i = a = (a <= o.to ? o : n.doc.lineAt(a)).to);
-			let l = new ye(n, {
+			let l = new P(n, {
 				simulateBreak: i,
 				simulateDoubleBreak: !!c
 			}), u = me(l, i);
@@ -1499,7 +1499,7 @@ function Yr(e, t) {
 }
 var Xr = ({ state: e, dispatch: t }) => {
 	if (e.readOnly) return !1;
-	let n = Object.create(null), r = new ye(e, { overrideIndentation: (e) => n[e] ?? -1 }), i = Yr(e, (t, i, a) => {
+	let n = Object.create(null), r = new P(e, { overrideIndentation: (e) => n[e] ?? -1 }), i = Yr(e, (t, i, a) => {
 		let o = me(r, t.from);
 		if (o == null) return;
 		/\S/.test(t.text) || (o = 0);
@@ -3207,7 +3207,7 @@ function ri(e) {
 	function u(e) {
 		var t = e.state.vim;
 		return t.onPasteFn ||= function() {
-			t.insertMode || (e.setCursor(I(e.getCursor(), 0, 1)), Oe.enterInsertMode(e, {}, t));
+			t.insertMode || (e.setCursor(L(e.getCursor(), 0, 1)), De.enterInsertMode(e, {}, t));
 		}, t.onPasteFn;
 	}
 	var d = /[\d]/, f = [e.isWordChar, function(t) {
@@ -3307,7 +3307,7 @@ function ri(e) {
 			}
 			if (c) {
 				var u = c.find();
-				u && !R(u, o) && l(o);
+				u && !z(u, o) && l(o);
 			} else l(o);
 			l(s), n = t, r = t - e + 1, r < 0 && (r = 0);
 		}
@@ -3317,7 +3317,7 @@ function ri(e) {
 			if (s && !s.find()) {
 				var c = o > 0 ? 1 : -1, l, u = a.getCursor();
 				do
-					if (t += c, s = i[(e + t) % e], s && (l = s.find()) && !R(u, l)) break;
+					if (t += c, s = i[(e + t) % e], s && (l = s.find()) && !z(u, l)) break;
 				while (t < n && t > r);
 			}
 			return s;
@@ -3399,9 +3399,9 @@ function ri(e) {
 				forward: !0,
 				selectedCharacter: ""
 			},
-			registerController: new xe({}),
-			searchHistoryController: new Se(),
-			exCommandHistoryController: new Se()
+			registerController: new be({}),
+			searchHistoryController: new xe(),
+			exCommandHistoryController: new xe()
 		}, T) {
 			var t = T[e];
 			t.value = t.defaultValue;
@@ -3483,7 +3483,7 @@ function ri(e) {
 			}
 			function c() {
 				if (n == "<Esc>") {
-					if (a.visualMode) Ye(o);
+					if (a.visualMode) Je(o);
 					else if (a.insertMode) Kt(o);
 					else return;
 					return N(o), !0;
@@ -3492,7 +3492,7 @@ function ri(e) {
 			function l() {
 				if (c()) return !0;
 				a.inputState.keyBuffer.push(n);
-				var e = a.inputState.keyBuffer.join(""), t = n.length == 1, i = Ce.matchCommand(e, r, a.inputState, "insert"), s = a.inputState.changeQueue;
+				var e = a.inputState.keyBuffer.join(""), t = n.length == 1, i = Se.matchCommand(e, r, a.inputState, "insert"), s = a.inputState.changeQueue;
 				if (i.type == "none") return N(o), !1;
 				if (i.type == "partial") {
 					if (i.expectLiteralNext && (a.expectLiteralNext = !0), se && window.clearTimeout(se), se = t && window.setTimeout(function() {
@@ -3501,7 +3501,7 @@ function ri(e) {
 						var l = o.listSelections();
 						(!s || s.removed.length != l.length) && (s = a.inputState.changeQueue = new ve()), s.inserted += n;
 						for (var u = 0; u < l.length; u++) {
-							var d = B(l[u].anchor, l[u].head), f = Fe(l[u].anchor, l[u].head), p = o.getRange(d, o.state.overwrite ? I(f, 0, 1) : f);
+							var d = V(l[u].anchor, l[u].head), f = Pe(l[u].anchor, l[u].head), p = o.getRange(d, o.state.overwrite ? L(f, 0, 1) : f);
 							s.removed[u] = (s.removed[u] || "") + p;
 						}
 					}
@@ -3510,7 +3510,7 @@ function ri(e) {
 				if (a.expectLiteralNext = !1, se && window.clearTimeout(se), i.command && s) {
 					for (var l = o.listSelections(), u = 0; u < l.length; u++) {
 						var m = l[u].head;
-						o.replaceRange(s.removed[u] || "", I(m, 0, -s.inserted.length), m, "+input");
+						o.replaceRange(s.removed[u] || "", L(m, 0, -s.inserted.length), m, "+input");
 					}
 					k.macroModeState.lastInsertModeChanges.changes.pop();
 				}
@@ -3525,7 +3525,7 @@ function ri(e) {
 				if (!t) return N(o), !1;
 				var i = a.visualMode ? "visual" : "normal", l = t[2] || t[1];
 				a.inputState.operatorShortcut && a.inputState.operatorShortcut.slice(-1) == l && (l = a.inputState.operatorShortcut);
-				var u = Ce.matchCommand(l, r, a.inputState, i);
+				var u = Se.matchCommand(l, r, a.inputState, i);
 				return u.type == "none" ? (N(o), !1) : u.type == "partial" ? (u.expectLiteralNext && (a.expectLiteralNext = !0), !0) : u.type == "clear" ? (N(o), !0) : (a.expectLiteralNext = !1, a.inputState.keyBuffer.length = 0, t = /^(\d*)(.*)$/.exec(e), t && t[1] && t[1] != "0" && a.inputState.pushRepeatDigit(t[1]), u.command);
 			}
 			var d = a.insertMode ? l() : u();
@@ -3540,7 +3540,7 @@ function ri(e) {
 					o.curOp.isVimOp = !0;
 					try {
 						if (typeof d != "object") return;
-						d.type == "keyToKey" ? de(o, d.toKeys, d) : Ce.processCommand(o, a, d);
+						d.type == "keyToKey" ? de(o, d.toKeys, d) : Se.processCommand(o, a, d);
 					} catch (e) {
 						throw o.state.vim = void 0, ie(o), A.suppressErrorLogging || console.log(e), e;
 					}
@@ -3551,13 +3551,13 @@ function ri(e) {
 		handleEx: function(e, t) {
 			G.processCommand(e, t);
 		},
-		defineMotion: Te,
-		defineAction: ke,
-		defineOperator: P,
+		defineMotion: we,
+		defineAction: Oe,
+		defineOperator: F,
 		mapCommand: Xt,
 		_mapCommand: qt,
-		defineRegister: be,
-		exitVisualMode: Ye,
+		defineRegister: ye,
+		exitVisualMode: Je,
 		exitInsertMode: Kt
 	}, ce = [], le = !1, j;
 	function ue(e) {
@@ -3713,7 +3713,7 @@ function ri(e) {
 	function ve() {
 		this.removed = [], this.inserted = "";
 	}
-	class ye {
+	class P {
 		constructor(e, t, n) {
 			this.clear(), this.keyBuffer = [e || ""], this.insertModeChanges = [], this.searchQueries = [], this.linewise = !!t, this.blockwise = !!n;
 		}
@@ -3736,15 +3736,15 @@ function ri(e) {
 			return this.keyBuffer.join("");
 		}
 	}
-	function be(e, t) {
+	function ye(e, t) {
 		var n = k.registerController.registers;
 		if (!e || e.length != 1) throw Error("Register name must be 1 character");
 		if (n[e]) throw Error("Register already defined " + e);
 		n[e] = t, h.push(e);
 	}
-	class xe {
+	class be {
 		constructor(e) {
-			this.registers = e, this.unnamedRegister = e["\""] = new ye(), e["."] = new ye(), e[":"] = new ye(), e["/"] = new ye(), e["+"] = new ye();
+			this.registers = e, this.unnamedRegister = e["\""] = new P(), e["."] = new P(), e[":"] = new P(), e["/"] = new P(), e["+"] = new P();
 		}
 		pushText(e, t, n, r, i) {
 			if (e !== "_") {
@@ -3753,11 +3753,11 @@ function ri(e) {
 				if (!a || !e) {
 					switch (t) {
 						case "yank":
-							this.registers[0] = new ye(n, r, i);
+							this.registers[0] = new P(n, r, i);
 							break;
 						case "delete":
 						case "change":
-							n.indexOf("\n") == -1 ? this.registers["-"] = new ye(n, r) : (this.shiftNumericRegisters_(), this.registers[1] = new ye(n, r));
+							n.indexOf("\n") == -1 ? this.registers["-"] = new P(n, r) : (this.shiftNumericRegisters_(), this.registers[1] = new P(n, r));
 							break;
 					}
 					this.unnamedRegister.setText(n, r, i);
@@ -3767,7 +3767,7 @@ function ri(e) {
 			}
 		}
 		getRegister(e) {
-			return this.isValidRegister(e) ? (e = e.toLowerCase(), this.registers[e] || (this.registers[e] = new ye()), this.registers[e]) : this.unnamedRegister;
+			return this.isValidRegister(e) ? (e = e.toLowerCase(), this.registers[e] || (this.registers[e] = new P()), this.registers[e]) : this.unnamedRegister;
 		}
 		isValidRegister(e) {
 			return e && (w(e, h) || g.test(e));
@@ -3776,7 +3776,7 @@ function ri(e) {
 			for (var e = 9; e >= 2; e--) this.registers[e] = this.getRegister("" + (e - 1));
 		}
 	}
-	class Se {
+	class xe {
 		constructor() {
 			this.historyBuffer = [], this.iterator = 0, this.initialPrefix = null;
 		}
@@ -3795,15 +3795,15 @@ function ri(e) {
 			this.initialPrefix = null, this.iterator = this.historyBuffer.length;
 		}
 	}
-	var Ce = {
+	var Se = {
 		matchCommand: function(e, t, n, r) {
-			var i = je(e, t, r, n), a = i.full[0];
+			var i = Ae(e, t, r, n), a = i.full[0];
 			if (!a) return i.partial.length ? {
 				type: "partial",
 				expectLiteralNext: i.partial.length == 1 && i.partial[0].keys.slice(-11) == "<character>"
 			} : { type: "none" };
 			if (a.keys.slice(-11) == "<character>" || a.keys.slice(-10) == "<register>") {
-				var o = Ne(e);
+				var o = Me(e);
 				if (!o || o.length > 1) return { type: "clear" };
 				n.selectedCharacter = o;
 			}
@@ -3836,7 +3836,7 @@ function ri(e) {
 			}
 		},
 		processMotion: function(e, t, n) {
-			t.inputState.motion = n.motion, t.inputState.motionArgs = Ae(n.motionArgs), this.evalInput(e, t);
+			t.inputState.motion = n.motion, t.inputState.motionArgs = ke(n.motionArgs), this.evalInput(e, t);
 		},
 		processOperator: function(e, t, n) {
 			var r = t.inputState;
@@ -3847,15 +3847,15 @@ function ri(e) {
 				}, this.evalInput(e, t);
 				return;
 			} else N(e);
-			r.operator = n.operator, r.operatorArgs = Ae(n.operatorArgs), n.keys.length > 1 && (r.operatorShortcut = n.keys), n.exitVisualBlock && (t.visualBlock = !1, Ke(e)), t.visualMode && this.evalInput(e, t);
+			r.operator = n.operator, r.operatorArgs = ke(n.operatorArgs), n.keys.length > 1 && (r.operatorShortcut = n.keys), n.exitVisualBlock && (t.visualBlock = !1, Ge(e)), t.visualMode && this.evalInput(e, t);
 		},
 		processOperatorMotion: function(e, t, n) {
-			var r = t.visualMode, i = Ae(n.operatorMotionArgs);
+			var r = t.visualMode, i = ke(n.operatorMotionArgs);
 			i && r && i.visualLine && (t.visualLine = !0), this.processOperator(e, t, n), r || this.processMotion(e, t, n);
 		},
 		processAction: function(e, t, n) {
-			var r = t.inputState, i = r.getRepeat(), a = !!i, o = Ae(n.actionArgs) || { repeat: 1 };
-			r.selectedCharacter && (o.selectedCharacter = r.selectedCharacter), n.operator && this.processOperator(e, t, n), n.motion && this.processMotion(e, t, n), (n.motion || n.operator) && this.evalInput(e, t), o.repeat = i || 1, o.repeatIsExplicit = a, o.registerName = r.registerName, N(e), t.lastMotion = null, n.isEdit && this.recordLastEdit(t, r, n), Oe[n.action](e, o, t);
+			var r = t.inputState, i = r.getRepeat(), a = !!i, o = ke(n.actionArgs) || { repeat: 1 };
+			r.selectedCharacter && (o.selectedCharacter = r.selectedCharacter), n.operator && this.processOperator(e, t, n), n.motion && this.processMotion(e, t, n), (n.motion || n.operator) && this.evalInput(e, t), o.repeat = i || 1, o.repeatIsExplicit = a, o.registerName = r.registerName, N(e), t.lastMotion = null, n.isEdit && this.recordLastEdit(t, r, n), De[n.action](e, o, t);
 		},
 		processSearch: function(t, n, r) {
 			if (!t.getSearchCursor) return;
@@ -3870,7 +3870,7 @@ function ri(e) {
 					W(t, "Invalid regex: " + e), N(t);
 					return;
 				}
-				Ce.processMotion(t, n, {
+				Se.processMotion(t, n, {
 					keys: "",
 					type: "motion",
 					motion: "findNext",
@@ -3926,7 +3926,7 @@ function ri(e) {
 						return;
 					}
 					let e = t.getLine(_.start.line).substring(_.start.ch, _.end.ch);
-					e = v && a ? "\\b" + e + "\\b" : Re(e), k.jumpList.cachedCursor = t.getCursor(), t.setCursor(_.start), u(e, !0, !1);
+					e = v && a ? "\\b" + e + "\\b" : Le(e), k.jumpList.cachedCursor = t.getCursor(), t.setCursor(_.start), u(e, !0, !1);
 					break;
 			}
 		},
@@ -3963,15 +3963,15 @@ function ri(e) {
 			}
 		},
 		evalInput: function(e, r) {
-			var i = r.inputState, a = i.motion, o = i.motionArgs || { repeat: 1 }, s = i.operator, c = i.operatorArgs || {}, l = i.registerName, u = r.sel, d = L(r.visualMode ? F(e, u.head) : e.getCursor("head")), f = L(r.visualMode ? F(e, u.anchor) : e.getCursor("anchor")), p = L(d), m = L(f), h, g, _;
+			var i = r.inputState, a = i.motion, o = i.motionArgs || { repeat: 1 }, s = i.operator, c = i.operatorArgs || {}, l = i.registerName, u = r.sel, d = R(r.visualMode ? I(e, u.head) : e.getCursor("head")), f = R(r.visualMode ? I(e, u.anchor) : e.getCursor("anchor")), p = R(d), m = R(f), h, g, _;
 			if (s && this.recordLastEdit(r, i), _ = i.repeatOverride === void 0 ? i.getRepeat() : i.repeatOverride, _ > 0 && o.explicitRepeat ? o.repeatIsExplicit = !0 : (o.noRepeat || !o.explicitRepeat && _ === 0) && (_ = 1, o.repeatIsExplicit = !1), i.selectedCharacter && (o.selectedCharacter = c.selectedCharacter = i.selectedCharacter), o.repeat = _, N(e), a) {
-				var v = we[a](e, d, o, r, i);
-				if (r.lastMotion = we[a], !v) return;
+				var v = Ce[a](e, d, o, r, i);
+				if (r.lastMotion = Ce[a], !v) return;
 				if (o.toJumplist) {
 					var y = k.jumpList, b = y.cachedCursor;
 					b ? (et(e, b, v), delete y.cachedCursor) : et(e, d, v);
 				}
-				v instanceof Array ? (g = v[0], h = v[1]) : h = v, h ||= L(d), r.visualMode ? (r.visualBlock && h.ch === Infinity || (h = F(e, h, p)), g &&= F(e, g), g ||= m, u.anchor = g, u.head = h, Ke(e), U(e, r, "<", z(g, h) ? g : h), U(e, r, ">", z(g, h) ? h : g)) : s || (h = F(e, h, p), e.setCursor(h.line, h.ch));
+				v instanceof Array ? (g = v[0], h = v[1]) : h = v, h ||= R(d), r.visualMode ? (r.visualBlock && h.ch === Infinity || (h = I(e, h, p)), g &&= I(e, g), g ||= m, u.anchor = g, u.head = h, Ge(e), U(e, r, "<", B(g, h) ? g : h), U(e, r, ">", B(g, h) ? h : g)) : s || (h = I(e, h, p), e.setCursor(h.line, h.ch));
 			}
 			if (s) {
 				if (c.lastSel) {
@@ -3980,58 +3980,58 @@ function ri(e) {
 					h = x.visualLine ? new t(m.line + ee, m.ch) : x.visualBlock ? new t(m.line + ee, m.ch + S) : x.head.line == x.anchor.line ? new t(m.line, m.ch + S) : new t(m.line + ee, m.ch), r.visualMode = !0, r.visualLine = x.visualLine, r.visualBlock = x.visualBlock, u = r.sel = {
 						anchor: g,
 						head: h
-					}, Ke(e);
+					}, Ge(e);
 				} else r.visualMode && (c.lastSel = {
-					anchor: L(u.anchor),
-					head: L(u.head),
+					anchor: R(u.anchor),
+					head: R(u.head),
 					visualBlock: r.visualBlock,
 					visualLine: r.visualLine
 				});
 				var C, w, T, E, D;
 				if (r.visualMode) {
-					C = B(u.head, u.anchor), w = Fe(u.head, u.anchor), T = r.visualLine || c.linewise, E = r.visualBlock ? "block" : T ? "line" : "char";
+					C = V(u.head, u.anchor), w = Pe(u.head, u.anchor), T = r.visualLine || c.linewise, E = r.visualBlock ? "block" : T ? "line" : "char";
 					var O = n(e, C, w);
-					if (D = qe(e, {
+					if (D = Ke(e, {
 						anchor: O.start,
 						head: O.end
 					}, E), T) {
 						var te = D.ranges;
-						if (E == "block") for (var ne = 0; ne < te.length; ne++) te[ne].head.ch = V(e, te[ne].head.line);
+						if (E == "block") for (var ne = 0; ne < te.length; ne++) te[ne].head.ch = H(e, te[ne].head.line);
 						else E == "line" && (te[0].head = new t(te[0].head.line + 1, 0));
 					}
 				} else {
-					if (C = L(g || m), w = L(h || p), z(w, C)) {
+					if (C = R(g || m), w = R(h || p), B(w, C)) {
 						var re = C;
 						C = w, w = re;
 					}
-					T = o.linewise || c.linewise, T ? Ze(e, C, w) : o.forward && Xe(e, C, w), E = "char";
+					T = o.linewise || c.linewise, T ? Xe(e, C, w) : o.forward && Ye(e, C, w), E = "char";
 					var ie = !o.inclusive || T, O = n(e, C, w);
-					D = qe(e, {
+					D = Ke(e, {
 						anchor: O.start,
 						head: O.end
 					}, E, ie);
 				}
 				e.setSelections(D.ranges, D.primary), r.lastMotion = null, c.repeat = _, c.registerName = l, c.linewise = T;
-				var ae = De[s](e, c, D.ranges, m, h);
-				r.visualMode && Ye(e, ae != null), ae && e.setCursor(ae);
+				var ae = Ee[s](e, c, D.ranges, m, h);
+				r.visualMode && Je(e, ae != null), ae && e.setCursor(ae);
 			}
 		},
 		recordLastEdit: function(e, t, n) {
 			var r = k.macroModeState;
 			r.isPlaying || (e.lastEditInputState = t, e.lastEditActionCommand = n, r.lastInsertModeChanges.changes = [], r.lastInsertModeChanges.expectCursorActivityForChange = !1, r.lastInsertModeChanges.visualBlock = e.visualBlock ? e.sel.head.line - e.sel.anchor.line : 0);
 		}
-	}, we = {
+	}, Ce = {
 		moveToTopLine: function(e, n, r) {
 			var i = Bt(e).top + r.repeat - 1;
-			return new t(i, H(e.getLine(i)));
+			return new t(i, Ze(e.getLine(i)));
 		},
 		moveToMiddleLine: function(e) {
 			var n = Bt(e), r = Math.floor((n.top + n.bottom) * .5);
-			return new t(r, H(e.getLine(r)));
+			return new t(r, Ze(e.getLine(r)));
 		},
 		moveToBottomLine: function(e, n, r) {
 			var i = Bt(e).bottom - r.repeat + 1;
-			return new t(i, H(e.getLine(i)));
+			return new t(i, Ze(e.getLine(i)));
 		},
 		expandToLine: function(e, n, r) {
 			return new t(n.line + r.repeat - 1, Infinity);
@@ -4073,25 +4073,25 @@ function ri(e) {
 			var i = Vt(e, r, n.selectedCharacter || "");
 			return i ? n.linewise ? {
 				line: i.line,
-				ch: H(e.getLine(i.line))
+				ch: Ze(e.getLine(i.line))
 			} : i : null;
 		},
 		moveToOtherHighlightedEnd: function(e, n, r, i) {
 			var a = i.sel;
-			return i.visualBlock && r.sameLine ? [F(e, new t(a.anchor.line, a.head.ch)), F(e, new t(a.head.line, a.anchor.ch))] : [a.head, a.anchor];
+			return i.visualBlock && r.sameLine ? [I(e, new t(a.anchor.line, a.head.ch)), I(e, new t(a.head.line, a.anchor.ch))] : [a.head, a.anchor];
 		},
 		jumpToMark: function(e, n, r, i) {
 			for (var a = n, o = 0; o < r.repeat; o++) {
 				var s = a;
 				for (var c in i.marks) if (y(c)) {
 					var l = i.marks[c].find();
-					if (!(r.forward ? z(l, s) : z(s, l)) && !(r.linewise && l.line == s.line)) {
-						var u = R(s, a), d = r.forward ? Ie(s, l, a) : Ie(a, l, s);
+					if (!(r.forward ? B(l, s) : B(s, l)) && !(r.linewise && l.line == s.line)) {
+						var u = z(s, a), d = r.forward ? Fe(s, l, a) : Fe(a, l, s);
 						(u || d) && (a = l);
 					}
 				}
 			}
-			return r.linewise && (a = new t(a.line, H(e.getLine(a.line)))), a;
+			return r.linewise && (a = new t(a.line, Ze(e.getLine(a.line)))), a;
 		},
 		moveByCharacters: function(e, n, r) {
 			var i = n, a = r.repeat, o = r.forward ? i.ch + a : i.ch - a;
@@ -4110,7 +4110,7 @@ function ri(e) {
 				default: i.lastHPos = o;
 			}
 			var s = r.repeat + (r.repeatOffset || 0), c = r.forward ? a.line + s : a.line - s, l = e.firstLine(), u = e.lastLine(), d = e.findPosV(a, r.forward ? s : -s, "line", i.lastHSPos);
-			return (r.forward ? d.line > c : d.line < c) && (c = d.line, o = d.ch), c < l && a.line == l ? this.moveToStartOfLine(e, n, r, i) : c > u && a.line == u ? st(e, n, r, i, !0) : (r.toFirstChar && (o = H(e.getLine(c)), i.lastHPos = o), i.lastHSPos = e.charCoords(new t(c, o), "div").left, new t(c, o));
+			return (r.forward ? d.line > c : d.line < c) && (c = d.line, o = d.ch), c < l && a.line == l ? this.moveToStartOfLine(e, n, r, i) : c > u && a.line == u ? st(e, n, r, i, !0) : (r.toFirstChar && (o = Ze(e.getLine(c)), i.lastHPos = o), i.lastHSPos = e.charCoords(new t(c, o), "div").left, new t(c, o));
 		},
 		moveByDisplayLines: function(e, n, r, i) {
 			var a = n;
@@ -4151,7 +4151,7 @@ function ri(e) {
 			var i = e.getScrollInfo(), a = null, o = n.repeat;
 			o ||= i.clientHeight / (2 * e.defaultTextHeight());
 			var s = e.charCoords(t, "local");
-			if (n.repeat = o, a = we.moveByDisplayLines(e, t, n, r), !a) return null;
+			if (n.repeat = o, a = Ce.moveByDisplayLines(e, t, n, r), !a) return null;
 			var c = e.charCoords(a, "local");
 			return e.scrollTo(null, i.top + c.top - s.top), a;
 		},
@@ -4179,7 +4179,7 @@ function ri(e) {
 		},
 		moveToFirstNonWhiteSpaceCharacter: function(e, n) {
 			var r = n;
-			return new t(r.line, H(e.getLine(r.line)));
+			return new t(r.line, Ze(e.getLine(r.line)));
 		},
 		moveToMatchedSymbol: function(e, n) {
 			for (var r = n, i = r.line, a = r.ch, o = e.getLine(i), s; a < o.length; a++) if (s = o.charAt(a), s && b(s)) {
@@ -4196,7 +4196,7 @@ function ri(e) {
 		},
 		moveToLineOrEdgeOfDocument: function(e, n, r) {
 			var i = r.forward ? e.lastLine() : e.firstLine();
-			return r.repeatIsExplicit && (i = r.repeat - e.getOption("firstLineNumber")), new t(i, H(e.getLine(i)));
+			return r.repeatIsExplicit && (i = r.repeat - e.getOption("firstLineNumber")), new t(i, Ze(e.getLine(i)));
 		},
 		moveToStartOfDisplayLine: function(e) {
 			return e.execCommand("goLineLeft"), e.getCursor();
@@ -4257,7 +4257,7 @@ function ri(e) {
 					end: h
 				};
 			}
-			return c ? e.state.vim.visualMode ? Ge(e, c.start, c.end, l) : [c.start, c.end] : null;
+			return c ? e.state.vim.visualMode ? We(e, c.start, c.end, l) : [c.start, c.end] : null;
 		},
 		repeatLastCharacterSearch: function(e, t, n) {
 			var r = k.lastCharacterSearch, i = n.repeat, a = n.forward === r.forward, o = !!r.increment * (a ? -1 : 1);
@@ -4266,14 +4266,14 @@ function ri(e) {
 			return s ? (s.ch += o, s) : (e.moveH(o, "char"), t);
 		}
 	};
-	function Te(e, t) {
-		we[e] = t;
+	function we(e, t) {
+		Ce[e] = t;
 	}
-	function Ee(e, t) {
+	function Te(e, t) {
 		for (var n = [], r = 0; r < t; r++) n.push(e);
 		return n;
 	}
-	var De = {
+	var Ee = {
 		change: function(e, n, r) {
 			var i, a, o = e.state.vim, s = r[0].anchor, c = r[0].head;
 			if (!o.visualMode) {
@@ -4281,33 +4281,33 @@ function ri(e) {
 				var l = o.lastEditInputState;
 				if (l?.motion == "moveByWords" && !S(a)) {
 					var u = /\s+$/.exec(a);
-					u && l.motionArgs && l.motionArgs.forward && (c = I(c, 0, -u[0].length), a = a.slice(0, -u[0].length));
+					u && l.motionArgs && l.motionArgs.forward && (c = L(c, 0, -u[0].length), a = a.slice(0, -u[0].length));
 				}
-				n.linewise && (s = new t(s.line, H(e.getLine(s.line))), c.line > s.line && (c = new t(c.line - 1, Number.MAX_VALUE))), e.replaceRange("", s, c), i = s;
+				n.linewise && (s = new t(s.line, Ze(e.getLine(s.line))), c.line > s.line && (c = new t(c.line - 1, Number.MAX_VALUE))), e.replaceRange("", s, c), i = s;
 			} else if (n.fullLine) c.ch = Number.MAX_VALUE, c.line--, e.setSelection(s, c), a = e.getSelection(), e.replaceSelection(""), i = s;
 			else {
 				a = e.getSelection();
-				var d = Ee("", r.length);
-				e.replaceSelections(d), i = B(r[0].head, r[0].anchor);
+				var d = Te("", r.length);
+				e.replaceSelections(d), i = V(r[0].head, r[0].anchor);
 			}
-			k.registerController.pushText(n.registerName, "change", a, n.linewise, r.length > 1), Oe.enterInsertMode(e, { head: i }, e.state.vim);
+			k.registerController.pushText(n.registerName, "change", a, n.linewise, r.length > 1), De.enterInsertMode(e, { head: i }, e.state.vim);
 		},
 		delete: function(e, n, r) {
 			var i, a, o = e.state.vim;
 			if (o.visualBlock) {
 				a = e.getSelection();
-				var s = Ee("", r.length);
-				e.replaceSelections(s), i = B(r[0].head, r[0].anchor);
+				var s = Te("", r.length);
+				e.replaceSelections(s), i = V(r[0].head, r[0].anchor);
 			} else {
 				var c = r[0].anchor, l = r[0].head;
-				n.linewise && l.line != e.firstLine() && c.line == e.lastLine() && c.line == l.line - 1 && (c.line == e.firstLine() ? c.ch = 0 : c = new t(c.line - 1, V(e, c.line - 1))), a = e.getRange(c, l), e.replaceRange("", c, l), i = c, n.linewise && (i = we.moveToFirstNonWhiteSpaceCharacter(e, c));
+				n.linewise && l.line != e.firstLine() && c.line == e.lastLine() && c.line == l.line - 1 && (c.line == e.firstLine() ? c.ch = 0 : c = new t(c.line - 1, H(e, c.line - 1))), a = e.getRange(c, l), e.replaceRange("", c, l), i = c, n.linewise && (i = Ce.moveToFirstNonWhiteSpaceCharacter(e, c));
 			}
-			return k.registerController.pushText(n.registerName, "delete", a, n.linewise, o.visualBlock), F(e, i);
+			return k.registerController.pushText(n.registerName, "delete", a, n.linewise, o.visualBlock), I(e, i);
 		},
 		indent: function(e, t, n) {
 			var r = e.state.vim, i = r.visualMode && t.repeat || 1;
 			if (r.visualBlock) {
-				for (var a = e.getOption("tabSize"), o = e.getOption("indentWithTabs") ? "	" : " ".repeat(a), s, c = n.length - 1; c >= 0; c--) if (s = B(n[c].anchor, n[c].head), t.indentRight) e.replaceRange(o.repeat(i), s, s);
+				for (var a = e.getOption("tabSize"), o = e.getOption("indentWithTabs") ? "	" : " ".repeat(a), s, c = n.length - 1; c >= 0; c--) if (s = V(n[c].anchor, n[c].head), t.indentRight) e.replaceRange(o.repeat(i), s, s);
 				else {
 					for (var l = e.getLine(s.line), u = 0, d = 0; d < i; d++) {
 						var f = l[s.ch + u];
@@ -4317,7 +4317,7 @@ function ri(e) {
 							for (var p = 1; p < o.length && (f = l[s.ch + u], f === " "); p++) u++;
 						} else break;
 					}
-					e.replaceRange("", s, I(s, 0, u));
+					e.replaceRange("", s, L(s, 0, u));
 				}
 				return s;
 			} else if (e.indentMore) for (var d = 0; d < i; d++) t.indentRight ? e.indentMore() : e.indentLess();
@@ -4326,10 +4326,10 @@ function ri(e) {
 				t.linewise && h--;
 				for (var c = m; c <= h; c++) for (var d = 0; d < i; d++) e.indentLine(c, t.indentRight);
 			}
-			return we.moveToFirstNonWhiteSpaceCharacter(e, n[0].anchor);
+			return Ce.moveToFirstNonWhiteSpaceCharacter(e, n[0].anchor);
 		},
 		indentAuto: function(e, t, n) {
-			return e.execCommand("indentAuto"), we.moveToFirstNonWhiteSpaceCharacter(e, n[0].anchor);
+			return e.execCommand("indentAuto"), Ce.moveToFirstNonWhiteSpaceCharacter(e, n[0].anchor);
 		},
 		hardWrap: function(e, n, r, i) {
 			if (e.hardWrap) {
@@ -4353,10 +4353,10 @@ function ri(e) {
 				}
 				o.push(u);
 			}
-			return e.replaceSelections(o), t.shouldMoveCursor ? i : !e.state.vim.visualMode && t.linewise && n[0].anchor.line + 1 == n[0].head.line ? we.moveToFirstNonWhiteSpaceCharacter(e, r) : t.linewise ? r : B(n[0].anchor, n[0].head);
+			return e.replaceSelections(o), t.shouldMoveCursor ? i : !e.state.vim.visualMode && t.linewise && n[0].anchor.line + 1 == n[0].head.line ? Ce.moveToFirstNonWhiteSpaceCharacter(e, r) : t.linewise ? r : V(n[0].anchor, n[0].head);
 		},
 		yank: function(e, t, n, r) {
-			var i = e.state.vim, a = e.getSelection(), o = i.visualMode ? B(i.sel.anchor, i.sel.head, n[0].head, n[0].anchor) : r;
+			var i = e.state.vim, a = e.getSelection(), o = i.visualMode ? V(i.sel.anchor, i.sel.head, n[0].head, n[0].anchor) : r;
 			return k.registerController.pushText(t.registerName, "yank", a, t.linewise, i.visualBlock), o;
 		},
 		rot13: function(e, t, n, r, i) {
@@ -4367,13 +4367,13 @@ function ri(e) {
 				}).join("");
 				o.push(e);
 			}
-			return e.replaceSelections(o), t.shouldMoveCursor ? i : !e.state.vim.visualMode && t.linewise && n[0].anchor.line + 1 == n[0].head.line ? we.moveToFirstNonWhiteSpaceCharacter(e, r) : t.linewise ? r : B(n[0].anchor, n[0].head);
+			return e.replaceSelections(o), t.shouldMoveCursor ? i : !e.state.vim.visualMode && t.linewise && n[0].anchor.line + 1 == n[0].head.line ? Ce.moveToFirstNonWhiteSpaceCharacter(e, r) : t.linewise ? r : V(n[0].anchor, n[0].head);
 		}
 	};
-	function P(e, t) {
-		De[e] = t;
+	function F(e, t) {
+		Ee[e] = t;
 	}
-	var Oe = {
+	var De = {
 		jumpListWalk: function(e, t, n) {
 			if (!n.visualMode) {
 				var r = t.repeat || 1, i = t.forward, a = k.jumpList.move(e, i ? r : -r), o = a ? a.find() : void 0;
@@ -4382,7 +4382,7 @@ function ri(e) {
 		},
 		scroll: function(e, t, n) {
 			if (!n.visualMode) {
-				var r = t.repeat || 1, i = e.defaultTextHeight(), a = e.getScrollInfo().top, o = i * r, s = t.forward ? a + o : a - o, c = L(e.getCursor()), l = e.charCoords(c, "local");
+				var r = t.repeat || 1, i = e.defaultTextHeight(), a = e.getScrollInfo().top, o = i * r, s = t.forward ? a + o : a - o, c = R(e.getCursor()), l = e.charCoords(c, "local");
 				if (t.forward) s > l.top ? (c.line += (s - l.top) / i, c.line = Math.ceil(c.line), e.setCursor(c), l = e.charCoords(c, "local"), e.scrollTo(null, l.top)) : e.scrollTo(null, s);
 				else {
 					var u = s + e.getScrollInfo().clientHeight;
@@ -4418,24 +4418,24 @@ function ri(e) {
 			if (!r.getOption("readOnly")) {
 				a.insertMode = !0, a.insertModeRepeat = i && i.repeat || 1;
 				var o = i ? i.insertAt : null, s = a.sel, c = i.head || r.getCursor("head"), l = r.listSelections().length;
-				if (o == "eol") c = new t(c.line, V(r, c.line));
+				if (o == "eol") c = new t(c.line, H(r, c.line));
 				else if (o == "bol") c = new t(c.line, 0);
 				else if (o == "charAfter") {
-					var u = n(r, c, I(c, 0, 1));
+					var u = n(r, c, L(c, 0, 1));
 					c = u.end;
 				} else if (o == "firstNonBlank") {
-					var u = n(r, c, we.moveToFirstNonWhiteSpaceCharacter(r, c));
+					var u = n(r, c, Ce.moveToFirstNonWhiteSpaceCharacter(r, c));
 					c = u.end;
 				} else if (o == "startOfSelectedArea") {
 					if (!a.visualMode) return;
 					a.visualBlock ? (c = new t(Math.min(s.head.line, s.anchor.line), Math.min(s.head.ch, s.anchor.ch)), l = Math.abs(s.head.line - s.anchor.line) + 1) : c = s.head.line < s.anchor.line ? s.head : new t(s.anchor.line, 0);
 				} else if (o == "endOfSelectedArea") {
 					if (!a.visualMode) return;
-					a.visualBlock ? (c = new t(Math.min(s.head.line, s.anchor.line), Math.max(s.head.ch, s.anchor.ch) + 1), l = Math.abs(s.head.line - s.anchor.line) + 1) : c = s.head.line >= s.anchor.line ? I(s.head, 0, 1) : new t(s.anchor.line, 0);
+					a.visualBlock ? (c = new t(Math.min(s.head.line, s.anchor.line), Math.max(s.head.ch, s.anchor.ch) + 1), l = Math.abs(s.head.line - s.anchor.line) + 1) : c = s.head.line >= s.anchor.line ? L(s.head, 0, 1) : new t(s.anchor.line, 0);
 				} else if (o == "inplace") {
 					if (a.visualMode) return;
 				} else o == "lastEdit" && (c = Ht(r) || c);
-				r.setOption("disableInput", !1), i && i.replace ? (r.toggleOverwrite(!0), r.setOption("keyMap", "vim-replace"), e.signal(r, "vim-mode-change", { mode: "replace" })) : (r.toggleOverwrite(!1), r.setOption("keyMap", "vim-insert"), e.signal(r, "vim-mode-change", { mode: "insert" })), k.macroModeState.isPlaying || (r.on("change", tn), a.insertEnd && a.insertEnd.clear(), a.insertEnd = r.setBookmark(c, { insertLeft: !0 }), e.on(r.getInputField(), "keydown", an)), a.visualMode && Ye(r), Ve(r, c, l);
+				r.setOption("disableInput", !1), i && i.replace ? (r.toggleOverwrite(!0), r.setOption("keyMap", "vim-replace"), e.signal(r, "vim-mode-change", { mode: "replace" })) : (r.toggleOverwrite(!1), r.setOption("keyMap", "vim-insert"), e.signal(r, "vim-mode-change", { mode: "insert" })), k.macroModeState.isPlaying || (r.on("change", tn), a.insertEnd && a.insertEnd.clear(), a.insertEnd = r.setBookmark(c, { insertLeft: !0 }), e.on(r.getInputField(), "keydown", an)), a.visualMode && Je(r), Be(r, c, l);
 			}
 		},
 		toggleVisualMode: function(r, i, a) {
@@ -4443,9 +4443,9 @@ function ri(e) {
 			if (a.visualMode) a.visualLine != !!i.linewise || a.visualBlock != !!i.blockwise ? (a.visualLine = !!i.linewise, a.visualBlock = !!i.blockwise, e.signal(r, "vim-mode-change", {
 				mode: "visual",
 				subMode: a.visualLine ? "linewise" : a.visualBlock ? "blockwise" : ""
-			}), Ke(r)) : Ye(r);
+			}), Ge(r)) : Je(r);
 			else {
-				a.visualMode = !0, a.visualLine = !!i.linewise, a.visualBlock = !!i.blockwise, c = F(r, new t(s.line, s.ch + o - 1));
+				a.visualMode = !0, a.visualLine = !!i.linewise, a.visualBlock = !!i.blockwise, c = I(r, new t(s.line, s.ch + o - 1));
 				var l = n(r, s, c);
 				a.sel = {
 					anchor: l.start,
@@ -4453,18 +4453,18 @@ function ri(e) {
 				}, e.signal(r, "vim-mode-change", {
 					mode: "visual",
 					subMode: a.visualLine ? "linewise" : a.visualBlock ? "blockwise" : ""
-				}), Ke(r), U(r, a, "<", B(s, c)), U(r, a, ">", Fe(s, c));
+				}), Ge(r), U(r, a, "<", V(s, c)), U(r, a, ">", Pe(s, c));
 			}
 		},
 		reselectLastSelection: function(t, n, r) {
 			var i = r.lastSelection;
-			if (r.visualMode && We(t, r), i) {
+			if (r.visualMode && Ue(t, r), i) {
 				var a = i.anchorMark.find(), o = i.headMark.find();
 				if (!a || !o) return;
 				r.sel = {
 					anchor: a,
 					head: o
-				}, r.visualMode = !0, r.visualLine = i.visualLine, r.visualBlock = i.visualBlock, Ke(t), U(t, r, "<", B(a, o)), U(t, r, ">", Fe(a, o)), e.signal(t, "vim-mode-change", {
+				}, r.visualMode = !0, r.visualLine = i.visualLine, r.visualBlock = i.visualBlock, Ge(t), U(t, r, "<", V(a, o)), U(t, r, ">", Pe(a, o)), e.signal(t, "vim-mode-change", {
 					mode: "visual",
 					subMode: r.visualLine ? "linewise" : r.visualBlock ? "blockwise" : ""
 				});
@@ -4473,17 +4473,17 @@ function ri(e) {
 		joinLines: function(e, n, r) {
 			var i, a;
 			if (r.visualMode) {
-				if (i = e.getCursor("anchor"), a = e.getCursor("head"), z(a, i)) {
+				if (i = e.getCursor("anchor"), a = e.getCursor("head"), B(a, i)) {
 					var o = a;
 					a = i, i = o;
 				}
-				a.ch = V(e, a.line) - 1;
+				a.ch = H(e, a.line) - 1;
 			} else {
 				var s = Math.max(n.repeat, 2);
-				i = e.getCursor(), a = F(e, new t(i.line + s - 1, Infinity));
+				i = e.getCursor(), a = I(e, new t(i.line + s - 1, Infinity));
 			}
 			for (var c = 0, l = i.line; l < a.line; l++) {
-				c = V(e, i.line);
+				c = H(e, i.line);
 				var u = "", d = 0;
 				if (!n.keepSpaces) {
 					var f = e.getLine(i.line + 1);
@@ -4491,13 +4491,13 @@ function ri(e) {
 				}
 				e.replaceRange(u, new t(i.line, c), new t(i.line + 1, d));
 			}
-			var p = F(e, new t(i.line, c));
-			r.visualMode && Ye(e, !1), e.setCursor(p);
+			var p = I(e, new t(i.line, c));
+			r.visualMode && Je(e, !1), e.setCursor(p);
 		},
 		newLineAndEnterInsertMode: function(n, r, i) {
 			i.insertMode = !0;
-			var a = L(n.getCursor());
-			a.line === n.firstLine() && !r.after ? (n.replaceRange("\n", new t(n.firstLine(), 0)), n.setCursor(n.firstLine(), 0)) : (a.line = r.after ? a.line : a.line - 1, a.ch = V(n, a.line), n.setCursor(a), (e.commands.newlineAndIndentContinueComment || e.commands.newlineAndIndent)(n)), this.enterInsertMode(n, { repeat: r.repeat }, i);
+			var a = R(n.getCursor());
+			a.line === n.firstLine() && !r.after ? (n.replaceRange("\n", new t(n.firstLine(), 0)), n.setCursor(n.firstLine(), 0)) : (a.line = r.after ? a.line : a.line - 1, a.ch = H(n, a.line), n.setCursor(a), (e.commands.newlineAndIndentContinueComment || e.commands.newlineAndIndent)(n)), this.enterInsertMode(n, { repeat: r.repeat }, i);
 		},
 		paste: function(e, t, n) {
 			var r = k.registerController.getRegister(t.registerName);
@@ -4510,7 +4510,7 @@ function ri(e) {
 			}
 		},
 		continuePaste: function(e, n, r, i, a) {
-			var o = L(e.getCursor());
+			var o = R(e.getCursor());
 			if (i) {
 				if (n.matchIndent) {
 					var s = e.getOption("tabSize"), c = function(e) {
@@ -4531,34 +4531,34 @@ function ri(e) {
 				if (h) {
 					p && h.pop();
 					for (var g = 0; g < h.length; g++) h[g] = h[g] == "" ? " " : h[g];
-					o.ch += +!!n.after, o.ch = Math.min(V(e, o.line), o.ch);
-				} else p ? r.visualMode ? i = r.visualLine ? i.slice(0, -1) : "\n" + i.slice(0, i.length - 1) + "\n" : n.after ? (i = "\n" + i.slice(0, i.length - 1), o.ch = V(e, o.line)) : o.ch = 0 : o.ch += +!!n.after;
+					o.ch += +!!n.after, o.ch = Math.min(H(e, o.line), o.ch);
+				} else p ? r.visualMode ? i = r.visualLine ? i.slice(0, -1) : "\n" + i.slice(0, i.length - 1) + "\n" : n.after ? (i = "\n" + i.slice(0, i.length - 1), o.ch = H(e, o.line)) : o.ch = 0 : o.ch += +!!n.after;
 				var _;
 				if (r.visualMode) {
 					r.lastPastedText = i;
-					var v, y = Ue(e), b = y[0], x = y[1], ee = e.getSelection(), S = e.listSelections(), C = Array(S.length).join("1").split("1");
-					r.lastSelection && (v = r.lastSelection.headMark.find()), k.registerController.unnamedRegister.setText(ee), m ? (e.replaceSelections(C), x = new t(b.line + i.length - 1, b.ch), e.setCursor(b), Be(e, x), e.replaceSelections(i), _ = b) : r.visualBlock ? (e.replaceSelections(C), e.setCursor(b), e.replaceRange(i, b, b), _ = b) : (e.replaceRange(i, b, x), _ = e.posFromIndex(e.indexFromPos(b) + i.length - 1)), v && (r.lastSelection.headMark = e.setBookmark(v)), p && (_.ch = 0);
+					var v, y = He(e), b = y[0], x = y[1], ee = e.getSelection(), S = e.listSelections(), C = Array(S.length).join("1").split("1");
+					r.lastSelection && (v = r.lastSelection.headMark.find()), k.registerController.unnamedRegister.setText(ee), m ? (e.replaceSelections(C), x = new t(b.line + i.length - 1, b.ch), e.setCursor(b), ze(e, x), e.replaceSelections(i), _ = b) : r.visualBlock ? (e.replaceSelections(C), e.setCursor(b), e.replaceRange(i, b, b), _ = b) : (e.replaceRange(i, b, x), _ = e.posFromIndex(e.indexFromPos(b) + i.length - 1)), v && (r.lastSelection.headMark = e.setBookmark(v)), p && (_.ch = 0);
 				} else if (m && h) {
 					e.setCursor(o);
 					for (var g = 0; g < h.length; g++) {
 						var w = o.line + g;
-						w > e.lastLine() && e.replaceRange("\n", new t(w, 0)), V(e, w) < o.ch && ze(e, w, o.ch);
+						w > e.lastLine() && e.replaceRange("\n", new t(w, 0)), H(e, w) < o.ch && Re(e, w, o.ch);
 					}
-					e.setCursor(o), Be(e, new t(o.line + h.length - 1, o.ch)), e.replaceSelections(h), _ = o;
+					e.setCursor(o), ze(e, new t(o.line + h.length - 1, o.ch)), e.replaceSelections(h), _ = o;
 				} else if (e.replaceRange(i, o), p) {
 					var w = n.after ? o.line + 1 : o.line;
-					_ = new t(w, H(e.getLine(w)));
-				} else _ = L(o), /\n/.test(i) || (_.ch += i.length - +!!n.after);
-				r.visualMode && Ye(e, !1), e.setCursor(_);
+					_ = new t(w, Ze(e.getLine(w)));
+				} else _ = R(o), /\n/.test(i) || (_.ch += i.length - +!!n.after);
+				r.visualMode && Je(e, !1), e.setCursor(_);
 			}
 		},
 		undo: function(t, n) {
 			t.operation(function() {
-				Pe(t, e.commands.undo, n.repeat)(), t.setCursor(F(t, t.getCursor("start")));
+				Ne(t, e.commands.undo, n.repeat)(), t.setCursor(I(t, t.getCursor("start")));
 			});
 		},
 		redo: function(t, n) {
-			Pe(t, e.commands.redo, n.repeat)();
+			Ne(t, e.commands.redo, n.repeat)();
 		},
 		setRegister: function(e, t, n) {
 			n.inputState.registerName = t.selectedCharacter;
@@ -4569,7 +4569,7 @@ function ri(e) {
 		},
 		oneNormalCommand: function(t, n, r) {
 			Kt(t, !0), r.insertModeReturn = !0, e.on(t, "vim-command-done", function n() {
-				r.visualMode || (r.insertModeReturn && (r.insertModeReturn = !1, r.insertMode || Oe.enterInsertMode(t, {}, r)), e.off(t, "vim-command-done", n));
+				r.visualMode || (r.insertModeReturn && (r.insertModeReturn = !1, r.insertMode || De.enterInsertMode(t, {}, r)), e.off(t, "vim-command-done", n));
 			});
 		},
 		setMark: function(e, t, n) {
@@ -4593,7 +4593,7 @@ function ri(e) {
 					var h = p.replace(/\t/g, m).replace(/[^\n]/g, o).split("\n");
 					r.replaceSelections(h);
 				} else r.replaceRange(p, s, l);
-				a.visualMode ? (s = z(u[0].anchor, u[0].head) ? u[0].anchor : u[0].head, r.setCursor(s), Ye(r, !1)) : r.setCursor(I(l, 0, -1));
+				a.visualMode ? (s = B(u[0].anchor, u[0].head) ? u[0].anchor : u[0].head, r.setCursor(s), Je(r, !1)) : r.setCursor(L(l, 0, -1));
 			}
 		},
 		incrementNumberToken: function(e, n) {
@@ -4629,10 +4629,10 @@ function ri(e) {
 			Kt(e);
 		}
 	};
-	function ke(e, t) {
-		Oe[e] = t;
+	function Oe(e, t) {
+		De[e] = t;
 	}
-	function F(e, n, r) {
+	function I(e, n, r) {
 		var i = e.state.vim, a = i.insertMode || i.visualMode, o = Math.min(Math.max(e.firstLine(), n.line), e.lastLine()), s = e.getLine(o), c = s.length - 1 + Number(!!a), l = Math.min(Math.max(0, n.ch), c), u = s.charCodeAt(l);
 		if (56320 <= u && u <= 57343) {
 			var d = 1;
@@ -4640,33 +4640,33 @@ function ri(e) {
 		}
 		return new t(o, l);
 	}
-	function Ae(e) {
+	function ke(e) {
 		var t = {};
 		for (var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
 		return t;
 	}
-	function I(e, n, r) {
+	function L(e, n, r) {
 		return typeof n == "object" && (r = n.ch, n = n.line), new t(e.line + n, e.ch + r);
 	}
-	function je(e, t, n, r) {
+	function Ae(e, t, n, r) {
 		r.operator && (n = "operatorPending");
 		for (var i, o = [], s = [], c = le ? t.length - a : 0; c < t.length; c++) {
 			var l = t[c];
-			n == "insert" && l.context != "insert" || l.context && l.context != n || r.operator && l.type == "action" || !(i = Me(e, l.keys)) || (i == "partial" && o.push(l), i == "full" && s.push(l));
+			n == "insert" && l.context != "insert" || l.context && l.context != n || r.operator && l.type == "action" || !(i = je(e, l.keys)) || (i == "partial" && o.push(l), i == "full" && s.push(l));
 		}
 		return {
 			partial: o,
 			full: s
 		};
 	}
-	function Me(e, t) {
+	function je(e, t) {
 		let n = t.slice(-11) == "<character>", r = t.slice(-10) == "<register>";
 		if (n || r) {
 			var i = t.length - (n ? 11 : 10), a = e.slice(0, i), o = t.slice(0, i);
 			return a == o && e.length > i ? "full" : o.indexOf(a) == 0 ? "partial" : !1;
 		} else return e == t ? "full" : t.indexOf(e) == 0 ? "partial" : !1;
 	}
-	function Ne(e) {
+	function Me(e) {
 		var t = /^.*(<[^>]+>)$/.exec(e), n = t ? t[1] : e.slice(-1);
 		if (n.length > 1) switch (n) {
 			case "<CR>":
@@ -4683,45 +4683,45 @@ function ri(e) {
 		}
 		return n;
 	}
-	function Pe(e, t, n) {
+	function Ne(e, t, n) {
 		return function() {
 			for (var r = 0; r < n; r++) t(e);
 		};
 	}
-	function L(e) {
+	function R(e) {
 		return new t(e.line, e.ch);
 	}
-	function R(e, t) {
+	function z(e, t) {
 		return e.ch == t.ch && e.line == t.line;
 	}
-	function z(e, t) {
+	function B(e, t) {
 		return e.line < t.line || e.line == t.line && e.ch < t.ch;
 	}
-	function B(e, t) {
-		return arguments.length > 2 && (t = B.apply(void 0, Array.prototype.slice.call(arguments, 1))), z(e, t) ? e : t;
+	function V(e, t) {
+		return arguments.length > 2 && (t = V.apply(void 0, Array.prototype.slice.call(arguments, 1))), B(e, t) ? e : t;
 	}
-	function Fe(e, t) {
-		return arguments.length > 2 && (t = Fe.apply(void 0, Array.prototype.slice.call(arguments, 1))), z(e, t) ? t : e;
+	function Pe(e, t) {
+		return arguments.length > 2 && (t = Pe.apply(void 0, Array.prototype.slice.call(arguments, 1))), B(e, t) ? t : e;
 	}
-	function Ie(e, t, n) {
-		var r = z(e, t), i = z(t, n);
+	function Fe(e, t, n) {
+		var r = B(e, t), i = B(t, n);
 		return r && i;
 	}
-	function V(e, t) {
+	function H(e, t) {
 		return e.getLine(t).length;
 	}
-	function Le(e) {
+	function Ie(e) {
 		return e.trim ? e.trim() : e.replace(/^\s+|\s+$/g, "");
 	}
-	function Re(e) {
+	function Le(e) {
 		return e.replace(/([.?*+$\[\]\/\\(){}|\-])/g, "\\$1");
 	}
-	function ze(e, n, r) {
-		var i = V(e, n), a = Array(r - i + 1).join(" ");
+	function Re(e, n, r) {
+		var i = H(e, n), a = Array(r - i + 1).join(" ");
 		e.setCursor(new t(n, i)), e.replaceRange(a, e.getCursor());
 	}
-	function Be(e, n) {
-		var r = [], i = e.listSelections(), a = L(e.clipPos(n)), o = !R(n, a), s = He(i, e.getCursor("head")), c = R(i[s].head, i[s].anchor), l = i.length - 1, u = l - s > s ? l : 0, d = i[u].anchor, f = Math.min(d.line, a.line), p = Math.max(d.line, a.line), m = d.ch, h = a.ch, g = i[u].head.ch - m, _ = h - m;
+	function ze(e, n) {
+		var r = [], i = e.listSelections(), a = R(e.clipPos(n)), o = !z(n, a), s = Ve(i, e.getCursor("head")), c = z(i[s].head, i[s].anchor), l = i.length - 1, u = l - s > s ? l : 0, d = i[u].anchor, f = Math.min(d.line, a.line), p = Math.max(d.line, a.line), m = d.ch, h = a.ch, g = i[u].head.ch - m, _ = h - m;
 		g > 0 && _ <= 0 ? (m++, o || h--) : g < 0 && _ >= 0 ? (m--, c || h++) : g < 0 && _ == -1 && (m--, h++);
 		for (var v = f; v <= p; v++) {
 			var y = {
@@ -4732,9 +4732,9 @@ function ri(e) {
 		}
 		return e.setSelections(r), n.ch = h, d.ch = m, d;
 	}
-	function Ve(e, t, n) {
+	function Be(e, t, n) {
 		for (var r = [], i = 0; i < n; i++) {
-			var a = I(t, i, 0);
+			var a = L(t, i, 0);
 			r.push({
 				anchor: a,
 				head: a
@@ -4742,44 +4742,44 @@ function ri(e) {
 		}
 		e.setSelections(r, 0);
 	}
-	function He(e, t, n) {
+	function Ve(e, t, n) {
 		for (var r = 0; r < e.length; r++) {
-			var i = R(e[r].anchor, t), a = R(e[r].head, t);
+			var i = z(e[r].anchor, t), a = z(e[r].head, t);
 			if (i || a) return r;
 		}
 		return -1;
 	}
-	function Ue(e, t) {
+	function He(e, t) {
 		var n = e.listSelections(), r = n[0], i = n[n.length - 1];
-		return [z(r.anchor, r.head) ? r.anchor : r.head, z(i.anchor, i.head) ? i.head : i.anchor];
+		return [B(r.anchor, r.head) ? r.anchor : r.head, B(i.anchor, i.head) ? i.head : i.anchor];
 	}
-	function We(e, t) {
+	function Ue(e, t) {
 		var n = t.sel.anchor, r = t.sel.head;
 		t.lastPastedText &&= (r = e.posFromIndex(e.indexFromPos(n) + t.lastPastedText.length), void 0), t.lastSelection = {
 			anchorMark: e.setBookmark(n),
 			headMark: e.setBookmark(r),
-			anchor: L(n),
-			head: L(r),
+			anchor: R(n),
+			head: R(r),
 			visualMode: t.visualMode,
 			visualLine: t.visualLine,
 			visualBlock: t.visualBlock
 		};
 	}
-	function Ge(e, n, r, i) {
+	function We(e, n, r, i) {
 		var a = e.state.vim.sel, o = i ? n : a.head, s = i ? n : a.anchor, c;
-		return z(r, n) && (c = r, r = n, n = c), z(o, s) ? (o = B(n, o), s = Fe(s, r)) : (s = B(n, s), o = Fe(o, r), o = I(o, 0, -1), o.ch == -1 && o.line != e.firstLine() && (o = new t(o.line - 1, V(e, o.line - 1)))), [s, o];
+		return B(r, n) && (c = r, r = n, n = c), B(o, s) ? (o = V(n, o), s = Pe(s, r)) : (s = V(n, s), o = Pe(o, r), o = L(o, 0, -1), o.ch == -1 && o.line != e.firstLine() && (o = new t(o.line - 1, H(e, o.line - 1)))), [s, o];
 	}
-	function Ke(e, t, n) {
+	function Ge(e, t, n) {
 		var r = e.state.vim;
 		t ||= r.sel, n ||= r.visualLine ? "line" : r.visualBlock ? "block" : "char";
-		var i = qe(e, t, n);
+		var i = Ke(e, t, n);
 		e.setSelections(i.ranges, i.primary);
 	}
-	function qe(e, n, r, i) {
-		var a = L(n.head), o = L(n.anchor);
+	function Ke(e, n, r, i) {
+		var a = R(n.head), o = R(n.anchor);
 		if (r == "char") {
-			var s = +(!i && !z(n.head, n.anchor)), c = +!!z(n.head, n.anchor);
-			return a = I(n.head, 0, s), o = I(n.anchor, 0, c), {
+			var s = +(!i && !B(n.head, n.anchor)), c = +!!B(n.head, n.anchor);
+			return a = L(n.head, 0, s), o = L(n.anchor, 0, c), {
 				ranges: [{
 					anchor: o,
 					head: a
@@ -4787,11 +4787,11 @@ function ri(e) {
 				primary: 0
 			};
 		} else if (r == "line") {
-			if (z(n.head, n.anchor)) a.ch = 0, o.ch = V(e, o.line);
+			if (B(n.head, n.anchor)) a.ch = 0, o.ch = H(e, o.line);
 			else {
 				o.ch = 0;
 				var l = e.lastLine();
-				a.line > l && (a.line = l), a.ch = V(e, a.line);
+				a.line > l && (a.line = l), a.ch = H(e, a.line);
 			}
 			return {
 				ranges: [{
@@ -4814,33 +4814,33 @@ function ri(e) {
 		}
 		throw "never happens";
 	}
-	function Je(e) {
+	function qe(e) {
 		var t = e.getCursor("head");
-		return e.getSelection().length == 1 && (t = B(t, e.getCursor("anchor"))), t;
+		return e.getSelection().length == 1 && (t = V(t, e.getCursor("anchor"))), t;
 	}
-	function Ye(t, n) {
+	function Je(t, n) {
 		var r = t.state.vim;
-		n !== !1 && t.setCursor(F(t, r.sel.head)), We(t, r), r.visualMode = !1, r.visualLine = !1, r.visualBlock = !1, r.insertMode || e.signal(t, "vim-mode-change", { mode: "normal" });
+		n !== !1 && t.setCursor(I(t, r.sel.head)), Ue(t, r), r.visualMode = !1, r.visualLine = !1, r.visualBlock = !1, r.insertMode || e.signal(t, "vim-mode-change", { mode: "normal" });
 	}
-	function Xe(e, t, n) {
+	function Ye(e, t, n) {
 		var r = e.getRange(t, n);
 		if (/\n\s*$/.test(r)) {
 			var i = r.split("\n");
 			i.pop();
 			for (var a = i.pop(); i.length > 0 && a && S(a); a = i.pop()) n.line--, n.ch = 0;
-			a ? (n.line--, n.ch = V(e, n.line)) : n.ch = 0;
+			a ? (n.line--, n.ch = H(e, n.line)) : n.ch = 0;
 		}
 	}
-	function Ze(e, t, n) {
+	function Xe(e, t, n) {
 		t.ch = 0, n.ch = 0, n.line++;
 	}
-	function H(e) {
+	function Ze(e) {
 		if (!e) return 0;
 		var t = e.search(/\S/);
 		return t == -1 ? e.length : t;
 	}
 	function Qe(e, { inclusive: n, innerWord: r, bigWord: i, noSymbol: a, multiline: o }, s) {
-		var c = s || Je(e), l = e.getLine(c.line), u = l, d = c.line, m = d, h = c.ch, g, _ = a ? f[0] : p[0];
+		var c = s || qe(e), l = e.getLine(c.line), u = l, d = c.line, m = d, h = c.ch, g, _ = a ? f[0] : p[0];
 		if (r && /\s/.test(l.charAt(h))) _ = function(e) {
 			return /\s/.test(e);
 		};
@@ -4887,7 +4887,7 @@ function ri(e) {
 		};
 	}
 	function et(e, t, n) {
-		R(t, n) || k.jumpList.add(e, t, n);
+		z(t, n) || k.jumpList.add(e, t, n);
 	}
 	function tt(e, t) {
 		k.lastCharacterSearch.increment = e, k.lastCharacterSearch.forward = t.forward, k.lastCharacterSearch.selectedCharacter = t.selectedCharacter;
@@ -4952,7 +4952,7 @@ function ri(e) {
 		}
 	};
 	function it(e, n, r, i) {
-		var a = L(e.getCursor()), o = r ? 1 : -1, s = r ? e.lineCount() : -1, c = a.ch, l = a.line, u = e.getLine(l), d = {
+		var a = R(e.getCursor()), o = r ? 1 : -1, s = r ? e.lineCount() : -1, c = a.ch, l = a.line, u = e.getLine(l), d = {
 			lineText: u,
 			nextCh: u.charAt(c),
 			lastCh: null,
@@ -5013,12 +5013,12 @@ function ri(e) {
 		}
 	}
 	function ot(e, n, r, i, a, o) {
-		var s = L(n), c = [];
+		var s = R(n), c = [];
 		(i && !a || !i && a) && r++;
 		for (var l = !(i && a), u = 0; u < r; u++) {
 			var d = at(e, n, i, o, l);
 			if (!d) {
-				var f = V(e, e.lastLine());
+				var f = H(e, e.lastLine());
 				c.push(i ? {
 					line: e.lastLine(),
 					from: f,
@@ -5051,7 +5051,7 @@ function ri(e) {
 	}
 	function lt(e, n) {
 		var r = e.getCursor().line;
-		return F(e, new t(r, n - 1));
+		return I(e, new t(r, n - 1));
 	}
 	function U(e, t, n, r) {
 		!w(n, m) && !g.test(n) || (t.marks[n] && t.marks[n].clear(), t.marks[n] = e.setBookmark(r));
@@ -5263,10 +5263,10 @@ function ri(e) {
 		};
 	}
 	function ht(e, n, r, i) {
-		var a = L(n), o = e.getLine(a.line).split(""), s, c, l, u, d = o.indexOf(r);
+		var a = R(n), o = e.getLine(a.line).split(""), s, c, l, u, d = o.indexOf(r);
 		if (a.ch < d) a.ch = d;
 		else if (d < a.ch && o[a.ch] == r) {
-			var f = /string/.test(e.getTokenTypeAt(I(n, 0, 1))), p = /string/.test(e.getTokenTypeAt(n));
+			var f = /string/.test(e.getTokenTypeAt(L(n, 0, 1))), p = /string/.test(e.getTokenTypeAt(n));
 			f && !p || (c = a.ch, --a.ch);
 		}
 		if (o[a.ch] == r && !c) s = a.ch + 1;
@@ -5491,9 +5491,9 @@ function ri(e) {
 			i === void 0 && (i = 1);
 			for (var a = e.getCursor(), o = e.getSearchCursor(r, a), s = 0; s < i; s++) {
 				var c = o.find(n);
-				if (s == 0 && c && R(o.from(), a)) {
+				if (s == 0 && c && z(o.from(), a)) {
 					var l = n ? o.from() : o.to();
-					c = o.find(n), c && !c[0] && R(o.from(), l) && e.getLine(l.line).length == l.ch && (c = o.find(n));
+					c = o.find(n), c && !c[0] && z(o.from(), l) && e.getLine(l.line).length == l.ch && (c = o.find(n));
 				}
 				if (!c && (o = e.getSearchCursor(r, n ? new t(e.lastLine()) : new t(e.firstLine(), 0)), !o.find(n))) return;
 			}
@@ -5504,7 +5504,7 @@ function ri(e) {
 		return e.operation(function() {
 			i === void 0 && (i = 1);
 			var o = e.getCursor(), s = e.getSearchCursor(r, o), c = s.find(!n);
-			!a.visualMode && c && R(s.from(), o) && s.find(!n);
+			!a.visualMode && c && z(s.from(), o) && s.find(!n);
 			for (var l = 0; l < i; l++) if (c = s.find(n), !c && (s = e.getSearchCursor(r, n ? new t(e.lastLine()) : new t(e.firstLine(), 0)), !s.find(n))) return;
 			var u = s.from(), d = s.to();
 			return u && d && [u, d];
@@ -5538,7 +5538,7 @@ function ri(e) {
 	}
 	function Ht(e) {
 		if (e.getLastEditEnd) return e.getLastEditEnd();
-		for (var t = e.doc.history.done, n = t.length; n--;) if (t[n].changes) return L(t[n].changes[0].to);
+		for (var t = e.doc.history.done, n = t.length; n--;) if (t[n].changes) return R(t[n].changes[0].to);
 	}
 	class Ut {
 		constructor() {
@@ -5560,7 +5560,7 @@ function ri(e) {
 			} catch (e) {
 				throw W(t, e + ""), e;
 			}
-			i.visualMode && Ye(t);
+			i.visualMode && Je(t);
 			var l, u;
 			if (!c.commandName) c.line !== void 0 && (u = "move");
 			else if (l = this.matchCommand_(c.commandName), l) {
@@ -5615,7 +5615,7 @@ function ri(e) {
 		parseCommandArgs_(e, t, n) {
 			if (!e.eol()) {
 				t.argString = e.match(/.*/)?.[0];
-				var r = n.argDelimiter || /\s+/, i = Le(t.argString || "").split(r);
+				var r = n.argDelimiter || /\s+/, i = Ie(t.argString || "").split(r);
 				i.length && i[0] && (t.args = i);
 			}
 		}
@@ -5731,7 +5731,7 @@ function ri(e) {
 			A.mapclear("operatorPending");
 		},
 		move: function(e, t) {
-			Ce.processCommand(e, e.state.vim, {
+			Se.processCommand(e, e.state.vim, {
 				keys: "",
 				type: "motion",
 				motion: "moveToLineOrEdgeOfDocument",
@@ -5775,7 +5775,7 @@ function ri(e) {
 			if (n) for (var a = n.join(""), o = 0; o < a.length; o++) {
 				var s = a.charAt(o);
 				if (k.registerController.isValidRegister(s)) {
-					var c = r[s] || new ye();
+					var c = r[s] || new P();
 					i += "\"" + s + "    " + c.toString() + "\n";
 				}
 			}
@@ -5822,7 +5822,7 @@ function ri(e) {
 			}
 			var d = r.line || n.firstLine(), f = r.lineEnd || r.line || n.lastLine();
 			if (d == f) return;
-			var p = new t(d, 0), m = new t(f, V(n, f)), h = n.getRange(p, m).split("\n"), g = s == "decimal" ? /(-?)([\d]+)/ : s == "hex" ? /(-?)(?:0x)?([0-9a-f]+)/i : s == "octal" ? /([0-7]+)/ : null, _ = s == "decimal" ? 10 : s == "hex" ? 16 : s == "octal" ? 8 : void 0, v = [], y = [];
+			var p = new t(d, 0), m = new t(f, H(n, f)), h = n.getRange(p, m).split("\n"), g = s == "decimal" ? /(-?)([\d]+)/ : s == "hex" ? /(-?)(?:0x)?([0-9a-f]+)/i : s == "octal" ? /([0-7]+)/ : null, _ = s == "decimal" ? 10 : s == "hex" ? 16 : s == "octal" ? 8 : void 0, v = [], y = [];
 			if (s || c) for (var b = 0; b < h.length; b++) {
 				var x = c ? h[b].match(c) : null;
 				x && x[0] != "" ? v.push(x) : g && g.exec(h[b]) ? v.push(h[b]) : y.push(h[b]);
@@ -5922,7 +5922,7 @@ function ri(e) {
 			}
 			var f = _t(e).getQuery(), p = n.line === void 0 ? e.getCursor().line : n.line, m = n.lineEnd || p;
 			p == e.firstLine() && m == e.lastLine() && (m = Infinity), l && (p = m, m = p + l - 1);
-			var h = F(e, new t(p, 0)), g = e.getSearchCursor(f, h);
+			var h = I(e, new t(p, 0)), g = e.getSearchCursor(f, h);
 			Gt(e, u, d, p, m, g, f, o, n.callback);
 		},
 		startinsert: function(e, t) {
@@ -5937,26 +5937,26 @@ function ri(e) {
 			Rt(e);
 		},
 		yank: function(e) {
-			var t = L(e.getCursor()).line, n = e.getLine(t);
+			var t = R(e.getCursor()).line, n = e.getLine(t);
 			k.registerController.pushText("0", "yank", n, !0, !0);
 		},
 		delete: function(e, n) {
 			var r = n.selectionLine, i = isNaN(n.selectionLineEnd) ? r : n.selectionLineEnd;
-			De.delete(e, { linewise: !0 }, [{
+			Ee.delete(e, { linewise: !0 }, [{
 				anchor: new t(r, 0),
 				head: new t(i + 1, 0)
 			}]);
 		},
 		join: function(e, n) {
 			var r = n.selectionLine, i = isNaN(n.selectionLineEnd) ? r : n.selectionLineEnd;
-			e.setCursor(new t(r, 0)), Oe.joinLines(e, { repeat: i - r }, e.state.vim);
+			e.setCursor(new t(r, 0)), De.joinLines(e, { repeat: i - r }, e.state.vim);
 		},
 		delmarks: function(t, n) {
-			if (!n.argString || !Le(n.argString)) {
+			if (!n.argString || !Ie(n.argString)) {
 				W(t, "Argument required");
 				return;
 			}
-			for (var r = t.state.vim, i = new e.StringStream(Le(n.argString)); !i.eol();) {
+			for (var r = t.state.vim, i = new e.StringStream(Ie(n.argString)); !i.eol();) {
 				i.eatSpace();
 				var a = i.pos;
 				if (!i.match(/[a-zA-Z]/, !1)) {
@@ -6012,8 +6012,8 @@ function ri(e) {
 			o.replace(e), p = o.to().line, a += p - r, m = p < r;
 		}
 		function _() {
-			var e = f && L(o.to()), t = o.findNext();
-			return t && !t[0] && e && R(o.from(), e) && (t = o.findNext()), t && d++, t;
+			var e = f && R(o.to()), t = o.findNext();
+			return t && !t[0] && e && z(o.from(), e) && (t = o.findNext()), t && d++, t;
 		}
 		function v() {
 			for (; _() && zt(o.from(), i, a);) if (!(!r && o.from().line == p && !m)) {
@@ -6157,12 +6157,12 @@ function ri(e) {
 	}
 	function rn(t, n) {
 		var r = t.getCursor("anchor"), i = t.getCursor("head");
-		if (n.visualMode && !t.somethingSelected() ? Ye(t, !1) : !n.visualMode && !n.insertMode && t.somethingSelected() && (n.visualMode = !0, n.visualLine = !1, e.signal(t, "vim-mode-change", { mode: "visual" })), n.visualMode) {
-			var a = z(i, r) ? 0 : -1, o = z(i, r) ? -1 : 0;
-			i = I(i, 0, a), r = I(r, 0, o), n.sel = {
+		if (n.visualMode && !t.somethingSelected() ? Je(t, !1) : !n.visualMode && !n.insertMode && t.somethingSelected() && (n.visualMode = !0, n.visualLine = !1, e.signal(t, "vim-mode-change", { mode: "visual" })), n.visualMode) {
+			var a = B(i, r) ? 0 : -1, o = B(i, r) ? -1 : 0;
+			i = L(i, 0, a), r = L(r, 0, o), n.sel = {
 				anchor: r,
 				head: i
-			}, U(t, n, "<", B(i, r)), U(t, n, ">", Fe(i, r));
+			}, U(t, n, "<", V(i, r)), U(t, n, ">", Pe(i, r));
 		} else n.insertMode || (n.lastHPos = t.getCursor().ch);
 	}
 	function an(t) {
@@ -6174,7 +6174,7 @@ function ri(e) {
 		i.isPlaying = !0;
 		var a = t.lastEditActionCommand, o = t.inputState;
 		function s() {
-			a ? Ce.processAction(e, t, a) : Ce.evalInput(e, t);
+			a ? Se.processAction(e, t, a) : Se.evalInput(e, t);
 		}
 		function c(n) {
 			if (i.lastInsertModeChanges.changes.length > 0) {
@@ -6194,20 +6194,20 @@ function ri(e) {
 	}
 	function sn(e, t, n) {
 		var r = e.getCursor("head"), i = k.macroModeState.lastInsertModeChanges.visualBlock;
-		i && (Ve(e, r, i + 1), n = e.listSelections().length, e.setCursor(r));
+		i && (Be(e, r, i + 1), n = e.listSelections().length, e.setCursor(r));
 		for (var a = 0; a < n; a++) {
-			i && e.setCursor(I(r, a, 0));
+			i && e.setCursor(L(r, a, 0));
 			for (var o = 0; o < t.length; o++) {
 				var s = t[o];
 				if (s instanceof oe) K(e, s.keyName);
 				else if (typeof s == "string") e.replaceSelection(s);
 				else {
-					var c = e.getCursor(), l = I(c, 0, s[0].length - (s[1] || 0));
+					var c = e.getCursor(), l = L(c, 0, s[0].length - (s[1] || 0));
 					e.replaceRange(s[0], c, s[1] ? c : l), e.setCursor(l);
 				}
 			}
 		}
-		i && e.setCursor(I(r, 0, 1));
+		i && e.setCursor(L(r, 0, 1));
 	}
 	function cn(e) {
 		var t = new e.constructor();
@@ -6217,8 +6217,8 @@ function ri(e) {
 				Array.isArray(r) ? r = r.slice() : r && typeof r == "object" && r.constructor != Object && (r = cn(r)), t[n] = r;
 			}
 		}), e.sel && (t.sel = {
-			head: e.sel.head && L(e.sel.head),
-			anchor: e.sel.anchor && L(e.sel.anchor)
+			head: e.sel.head && R(e.sel.head),
+			anchor: e.sel.anchor && R(e.sel.anchor)
 		}), t;
 	}
 	function ln(e, t, n) {
@@ -6237,8 +6237,8 @@ function ri(e) {
 				var e = 0;
 				i.forEachSelection(function() {
 					i.state.vim.inputState.changeQueue = u[e];
-					var r = i.getCursor("head"), o = i.getCursor("anchor"), s = z(r, o) ? 0 : -1, c = z(r, o) ? -1 : 0;
-					r = I(r, 0, s), o = I(o, 0, c), i.state.vim.sel.head = r, i.state.vim.sel.anchor = o, a = A.handleKey(i, t, n), i.virtualSelection && (u[e] = i.state.vim.inputState.changeQueue, i.state.vim = cn(l)), e++;
+					var r = i.getCursor("head"), o = i.getCursor("anchor"), s = B(r, o) ? 0 : -1, c = B(r, o) ? -1 : 0;
+					r = L(r, 0, s), o = L(o, 0, c), i.state.vim.sel.head = r, i.state.vim.sel.anchor = o, a = A.handleKey(i, t, n), i.virtualSelection && (u[e] = i.state.vim.inputState.changeQueue, i.state.vim = cn(l)), e++;
 				}), i.curOp?.cursorActivity && !a && (i.curOp.cursorActivity = !1), i.state.vim = r, r.inputState.changeQueueList = u, r.inputState.changeQueue = null;
 			}, !0);
 		}
@@ -6508,7 +6508,7 @@ var pi = {
 		return new Ei(this, r, n);
 	}
 	addOverlay({ query: e }) {
-		let t = new Ze({
+		let t = new Xe({
 			regexp: !0,
 			search: e.source,
 			caseSensitive: !/i/.test(e.flags)
@@ -6532,7 +6532,7 @@ var pi = {
 			return t || "\\" + e;
 		});
 		function c(t, n = 0, r = t.length) {
-			return new R(t, s, { ignoreCase: e.ignoreCase }, n, r);
+			return new z(t, s, { ignoreCase: e.ignoreCase }, n, r);
 		}
 		function l(e) {
 			var t = n.cm6.state.doc;
@@ -6736,7 +6736,7 @@ var pi = {
 		return Di(this, e);
 	}
 };
-Y.isMac = typeof navigator < "u" && /* @__PURE__ */ /Mac/.test(navigator.platform), Y.Pos = ai, Y.StringStream = be, Y.commands = {
+Y.isMac = typeof navigator < "u" && /* @__PURE__ */ /Mac/.test(navigator.platform), Y.Pos = ai, Y.StringStream = ye, Y.commands = {
 	cursorCharLeft: function(e) {
 		bn(e.cm6);
 	},
@@ -7248,7 +7248,7 @@ function Ki(e) {
 //#endregion
 //#region node_modules/@codemirror/language-data/dist/index.js
 function Z(e) {
-	return new we(ce.define(e));
+	return new Ce(ce.define(e));
 }
 function qi(e) {
 	return import("./dist-BAGwuVHZ.js").then((t) => t.sql({ dialect: t[e] }));
@@ -8547,7 +8547,7 @@ function ia(e, t, n) {
 	} : null;
 }
 function aa(e, t) {
-	return P("ul", { class: "cm-tooltip-lint" }, t.map((t) => fa(e, t, !1)));
+	return F("ul", { class: "cm-tooltip-lint" }, t.map((t) => fa(e, t, !1)));
 }
 var oa = (e) => {
 	let t = e.state.field(Q, !1);
@@ -8578,7 +8578,7 @@ var oa = (e) => {
 }], la = /* @__PURE__ */ i.define({ combine(e) {
 	return {
 		sources: e.map((e) => e.source).filter((e) => e != null),
-		...Oe(e.map((e) => e.config), {
+		...De(e.map((e) => e.config), {
 			delay: 750,
 			markerFilter: null,
 			tooltipFilter: null,
@@ -8613,7 +8613,7 @@ function da(e) {
 }
 function fa(e, t, n) {
 	let r = n ? da(t.actions) : [];
-	return P("li", { class: "cm-diagnostic cm-diagnostic-" + t.severity }, P("span", { class: "cm-diagnosticText" }, t.renderMessage ? t.renderMessage(e) : t.message), t.actions?.map((n, i) => {
+	return F("li", { class: "cm-diagnostic cm-diagnostic-" + t.severity }, F("span", { class: "cm-diagnosticText" }, t.renderMessage ? t.renderMessage(e) : t.message), t.actions?.map((n, i) => {
 		let a = !1, o = (r) => {
 			if (r.preventDefault(), a) return;
 			a = !0;
@@ -8621,17 +8621,17 @@ function fa(e, t, n) {
 			i && n.apply(e, i.from, i.to);
 		}, { name: s } = n, c = r[i] ? s.indexOf(r[i]) : -1, l = c < 0 ? s : [
 			s.slice(0, c),
-			P("u", s.slice(c, c + 1)),
+			F("u", s.slice(c, c + 1)),
 			s.slice(c + 1)
 		];
-		return P("button", {
+		return F("button", {
 			type: "button",
 			class: "cm-diagnosticAction" + (n.markClass ? " " + n.markClass : ""),
 			onclick: o,
 			onmousedown: o,
 			"aria-label": ` Action: ${s}${c < 0 ? "" : ` (access key "${r[i]})"`}.`
 		}, l);
-	}), t.source && P("div", { class: "cm-diagnosticSource" }, t.source));
+	}), t.source && F("div", { class: "cm-diagnosticSource" }, t.source));
 }
 var pa = class extends A {
 	constructor(e) {
@@ -8641,7 +8641,7 @@ var pa = class extends A {
 		return e.sev == this.sev;
 	}
 	toDOM() {
-		return P("span", { class: "cm-lintPoint cm-lintPoint-" + this.sev });
+		return F("span", { class: "cm-lintPoint cm-lintPoint-" + this.sev });
 	}
 }, ma = class {
 	constructor(e, t) {
@@ -8649,7 +8649,7 @@ var pa = class extends A {
 	}
 }, ha = class e {
 	constructor(e) {
-		this.view = e, this.items = [], this.list = P("ul", {
+		this.view = e, this.items = [], this.list = F("ul", {
 			tabIndex: 0,
 			role: "listbox",
 			"aria-label": this.view.state.phrase("Diagnostics"),
@@ -8674,7 +8674,7 @@ var pa = class extends A {
 			onclick: (e) => {
 				for (let t = 0; t < this.items.length; t++) this.items[t].dom.contains(e.target) && this.moveSelection(t);
 			}
-		}), this.dom = P("div", { class: "cm-panel-lint" }, this.list, P("button", {
+		}), this.dom = F("div", { class: "cm-panel-lint" }, this.list, F("button", {
 			type: "button",
 			name: "close",
 			"aria-label": this.view.state.phrase("close"),
@@ -8856,7 +8856,7 @@ var xa = [
 		let { selected: t, panel: n } = e.field(Q);
 		return !t || !n || t.from == t.to ? D.none : D.set([ra.range(t.from, t.to)]);
 	}),
-	/* @__PURE__ */ Te(ia, { hideOn: Qi }),
+	/* @__PURE__ */ we(ia, { hideOn: Qi }),
 	va
 ], Sa = [
 	le(),
@@ -8865,24 +8865,24 @@ var xa = [
 	Yt(),
 	n(),
 	ve(),
-	xe(),
+	be(),
 	a.allowMultipleSelections.of(!0),
 	fe(),
 	u(te, { fallback: !0 }),
 	_e(),
+	L(),
 	I(),
-	F(),
 	N(),
-	Ce(),
 	Se(),
-	Be(),
+	xe(),
+	ze(),
 	se.of([
-		...ke,
+		...Oe,
 		...ni,
 		...Dt,
 		...mn,
 		...S,
-		...Ae,
+		...ke,
 		...ca
 	])
 ];
@@ -9152,7 +9152,7 @@ function Ha(e) {
 	return `${e}_vim_mode`;
 }
 function Ua(e) {
-	return localStorage.getItem(Ha(e)) !== "false";
+	return localStorage.getItem(Ha(e)) === "true";
 }
 function Wa(e, t) {
 	localStorage.setItem(Ha(e), String(t));
@@ -9182,7 +9182,7 @@ var Ya = v.domEventHandlers({ click(e, t) {
 	if (n == null) return !1;
 	let r = t.state.doc.lineAt(n), i = n - r.from, a = Ja(r.text, i);
 	return a ? (window.open(a, Va(a)), e.preventDefault(), !0) : !1;
-} }), $ = null, Xa = "", Za = null, Qa = "veditor", $a = null, eo = new Ee(), to = new Ee(), no = new Ee(), ro = null;
+} }), $ = null, Xa = "", Za = null, Qa = "veditor", $a = null, eo = new Te(), to = new Te(), no = new Te(), ro = null;
 function io() {
 	if (!Za) return;
 	let e = po(Xa);
@@ -9270,6 +9270,8 @@ function uo(e, t, n, r) {
 		co(r?.bang ?? !1, e, n);
 	}), X.defineEx("wq", "wq", async () => {
 		await n.onSave(), Xa = fo(), io(), co(!1, e, n);
+	}), X.defineEx("cua", "cua", () => {
+		Ua(Qa) && vo();
 	}), X.defineEx("wrap", "wrap", () => {
 		if (!$) return;
 		let e = !Ka(i);
@@ -9287,7 +9289,7 @@ function uo(e, t, n, r) {
 		to.of(s ? Gi() : []),
 		no.of(s ? [] : u),
 		Sa,
-		je({ codeLanguages: Ji }),
+		Ae({ codeLanguages: Ji }),
 		za,
 		se.of([{
 			key: "Tab",
@@ -9329,9 +9331,7 @@ function uo(e, t, n, r) {
 		Ua(Qa) && navigator.clipboard.readText().then((e) => {
 			e && c.unnamedRegister.setText(e);
 		}).catch(() => {});
-	}), $.dom.addEventListener("keydown", (e) => {
-		e.key === "M" && e.ctrlKey && e.shiftKey && !e.altKey && (e.preventDefault(), e.stopImmediatePropagation(), vo());
-	}, { capture: !0 }), so(e, s), $.focus(), $;
+	}), so(e, s), $.focus(), $;
 }
 function fo() {
 	return $ ? $.state.doc.toString() : "";
@@ -9378,7 +9378,7 @@ function xo(e) {
 function So(e, t) {
 	let n = document.createElement("div");
 	n.className = "vim-input", e.appendChild(n);
-	let r = t?.storagePrefix ?? "veditor", i = Ua(r), o = new Ee(), s = v.updateListener.of((e) => {
+	let r = t?.storagePrefix ?? "veditor", i = Ua(r), o = new Te(), s = v.updateListener.of((e) => {
 		e.docChanged && t?.onChange?.(e.state.doc.toString());
 	}), c = a.transactionFilter.of((e) => e.newDoc.lines > 1 ? {
 		...e,
