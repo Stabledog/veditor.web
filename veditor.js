@@ -9148,14 +9148,12 @@ function Va(e) {
 }
 //#endregion
 //#region src/prefs.ts
-function Ha(e) {
-	return `${e}_vim_mode`;
-}
+var Ha = "veditor_vim_mode";
 function Ua(e) {
-	return localStorage.getItem(Ha(e)) === "true";
+	return localStorage.getItem(Ha) === "true";
 }
 function Wa(e, t) {
-	localStorage.setItem(Ha(e), String(t));
+	localStorage.setItem(Ha, String(t));
 }
 function Ga(e) {
 	return `${e}_line_wrap`;
@@ -9271,7 +9269,7 @@ function uo(e, t, n, r) {
 	}), X.defineEx("wq", "wq", async () => {
 		await n.onSave(), Xa = fo(), io(), co(!1, e, n);
 	}), X.defineEx("cua", "cua", () => {
-		Ua(Qa) && vo();
+		Ua(Qa) && setTimeout(() => vo(), 0);
 	}), X.defineEx("wrap", "wrap", () => {
 		if (!$) return;
 		let e = !Ka(i);
