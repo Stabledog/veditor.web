@@ -2,18 +2,16 @@
 // Shared localStorage preference helpers
 // ---------------------------------------------------------------------------
 
-// --- Vim mode ---
+// --- Vim mode (shared across all veditor instances) ---
 
-function vimModeKey(prefix: string): string {
-  return `${prefix}_vim_mode`;
+const VIM_MODE_KEY = 'veditor_vim_mode';
+
+export function getVimModePref(_prefix: string): boolean {
+  return localStorage.getItem(VIM_MODE_KEY) === 'true'; // default off (CUA)
 }
 
-export function getVimModePref(prefix: string): boolean {
-  return localStorage.getItem(vimModeKey(prefix)) === 'true'; // default off (CUA)
-}
-
-export function setVimModePref(prefix: string, on: boolean): void {
-  localStorage.setItem(vimModeKey(prefix), String(on));
+export function setVimModePref(_prefix: string, on: boolean): void {
+  localStorage.setItem(VIM_MODE_KEY, String(on));
 }
 
 // --- Line wrap ---

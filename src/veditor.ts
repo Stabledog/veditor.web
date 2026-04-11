@@ -266,7 +266,8 @@ export function createEditor(
   });
 
   Vim.defineEx('cua', 'cua', () => {
-    if (getVimModePref(currentPrefix)) toggleVimMode();
+    // Defer so the ex command fully completes before vim is removed
+    if (getVimModePref(currentPrefix)) setTimeout(() => toggleVimMode(), 0);
   });
 
   Vim.defineEx('wrap', 'wrap', () => {
