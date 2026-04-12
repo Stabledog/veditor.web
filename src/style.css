@@ -100,3 +100,12 @@
   background: #45475a;
   color: #cdd6f4;
 }
+
+/* URL decorator — makes plain URLs visually clickable */
+
+.cm-editor .veditor-url {
+  color: #89b4fa;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+}

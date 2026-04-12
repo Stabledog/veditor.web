@@ -8,6 +8,7 @@ import { basicSetup } from 'codemirror';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { hashTarget } from './util';
 import { getVimModePref, setVimModePref, getWrapPref, setWrapPref } from './prefs';
+import { urlDecorator } from './url-decorator';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -317,12 +318,14 @@ export function createEditor(
   const cuaKeymap = buildCuaKeymap(callbacks, parent, prefix);
 
   // --- Build extensions ---
+  console.log('[veditor] Creating editor with urlDecorator extension');
   const exts: Extension[] = [
     vimCompartment.of(vimOn ? vim() : []),
     cuaCompartment.of(vimOn ? [] : cuaKeymap),
     basicSetup,
     markdown({ codeLanguages: languages }),
     oneDark,
+    urlDecorator,
     keymap.of([
       { key: 'Tab', run: indentMore },
       { key: 'Shift-Tab', run: indentLess },
