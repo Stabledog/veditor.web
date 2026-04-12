@@ -82,6 +82,7 @@ const wrapCompartment = new Compartment();
 const vimCompartment = new Compartment();
 const cuaCompartment = new Compartment();
 let modeToggleEl: HTMLButtonElement | null = null;
+let beforeunloadAbort: AbortController | null = null;
 
 function updateDirtyClass(): void {
   if (!editorParent) return;
@@ -378,6 +379,15 @@ export function createEditor(
     }).catch(() => {});
   });
 
+  // --- Trap tab/window close with unsaved changes ---
+  beforeunloadAbort = new AbortController();
+  window.addEventListener('beforeunload', (event) => {
+    if (isEditorDirty(savedContent)) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+  }, { signal: beforeunloadAbort.signal });
+
   // --- Mode toggle indicator ---
   createToggleIndicator(parent, vimOn);
 
@@ -410,6 +420,10 @@ export function destroyEditor(): void {
   if (editorParent) {
     editorParent.classList.remove('veditor-dirty');
     editorParent = null;
+  }
+  if (beforeunloadAbort) {
+    beforeunloadAbort.abort();
+    beforeunloadAbort = null;
   }
   currentCallbacks = null;
 }
