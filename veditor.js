@@ -9454,9 +9454,79 @@ function So(e, t) {
 	};
 }
 //#endregion
-//#region src/index.ts
-var Co = "0.1.0";
+//#region src/logging.ts
+var Co = "_app_debug_logs", wo = 1e3;
+function To() {
+	try {
+		let e = localStorage.getItem(Co);
+		return e ? JSON.parse(e) : [];
+	} catch {
+		return [];
+	}
+}
+function Eo(e) {
+	try {
+		let t = e.slice(-wo);
+		localStorage.setItem(Co, JSON.stringify(t));
+	} catch {}
+}
+function Do(e, t) {
+	let n = {
+		timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+		level: e,
+		message: t
+	}, r = To();
+	r.push(n), Eo(r), console[e === "warn" ? "warn" : e === "error" ? "error" : "log"](`[${e.toUpperCase()}] ${t}`);
+}
+function Oo(e) {
+	Do("error", e);
+}
+function ko(e) {
+	Do("warn", e);
+}
+function Ao(e) {
+	Do("info", e);
+}
+function jo(e) {
+	Do("debug", e);
+}
+function Mo() {
+	let e = To();
+	return e.length === 0 ? "(no logs)" : e.map((e) => `[${new Date(e.timestamp).toLocaleTimeString()}] ${e.level.toUpperCase()}: ${e.message}`).join("\n");
+}
+function No() {
+	try {
+		localStorage.removeItem(Co);
+	} catch {}
+}
+function Po() {
+	let e = document.createElement("div");
+	e.id = "log-viewer-modal", e.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    background: rgba(0, 0, 0, 0.7);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 10000;\n  ";
+	let t = document.createElement("div");
+	t.style.cssText = "\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: 1px solid #444;\n    border-radius: 4px;\n    width: 80vw;\n    max-width: 800px;\n    height: 70vh;\n    display: flex;\n    flex-direction: column;\n    font-family: monospace;\n    font-size: 12px;\n  ";
+	let n = document.createElement("div");
+	n.style.cssText = "\n    padding: 10px;\n    border-bottom: 1px solid #444;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n  ", n.innerHTML = "<div>Debug Logs</div>";
+	let r = document.createElement("button");
+	r.textContent = "×", r.style.cssText = "\n    background: none;\n    border: none;\n    color: #e0e0e0;\n    font-size: 20px;\n    cursor: pointer;\n    padding: 0;\n    width: 30px;\n    height: 30px;\n  ", r.addEventListener("click", () => e.remove()), n.appendChild(r);
+	let i = document.createElement("textarea");
+	i.readOnly = !0, i.value = Mo(), i.style.cssText = "\n    flex: 1;\n    padding: 10px;\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: none;\n    font-family: monospace;\n    font-size: 12px;\n    resize: none;\n    overflow: auto;\n  ", i.scrollTop = i.scrollHeight;
+	let a = document.createElement("div");
+	a.style.cssText = "\n    padding: 10px;\n    border-top: 1px solid #444;\n    display: flex;\n    gap: 10px;\n    justify-content: flex-end;\n  ";
+	let o = document.createElement("button");
+	o.textContent = "Clear Logs", o.style.cssText = "\n    padding: 6px 12px;\n    background: #d32f2f;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", o.addEventListener("click", () => {
+		No(), i.value = "(no logs)";
+	}), a.appendChild(o);
+	let s = document.createElement("button");
+	return s.textContent = "Refresh", s.style.cssText = "\n    padding: 6px 12px;\n    background: #1976d2;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", s.addEventListener("click", () => {
+		i.value = Mo(), i.scrollTop = i.scrollHeight;
+	}), a.appendChild(s), t.appendChild(n), t.appendChild(i), t.appendChild(a), e.appendChild(t), e.addEventListener("click", (t) => {
+		t.target === e && e.remove();
+	}), e;
+}
 //#endregion
-export { Co as VERSION, uo as createEditor, So as createVimInput, ho as destroyEditor, _o as executeExCommand, go as exitInsertMode, mo as focusEditor, fo as getEditorContent, Va as hashTarget, po as isEditorDirty, yo as isVimMode, xo as requestQuit, bo as requestSave, vo as toggleVimMode };
+//#region src/index.ts
+var Fo = "0.2.0";
+//#endregion
+export { Fo as VERSION, No as clearLogs, uo as createEditor, Po as createLogViewer, So as createVimInput, ho as destroyEditor, _o as executeExCommand, go as exitInsertMode, mo as focusEditor, fo as getEditorContent, Mo as getFormattedLogs, Va as hashTarget, po as isEditorDirty, yo as isVimMode, jo as logDebug, Oo as logError, Ao as logInfo, ko as logWarn, xo as requestQuit, bo as requestSave, vo as toggleVimMode };
 
 //# sourceMappingURL=veditor.js.map
