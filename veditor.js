@@ -9284,7 +9284,7 @@ function ho(e, t, n) {
 	});
 }
 function go(e, t, n, r) {
-	bo(), eo = t, to = e, e.classList.remove("veditor-dirty");
+	bo(), eo = t, to = e, e.classList.add("veditor-dirty-aware"), e.classList.remove("veditor-dirty");
 	let i = r?.storagePrefix ?? "veditor";
 	no = i, ro = n;
 	let o = r?.clickableLinks ?? !0, s = Ua(i);
@@ -9372,7 +9372,7 @@ function yo() {
 	$?.focus();
 }
 function bo() {
-	$ &&= ($.destroy(), null), so &&= (so.remove(), null), to &&= (to.classList.remove("veditor-dirty"), null), co &&= (co.abort(), null), ro = null;
+	$ &&= ($.destroy(), null), so &&= (so.remove(), null), to &&= (to.classList.remove("veditor-dirty", "veditor-dirty-aware"), null), co &&= (co.abort(), null), ro = null;
 }
 function xo() {
 	$ && Ua(no) && $.contentDOM.dispatchEvent(new KeyboardEvent("keydown", {
