@@ -239,6 +239,7 @@ export function createEditor(
   destroyEditor();
   savedContent = content;
   editorParent = parent;
+  parent.classList.add('veditor-dirty-aware');
   parent.classList.remove('veditor-dirty');
 
   const prefix = options?.storagePrefix ?? 'veditor';
@@ -418,7 +419,7 @@ export function destroyEditor(): void {
     modeToggleEl = null;
   }
   if (editorParent) {
-    editorParent.classList.remove('veditor-dirty');
+    editorParent.classList.remove('veditor-dirty', 'veditor-dirty-aware');
     editorParent = null;
   }
   if (beforeunloadAbort) {

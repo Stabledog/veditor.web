@@ -9,10 +9,14 @@
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 }
 
-/* Dirty indicator — applied to the parent container when content is modified */
+/* Dirty indicator — reserve border space so content doesn't reflow on toggle */
 
-.veditor-dirty {
-  border: 0.5em solid red;
+.veditor-dirty-aware {
+  border: 3px solid transparent;
+}
+
+.veditor-dirty-aware.veditor-dirty {
+  border-color: red;
 }
 
 /* Confirm bar (shown on dirty quit) */
