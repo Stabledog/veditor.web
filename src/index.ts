@@ -26,3 +26,13 @@ export {
   type VimInputOptions,
   type VimInputHandle,
 } from './vim-input';
+
+export {
+  logError,
+  logWarn,
+  logInfo,
+  logDebug,
+  getFormattedLogs,
+  clearLogs,
+  createLogViewer,
+} from './logging';
