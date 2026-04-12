@@ -9206,28 +9206,28 @@ var $a = v.domEventHandlers({ click(e, t) {
 	if (n == null) return !1;
 	let r = t.state.doc.lineAt(n), i = n - r.from, a = Qa(r.text, i);
 	return a ? (window.open(a, Va(a)), e.preventDefault(), !0) : !1;
-} }), $ = null, eo = "", to = null, no = "veditor", ro = null, io = new Ee(), ao = new Ee(), oo = new Ee(), so = null;
-function co() {
+} }), $ = null, eo = "", to = null, no = "veditor", ro = null, io = new Ee(), ao = new Ee(), oo = new Ee(), so = null, co = null;
+function lo() {
 	if (!to) return;
-	let e = _o(eo);
+	let e = vo(eo);
 	to.classList.toggle("veditor-dirty", e);
 }
-function lo(e, t, n) {
+function uo(e, t, n) {
 	return se.of([
 		{
 			key: "Mod-s",
 			run: () => ((async () => {
-				await e.onSave(), eo = go(), co();
+				await e.onSave(), eo = _o(), lo();
 			})(), !0)
 		},
 		{
 			key: "Escape",
-			run: () => (po(!1, t, e), !0)
+			run: () => (mo(!1, t, e), !0)
 		},
 		{
 			key: "Mod-Shift-s",
 			run: () => ((async () => {
-				await e.onSave(), eo = go(), co(), po(!1, t, e);
+				await e.onSave(), eo = _o(), lo(), mo(!1, t, e);
 			})(), !0)
 		},
 		{
@@ -9240,28 +9240,28 @@ function lo(e, t, n) {
 		}
 	]);
 }
-function uo(e) {
+function fo(e) {
 	so && (so.textContent = e ? "VIM" : "CUA", so.title = e ? "Vim mode active — click to switch to standard editing" : "Standard editing — click to switch to Vim mode");
 }
-function fo(e, t) {
+function po(e, t) {
 	so?.remove();
 	let n = document.createElement("button");
-	n.className = "veditor-mode-toggle", n.type = "button", n.addEventListener("click", () => So()), e.appendChild(n), so = n, uo(t);
+	n.className = "veditor-mode-toggle", n.type = "button", n.addEventListener("click", () => Co()), e.appendChild(n), so = n, fo(t);
 }
-function po(e, t, n) {
+function mo(e, t, n) {
 	if (e) {
 		n.onQuit();
 		return;
 	}
-	if (_o(eo) || n.isAppDirty?.()) {
-		mo(t, () => n.onQuit(), async () => {
+	if (vo(eo) || n.isAppDirty?.()) {
+		ho(t, () => n.onQuit(), async () => {
 			await n.onSave(), n.onQuit();
 		});
 		return;
 	}
 	n.onQuit();
 }
-function mo(e, t, n) {
+function ho(e, t, n) {
 	e.querySelector(".veditor-confirm-bar")?.remove();
 	let r = (e, t) => e.slice(0, t) + `<u>${e[t]}</u>` + e.slice(t + 1), i = document.createElement("div");
 	i.className = "veditor-confirm-bar", i.innerHTML = `
@@ -9283,19 +9283,19 @@ function mo(e, t, n) {
 		a();
 	});
 }
-function ho(e, t, n, r) {
-	yo(), eo = t, to = e, e.classList.remove("veditor-dirty");
+function go(e, t, n, r) {
+	bo(), eo = t, to = e, e.classList.remove("veditor-dirty");
 	let i = r?.storagePrefix ?? "veditor";
 	no = i, ro = n;
 	let o = r?.clickableLinks ?? !0, s = Ua(i);
 	if (X.defineEx("w", "w", async () => {
-		await n.onSave(), eo = go(), co();
+		await n.onSave(), eo = _o(), lo();
 	}), X.defineEx("q", "q", (t, r) => {
-		po(r?.bang ?? !1, e, n);
+		mo(r?.bang ?? !1, e, n);
 	}), X.defineEx("wq", "wq", async () => {
-		await n.onSave(), eo = go(), co(), po(!1, e, n);
+		await n.onSave(), eo = _o(), lo(), mo(!1, e, n);
 	}), X.defineEx("cua", "cua", () => {
-		Ua(no) && setTimeout(() => So(), 0);
+		Ua(no) && setTimeout(() => Co(), 0);
 	}), X.defineEx("wrap", "wrap", () => {
 		if (!$) return;
 		let e = !Ka(i);
@@ -9309,7 +9309,7 @@ function ho(e, t, n, r) {
 	c.pushText = (e, t, n, r, i) => {
 		l(e, t, n, r, i), e !== "_" && navigator.clipboard.writeText(n).catch(() => {});
 	};
-	let u = lo(n, e, i);
+	let u = uo(n, e, i);
 	console.log("[veditor] Creating editor with urlDecorator extension");
 	let d = [
 		ao.of(s ? Gi() : []),
@@ -9347,7 +9347,7 @@ function ho(e, t, n, r) {
 		})
 	];
 	return d.push(v.updateListener.of((e) => {
-		e.docChanged && co();
+		e.docChanged && lo();
 	})), o && d.push($a), r?.extensions && d.push(...r.extensions), $ = new v({
 		state: a.create({
 			doc: t,
@@ -9358,51 +9358,53 @@ function ho(e, t, n, r) {
 		Ua(no) && navigator.clipboard.readText().then((e) => {
 			e && c.unnamedRegister.setText(e);
 		}).catch(() => {});
-	}), fo(e, s), $.focus(), $;
+	}), co = new AbortController(), window.addEventListener("beforeunload", (e) => {
+		vo(eo) && (e.preventDefault(), e.returnValue = "");
+	}, { signal: co.signal }), po(e, s), $.focus(), $;
 }
-function go() {
+function _o() {
 	return $ ? $.state.doc.toString() : "";
 }
-function _o(e) {
-	return go() !== e;
-}
-function vo() {
-	$?.focus();
+function vo(e) {
+	return _o() !== e;
 }
 function yo() {
-	$ &&= ($.destroy(), null), so &&= (so.remove(), null), to &&= (to.classList.remove("veditor-dirty"), null), ro = null;
+	$?.focus();
 }
 function bo() {
+	$ &&= ($.destroy(), null), so &&= (so.remove(), null), to &&= (to.classList.remove("veditor-dirty"), null), co &&= (co.abort(), null), ro = null;
+}
+function xo() {
 	$ && Ua(no) && $.contentDOM.dispatchEvent(new KeyboardEvent("keydown", {
 		key: "Escape",
 		code: "Escape",
 		bubbles: !0
 	}));
 }
-function xo(e) {
+function So(e) {
 	if (!$ || !Ua(no)) return;
 	let t = Ki($);
 	t && X.handleEx(t, e);
 }
-function So() {
+function Co() {
 	if (!$) return Ua(no);
 	let e = !Ua(no);
 	Wa(no, e);
-	let t = ro && to ? lo(ro, to, no) : [];
-	return $.dispatch({ effects: [ao.reconfigure(e ? Gi() : []), oo.reconfigure(e ? [] : t)] }), uo(e), $.focus(), e;
+	let t = ro && to ? uo(ro, to, no) : [];
+	return $.dispatch({ effects: [ao.reconfigure(e ? Gi() : []), oo.reconfigure(e ? [] : t)] }), fo(e), $.focus(), e;
 }
-function Co() {
+function wo() {
 	return Ua(no);
 }
-async function wo() {
-	ro && (await ro.onSave(), eo = go(), co());
+async function To() {
+	ro && (await ro.onSave(), eo = _o(), lo());
 }
-function To(e) {
-	!ro || !to || po(e ?? !1, to, ro);
+function Eo(e) {
+	!ro || !to || mo(e ?? !1, to, ro);
 }
 //#endregion
 //#region src/vim-input.ts
-function Eo(e, t) {
+function Do(e, t) {
 	let n = document.createElement("div");
 	n.className = "vim-input", e.appendChild(n);
 	let r = t?.storagePrefix ?? "veditor", i = Ua(r), o = new Ee(), s = v.updateListener.of((e) => {
@@ -9484,51 +9486,51 @@ function Eo(e, t) {
 }
 //#endregion
 //#region src/logging.ts
-var Do = "_app_debug_logs", Oo = 1e3;
-function ko() {
+var Oo = "_app_debug_logs", ko = 1e3;
+function Ao() {
 	try {
-		let e = localStorage.getItem(Do);
+		let e = localStorage.getItem(Oo);
 		return e ? JSON.parse(e) : [];
 	} catch {
 		return [];
 	}
 }
-function Ao(e) {
+function jo(e) {
 	try {
-		let t = e.slice(-Oo);
-		localStorage.setItem(Do, JSON.stringify(t));
+		let t = e.slice(-ko);
+		localStorage.setItem(Oo, JSON.stringify(t));
 	} catch {}
 }
-function jo(e, t) {
+function Mo(e, t) {
 	let n = {
 		timestamp: (/* @__PURE__ */ new Date()).toISOString(),
 		level: e,
 		message: t
-	}, r = ko();
-	r.push(n), Ao(r), console[e === "warn" ? "warn" : e === "error" ? "error" : "log"](`[${e.toUpperCase()}] ${t}`);
-}
-function Mo(e) {
-	jo("error", e);
+	}, r = Ao();
+	r.push(n), jo(r), console[e === "warn" ? "warn" : e === "error" ? "error" : "log"](`[${e.toUpperCase()}] ${t}`);
 }
 function No(e) {
-	jo("warn", e);
+	Mo("error", e);
 }
 function Po(e) {
-	jo("info", e);
+	Mo("warn", e);
 }
 function Fo(e) {
-	jo("debug", e);
+	Mo("info", e);
 }
-function Io() {
-	let e = ko();
-	return e.length === 0 ? "(no logs)" : e.map((e) => `[${new Date(e.timestamp).toLocaleTimeString()}] ${e.level.toUpperCase()}: ${e.message}`).join("\n");
+function Io(e) {
+	Mo("debug", e);
 }
 function Lo() {
-	try {
-		localStorage.removeItem(Do);
-	} catch {}
+	let e = Ao();
+	return e.length === 0 ? "(no logs)" : e.map((e) => `[${new Date(e.timestamp).toLocaleTimeString()}] ${e.level.toUpperCase()}: ${e.message}`).join("\n");
 }
 function Ro() {
+	try {
+		localStorage.removeItem(Oo);
+	} catch {}
+}
+function zo() {
 	let e = document.createElement("div");
 	e.id = "log-viewer-modal", e.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    background: rgba(0, 0, 0, 0.7);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 10000;\n  ";
 	let t = document.createElement("div");
@@ -9538,24 +9540,24 @@ function Ro() {
 	let r = document.createElement("button");
 	r.textContent = "×", r.style.cssText = "\n    background: none;\n    border: none;\n    color: #e0e0e0;\n    font-size: 20px;\n    cursor: pointer;\n    padding: 0;\n    width: 30px;\n    height: 30px;\n  ", r.addEventListener("click", () => e.remove()), n.appendChild(r);
 	let i = document.createElement("textarea");
-	i.readOnly = !0, i.value = Io(), i.style.cssText = "\n    flex: 1;\n    padding: 10px;\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: none;\n    font-family: monospace;\n    font-size: 12px;\n    resize: none;\n    overflow: auto;\n  ", i.scrollTop = i.scrollHeight;
+	i.readOnly = !0, i.value = Lo(), i.style.cssText = "\n    flex: 1;\n    padding: 10px;\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: none;\n    font-family: monospace;\n    font-size: 12px;\n    resize: none;\n    overflow: auto;\n  ", i.scrollTop = i.scrollHeight;
 	let a = document.createElement("div");
 	a.style.cssText = "\n    padding: 10px;\n    border-top: 1px solid #444;\n    display: flex;\n    gap: 10px;\n    justify-content: flex-end;\n  ";
 	let o = document.createElement("button");
 	o.textContent = "Clear Logs", o.style.cssText = "\n    padding: 6px 12px;\n    background: #d32f2f;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", o.addEventListener("click", () => {
-		Lo(), i.value = "(no logs)";
+		Ro(), i.value = "(no logs)";
 	}), a.appendChild(o);
 	let s = document.createElement("button");
 	return s.textContent = "Refresh", s.style.cssText = "\n    padding: 6px 12px;\n    background: #1976d2;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", s.addEventListener("click", () => {
-		i.value = Io(), i.scrollTop = i.scrollHeight;
+		i.value = Lo(), i.scrollTop = i.scrollHeight;
 	}), a.appendChild(s), t.appendChild(n), t.appendChild(i), t.appendChild(a), e.appendChild(t), e.addEventListener("click", (t) => {
 		t.target === e && e.remove();
 	}), e;
 }
 //#endregion
 //#region src/index.ts
-var zo = "0.2.1";
+var Bo = "0.2.1";
 //#endregion
-export { zo as VERSION, Lo as clearLogs, ho as createEditor, Ro as createLogViewer, Eo as createVimInput, yo as destroyEditor, xo as executeExCommand, bo as exitInsertMode, vo as focusEditor, go as getEditorContent, Io as getFormattedLogs, Va as hashTarget, _o as isEditorDirty, Co as isVimMode, Fo as logDebug, Mo as logError, Po as logInfo, No as logWarn, To as requestQuit, wo as requestSave, So as toggleVimMode };
+export { Bo as VERSION, Ro as clearLogs, go as createEditor, zo as createLogViewer, Do as createVimInput, bo as destroyEditor, So as executeExCommand, xo as exitInsertMode, yo as focusEditor, _o as getEditorContent, Lo as getFormattedLogs, Va as hashTarget, vo as isEditorDirty, wo as isVimMode, Io as logDebug, No as logError, Fo as logInfo, Po as logWarn, Eo as requestQuit, To as requestSave, Co as toggleVimMode };
 
 //# sourceMappingURL=veditor.js.map
