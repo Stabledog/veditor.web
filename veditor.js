@@ -9300,7 +9300,7 @@ function go(e, t, n, r) {
 		if (!$) return;
 		let e = !Ka(i);
 		qa(i, e), $.dispatch({ effects: io.reconfigure(e ? v.lineWrapping : []) });
-	}), X.map("jk", "<Esc>", "insert"), r?.exCommands) for (let [e, t] of Object.entries(r.exCommands)) X.defineEx(e, e, t);
+	}), X.map("jk", "<Esc>", "insert"), X.setOption("insertModeEscKeysTimeout", 750), r?.exCommands) for (let [e, t] of Object.entries(r.exCommands)) X.defineEx(e, e, t);
 	if (r?.normalMappings) for (let [e, t] of Object.entries(r.normalMappings)) {
 		let n = `veditor_${e}`;
 		X.defineAction(n, t), X.mapCommand(e, "action", n, {}, { context: "normal" });
@@ -9413,7 +9413,7 @@ function Do(e, t) {
 		...e,
 		changes: void 0
 	} : e);
-	X.map("jk", "<Esc>", "insert");
+	X.map("jk", "<Esc>", "insert"), X.setOption("insertModeEscKeysTimeout", 750);
 	let l = [
 		o.of(i ? Gi() : []),
 		za,
