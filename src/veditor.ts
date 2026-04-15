@@ -304,6 +304,12 @@ export function createEditor(
   Vim.map('jk', '<Esc>', 'insert');
   Vim.setOption('insertModeEscKeysTimeout', 750);
 
+  // 'u' in normal mode triggers the quit flow (same as :q)
+  Vim.defineAction('veditor_quit', () => {
+    handleQuitRequest(false, parent, callbacks);
+  });
+  Vim.mapCommand('u', 'action', 'veditor_quit', {}, { context: 'normal' });
+
   // --- Custom ex commands from host app ---
   if (options?.exCommands) {
     for (const [name, handler] of Object.entries(options.exCommands)) {
