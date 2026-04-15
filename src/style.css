@@ -22,7 +22,8 @@
 /* Vim mode: bottom border indicates vim mode (always); other 3 edges red only when dirty */
 
 .veditor-dirty-aware.veditor-vim-normal {
-  border-bottom-color: #89b4fa;
+  border-bottom-color: #ffff00;
+  border-bottom-width: 0.6em;
 }
 
 .veditor-dirty-aware.veditor-vim-insert {
