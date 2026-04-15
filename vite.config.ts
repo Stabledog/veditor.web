@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import pkg from './package.json';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  root: command === 'serve' ? 'demo' : undefined,
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
@@ -18,4 +19,9 @@ export default defineConfig({
       // Bundle everything — consumers load from CDN, no node_modules
     },
   },
-});
+  server: {
+    port: 3000,
+    host: '0.0.0.0',
+    allowedHosts: true,
+  },
+}));
