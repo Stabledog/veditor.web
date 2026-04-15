@@ -283,6 +283,7 @@ export function createEditor(
   });
 
   Vim.map('jk', '<Esc>', 'insert');
+  Vim.setOption('insertModeEscKeysTimeout', 750);
 
   // --- Custom ex commands from host app ---
   if (options?.exCommands) {

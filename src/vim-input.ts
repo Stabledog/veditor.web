@@ -72,6 +72,7 @@ export function createVimInput(
   });
 
   Vim.map('jk', '<Esc>', 'insert');
+  Vim.setOption('insertModeEscKeysTimeout', 750);
 
   const exts: Extension[] = [
     inputVimCompartment.of(vimOn ? vim() : []),
