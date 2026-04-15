@@ -12,22 +12,20 @@
 /* Dirty indicator — reserve border space so content doesn't reflow on toggle */
 
 .veditor-dirty-aware {
-  border: 3px solid transparent;
+  border: 0.3em solid transparent;
 }
 
 .veditor-dirty-aware.veditor-dirty {
   border-color: red;
 }
 
-/* Vim mode: bottom-border-only indicates mode + dirty state */
+/* Vim mode: bottom border indicates vim mode (always); other 3 edges red only when dirty */
 
-.veditor-dirty-aware.veditor-dirty.veditor-vim-normal {
-  border-color: transparent;
+.veditor-dirty-aware.veditor-vim-normal {
   border-bottom-color: #89b4fa;
 }
 
-.veditor-dirty-aware.veditor-dirty.veditor-vim-insert {
-  border-color: transparent;
+.veditor-dirty-aware.veditor-vim-insert {
   border-bottom-color: #f38ba8;
 }
 
