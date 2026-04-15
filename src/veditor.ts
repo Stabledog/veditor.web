@@ -90,6 +90,25 @@ function updateDirtyClass(): void {
   editorParent.classList.toggle('veditor-dirty', dirty);
 }
 
+function updateVimSubMode(mode: string): void {
+  if (!editorParent) return;
+  editorParent.classList.remove('veditor-vim-normal', 'veditor-vim-insert');
+  if (mode === 'insert' || mode === 'replace') {
+    editorParent.classList.add('veditor-vim-insert');
+  } else {
+    editorParent.classList.add('veditor-vim-normal');
+  }
+}
+
+function attachVimModeListener(): void {
+  if (!editorView) return;
+  const cm = getCM(editorView);
+  if (!cm) return;
+  cm.on('vim-mode-change', (e: { mode: string }) => {
+    updateVimSubMode(e.mode);
+  });
+}
+
 // ---------------------------------------------------------------------------
 // CUA keymap (active when vim is off)
 // ---------------------------------------------------------------------------
@@ -371,6 +390,12 @@ export function createEditor(
   const state = EditorState.create({ doc: content, extensions: exts });
   editorView = new EditorView({ state, parent });
 
+  // --- Vim sub-mode indicator (normal / insert via bottom border) ---
+  if (vimOn) {
+    parent.classList.add('veditor-vim-normal');
+    attachVimModeListener();
+  }
+
   // Pull system clipboard into unnamed register on focus (vim mode only)
   editorView.contentDOM.addEventListener('focus', () => {
     if (!getVimModePref(currentPrefix)) return;
@@ -420,7 +445,7 @@ export function destroyEditor(): void {
     modeToggleEl = null;
   }
   if (editorParent) {
-    editorParent.classList.remove('veditor-dirty', 'veditor-dirty-aware');
+    editorParent.classList.remove('veditor-dirty', 'veditor-dirty-aware', 'veditor-vim-normal', 'veditor-vim-insert');
     editorParent = null;
   }
   if (beforeunloadAbort) {
@@ -466,6 +491,13 @@ export function toggleVimMode(): boolean {
     ],
   });
   updateToggleIndicator(nowVim);
+  if (nowVim) {
+    editorParent?.classList.add('veditor-vim-normal');
+    editorParent?.classList.remove('veditor-vim-insert');
+    attachVimModeListener();
+  } else {
+    editorParent?.classList.remove('veditor-vim-normal', 'veditor-vim-insert');
+  }
   editorView.focus();
   return nowVim;
 }

@@ -19,6 +19,18 @@
   border-color: red;
 }
 
+/* Vim mode: bottom-border-only indicates mode + dirty state */
+
+.veditor-dirty-aware.veditor-dirty.veditor-vim-normal {
+  border-color: transparent;
+  border-bottom-color: #89b4fa;
+}
+
+.veditor-dirty-aware.veditor-dirty.veditor-vim-insert {
+  border-color: transparent;
+  border-bottom-color: #f38ba8;
+}
+
 /* Confirm bar (shown on dirty quit) */
 
 .veditor-confirm-bar {
