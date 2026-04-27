@@ -9570,7 +9570,7 @@ function Vo() {
 }
 //#endregion
 //#region src/index.ts
-var Ho = "0.9.0";
+var Ho = "0.10.0";
 //#endregion
 export { Ho as VERSION, Bo as clearLogs, vo as createEditor, Vo as createLogViewer, ko as createVimInput, So as destroyEditor, wo as executeExCommand, Co as exitInsertMode, xo as focusEditor, yo as getEditorContent, zo as getFormattedLogs, Ha as hashTarget, bo as isEditorDirty, Eo as isVimMode, Ro as logDebug, Fo as logError, Lo as logInfo, Io as logWarn, Oo as requestQuit, Do as requestSave, To as toggleVimMode };
 
