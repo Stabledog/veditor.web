@@ -9368,10 +9368,10 @@ function vo(e, t, n, r) {
 			extensions: d
 		}),
 		parent: e
-	}), s && (e.classList.add("veditor-vim-normal"), fo()), Q.contentDOM.addEventListener("focus", () => {
-		Wa(no) && navigator.clipboard.readText().then((e) => {
-			e && c.unnamedRegister.setText(e);
-		}).catch(() => {});
+	}), s && (e.classList.add("veditor-vim-normal"), fo()), Q.contentDOM.addEventListener("paste", (e) => {
+		if (!Wa(no)) return;
+		let t = e.clipboardData?.getData("text/plain");
+		t && c.unnamedRegister.setText(t);
 	}), co = new AbortController(), window.addEventListener("beforeunload", (e) => {
 		bo(to) && (e.preventDefault(), e.returnValue = "");
 	}, { signal: co.signal }), ho(e, s), Q.focus(), Q;
