@@ -402,14 +402,17 @@ export function createEditor(
     attachVimModeListener();
   }
 
-  // Pull system clipboard into unnamed register on focus (vim mode only)
-  editorView.contentDOM.addEventListener('focus', () => {
+  // Seed unnamed register from system clipboard on paste (vim mode only).
+  // Using the 'paste' event instead of navigator.clipboard.readText() avoids
+  // the "Document is not focused" rejection that occurs in browser side
+  // panels (e.g. Vivaldi panel), where the contentDOM focus event can fire
+  // before window focus is established.
+  editorView.contentDOM.addEventListener('paste', (event: ClipboardEvent) => {
     if (!getVimModePref(currentPrefix)) return;
-    navigator.clipboard.readText().then((text) => {
-      if (text) {
-        rc.unnamedRegister.setText(text);
-      }
-    }).catch(() => {});
+    const text = event.clipboardData?.getData('text/plain');
+    if (text) {
+      rc.unnamedRegister.setText(text);
+    }
   });
 
   // --- Trap tab/window close with unsaved changes ---
