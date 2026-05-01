@@ -9366,7 +9366,11 @@ function vo(e, t, n, r) {
 			extensions: d
 		}),
 		parent: e
-	}), s && (e.classList.add("veditor-vim-normal"), fo()), Q.contentDOM.addEventListener("paste", (e) => {
+	}), s && (e.classList.add("veditor-vim-normal"), fo()), Q.contentDOM.addEventListener("focus", () => {
+		Wa(no) && navigator.clipboard.readText().then((e) => {
+			e && c.unnamedRegister.setText(e);
+		}).catch(() => {});
+	}), Q.contentDOM.addEventListener("paste", (e) => {
 		if (!Wa(no)) return;
 		let t = e.clipboardData?.getData("text/plain");
 		t && c.unnamedRegister.setText(t);
@@ -9568,7 +9572,7 @@ function Vo() {
 }
 //#endregion
 //#region src/index.ts
-var Ho = "0.10.2";
+var Ho = "0.11.0";
 //#endregion
 export { Ho as VERSION, Bo as clearLogs, vo as createEditor, Vo as createLogViewer, ko as createVimInput, So as destroyEditor, wo as executeExCommand, Co as exitInsertMode, xo as focusEditor, yo as getEditorContent, zo as getFormattedLogs, Ha as hashTarget, bo as isEditorDirty, Eo as isVimMode, Ro as logDebug, Fo as logError, Lo as logInfo, Io as logWarn, Oo as requestQuit, Do as requestSave, To as toggleVimMode };
 
