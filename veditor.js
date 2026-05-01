@@ -9189,7 +9189,7 @@ var Qa = e.fromClass(class {
 	update(e) {
 		e.docChanged && (this.decorations = Za(e.view));
 	}
-}, { decorations: (e) => e.decorations }), $a = "0.15.0";
+}, { decorations: (e) => e.decorations }), $a = "0.16.0";
 function eo(e, t) {
 	let n = /https?:\/\/[^\s)\]>]+/g, r;
 	for (; (r = n.exec(e)) !== null;) if (t >= r.index && t < r.index + r[0].length) return r[0];
@@ -9366,12 +9366,14 @@ function yo(e, t, n, r) {
 		parent: e
 	}), s && (e.classList.add("veditor-vim-normal"), po()), e.addEventListener("keydown", (t) => {
 		if (t.key !== "p" && t.key !== "P" || !Wa(ro) || !e.classList.contains("veditor-vim-normal") || !Q) return;
-		t.preventDefault(), t.stopPropagation();
+		console.log("[veditor] p/P intercepted"), t.preventDefault(), t.stopPropagation();
 		let n = qi(Q);
 		navigator.clipboard.readText().then((e) => {
-			e && c.unnamedRegister.setText(e);
-		}).catch(() => {}).finally(() => {
-			Y.handleKey(n, t.key, "user");
+			console.log("[veditor] clipboard read OK:", JSON.stringify(e?.slice(0, 50))), e && c.unnamedRegister.setText(e);
+		}).catch((e) => {
+			console.error("[veditor] clipboard read FAILED:", e);
+		}).finally(() => {
+			console.log("[veditor] replaying key:", t.key), Y.handleKey(n, t.key, "user");
 		});
 	}, { capture: !0 }), Q.contentDOM.addEventListener("paste", (e) => {
 		if (!Wa(ro)) return;
@@ -9575,7 +9577,7 @@ function Ho() {
 }
 //#endregion
 //#region src/index.ts
-var Uo = "0.15.0";
+var Uo = "0.16.0";
 //#endregion
 export { Uo as VERSION, Vo as clearLogs, yo as createEditor, Ho as createLogViewer, Ao as createVimInput, Co as destroyEditor, To as executeExCommand, wo as exitInsertMode, So as focusEditor, bo as getEditorContent, Bo as getFormattedLogs, Ha as hashTarget, xo as isEditorDirty, Do as isVimMode, zo as logDebug, Io as logError, Ro as logInfo, Lo as logWarn, ko as requestQuit, Oo as requestSave, Eo as toggleVimMode };
 
