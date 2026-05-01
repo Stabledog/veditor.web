@@ -10,6 +10,9 @@ import { hashTarget } from './util';
 import { getVimModePref, setVimModePref, getWrapPref, setWrapPref } from './prefs';
 import { urlDecorator } from './url-decorator';
 
+declare const __APP_VERSION__: string;
+const VERSION = __APP_VERSION__;
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -170,7 +173,8 @@ function buildCuaKeymap(
 
 function updateToggleIndicator(vimOn: boolean): void {
   if (modeToggleEl) {
-    modeToggleEl.textContent = vimOn ? 'VIM' : 'CUA';
+    const label = vimOn ? 'VIM' : 'CUA';
+    modeToggleEl.textContent = `${label} · v${VERSION}`;
     modeToggleEl.title = vimOn
       ? 'Vim mode active — click to switch to standard editing'
       : 'Standard editing — click to switch to Vim mode';
@@ -402,11 +406,32 @@ export function createEditor(
     attachVimModeListener();
   }
 
-  // Seed unnamed register from system clipboard on paste (vim mode only).
-  // Using the 'paste' event instead of navigator.clipboard.readText() avoids
-  // the "Document is not focused" rejection that occurs in browser side
-  // panels (e.g. Vivaldi panel), where the contentDOM focus event can fire
-  // before window focus is established.
+  // Sync OS clipboard → vim unnamed register on p/P (normal tabs).
+  // navigator.clipboard.readText() requires a user activation; a keydown
+  // qualifies.  In restricted contexts (extension iframes) this is denied
+  // and p/P falls through to whatever is in the register; the user can
+  // Ctrl+Shift+V to paste via the browser's native paste event instead.
+  parent.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key !== 'p' && e.key !== 'P') return;
+    if (!getVimModePref(currentPrefix)) return;
+    if (!parent.classList.contains('veditor-vim-normal')) return;
+    if (!editorView) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const cm = getCM(editorView)!;
+    const key = e.key;
+
+    navigator.clipboard.readText().then((text) => {
+      if (text) rc.unnamedRegister.setText(text);
+    }).catch(() => {}).finally(() => {
+      Vim.handleKey(cm, key, 'user');
+    });
+  }, { capture: true });
+
+  // Seed unnamed register from browser-native paste (Ctrl+V / Ctrl+Shift+V).
+  // This is the only clipboard path that works in extension iframes.
   editorView.contentDOM.addEventListener('paste', (event: ClipboardEvent) => {
     if (!getVimModePref(currentPrefix)) return;
     const text = event.clipboardData?.getData('text/plain');
