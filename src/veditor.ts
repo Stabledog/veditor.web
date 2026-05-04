@@ -416,6 +416,7 @@ export function createEditor(
     if (!getVimModePref(currentPrefix)) return;
     if (!parent.classList.contains('veditor-vim-normal')) return;
     if (!editorView) return;
+    if ((e.target as HTMLElement)?.tagName === 'INPUT') return;
 
     e.preventDefault();
     e.stopPropagation();
