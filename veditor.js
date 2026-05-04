@@ -9189,7 +9189,7 @@ var Qa = e.fromClass(class {
 	update(e) {
 		e.docChanged && (this.decorations = Za(e.view));
 	}
-}, { decorations: (e) => e.decorations }), $a = "0.19.0";
+}, { decorations: (e) => e.decorations }), $a = "0.20.0";
 function eo(e, t) {
 	let n = /https?:\/\/[^\s)\]>]+/g, r;
 	for (; (r = n.exec(e)) !== null;) if (t >= r.index && t < r.index + r[0].length) return r[0];
@@ -9263,7 +9263,7 @@ function _o(e, t, n) {
 	}
 	if (xo(no) || n.isAppDirty?.()) {
 		vo(t, () => n.onQuit(), async () => {
-			await n.onSave(), n.onQuit();
+			await n.onSave(), no = bo(), uo(), n.onQuit();
 		});
 		return;
 	}
@@ -9365,7 +9365,7 @@ function yo(e, t, n, r) {
 		}),
 		parent: e
 	}), s && (e.classList.add("veditor-vim-normal"), po()), e.addEventListener("keydown", (t) => {
-		if (t.key !== "p" && t.key !== "P" || !Wa(ro) || !e.classList.contains("veditor-vim-normal") || !Q) return;
+		if (t.key !== "p" && t.key !== "P" || !Wa(ro) || !e.classList.contains("veditor-vim-normal") || !Q || t.target?.tagName === "INPUT") return;
 		t.preventDefault(), t.stopPropagation();
 		let n = qi(Q), r = t.key;
 		navigator.clipboard.readText().then((e) => {
@@ -9575,7 +9575,7 @@ function Ho() {
 }
 //#endregion
 //#region src/index.ts
-var Uo = "0.19.0";
+var Uo = "0.20.0";
 //#endregion
 export { Uo as VERSION, Vo as clearLogs, yo as createEditor, Ho as createLogViewer, Ao as createVimInput, Co as destroyEditor, To as executeExCommand, wo as exitInsertMode, So as focusEditor, bo as getEditorContent, Bo as getFormattedLogs, Ha as hashTarget, xo as isEditorDirty, Do as isVimMode, zo as logDebug, Io as logError, Ro as logInfo, Lo as logWarn, ko as requestQuit, Oo as requestSave, Eo as toggleVimMode };
 
