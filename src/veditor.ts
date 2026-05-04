@@ -208,7 +208,12 @@ function handleQuitRequest(
   if (isEditorDirty(savedContent) || callbacks.isAppDirty?.()) {
     showConfirmBar(parent,
       () => callbacks.onQuit(),
-      async () => { await callbacks.onSave(); callbacks.onQuit(); },
+      async () => {
+        await callbacks.onSave();
+        savedContent = getEditorContent();
+        updateDirtyClass();
+        callbacks.onQuit();
+      },
     );
     return;
   }

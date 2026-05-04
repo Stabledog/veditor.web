@@ -13,7 +13,30 @@
       display: flex;
       flex-direction: column;
     }
-    header {
+
+    /* -- Start page (note list) -- */
+    #start-page { flex: 1; padding: 2rem; overflow-y: auto; }
+    #start-page h1 { font-size: 1.25rem; color: #89b4fa; margin-bottom: 1rem; }
+    .note-list { list-style: none; max-width: 36rem; }
+    .note-item {
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background: #313244;
+      border: 1px solid #45475a;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .note-item:hover { background: #45475a; }
+    .note-item h2 { font-size: 0.95rem; color: #cdd6f4; margin-bottom: 0.25rem; }
+    .note-item p { font-size: 0.8rem; color: #a6adc8; }
+
+    /* -- Editor page -- */
+    #editor-page { display: none; flex: 1; flex-direction: column; }
+    #editor-page.active { display: flex; }
+    #start-page.hidden { display: none; }
+
+    #editor-header {
       display: flex;
       align-items: center;
       gap: 0.75rem;
@@ -21,7 +44,16 @@
       background: #181825;
       border-bottom: 1px solid #313244;
     }
-    header h1 { font-size: 1rem; color: #89b4fa; }
+    #back-btn {
+      background: none;
+      border: 1px solid #585b70;
+      border-radius: 4px;
+      color: #a6adc8;
+      padding: 0.2rem 0.5rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    #back-btn:hover { background: #313244; color: #cdd6f4; }
     #title-container { flex: 1; min-width: 0; font-size: 0.85rem; font-weight: 600; }
     #status { font-size: 0.875rem; margin-left: auto; }
     #status.success { color: #a6e3a1; }
@@ -30,81 +62,149 @@
   </style>
 </head>
 <body>
-  <header>
+  <!-- Start page: note list -->
+  <div id="start-page">
     <h1>veditor demo</h1>
-    <div id="title-container"></div>
-    <span id="status"></span>
-  </header>
-  <div id="editor-container"></div>
+    <ul class="note-list" id="note-list"></ul>
+  </div>
+
+  <!-- Editor page -->
+  <div id="editor-page">
+    <div id="editor-header">
+      <button id="back-btn">&larr;</button>
+      <div id="title-container"></div>
+      <span id="status"></span>
+    </div>
+    <div id="editor-container"></div>
+  </div>
 
   <script type="module">
-    // In production, host apps import from the Pages CDN URL.
-    // For local dev, import from the source directly via Vite.
-    import { createEditor, createVimInput, getEditorContent, isEditorDirty, focusEditor } from '../src/index.ts';
+    import { createEditor, createVimInput, getEditorContent, destroyEditor, focusEditor, requestQuit } from '../src/index.ts';
 
-    const sampleContent = `# veditor demo
+    const notes = [
+      {
+        title: 'Vim commands',
+        body: `# Vim commands
 
-This is a standalone test of the veditor component.
+Try these ex commands:
 
-## Vim commands
-
-- \`:w\` — save (logs to console)
-- \`:q\` — quit (logs to console)
+- \`:w\` — save (persists in memory, re-open to verify)
+- \`:q\` — quit (returns to note list)
 - \`:wq\` — save and quit
+- \`:q!\` — force quit without saving
 - \`:wrap\` — toggle line wrapping
 - \`jk\` — escape from insert mode
 - \`Ctrl+Click\` — open URL: https://example.com
 
-## Test
+Edit this text, then use :q to test the confirm bar.
+`,
+      },
+      {
+        title: 'Markdown sample',
+        body: `# Markdown sample
 
-Try editing this text and using the vim commands above.
-`;
+## Headings, lists, code
 
-    const status = document.getElementById('status');
-    let originalContent = sampleContent;
+- Item one
+- Item two
+  - Nested item
+
+\`\`\`javascript
+function hello() {
+  console.log('world');
+}
+\`\`\`
+
+> A blockquote for good measure.
+`,
+      },
+      {
+        title: 'Long text (wrap test)',
+        body: `# Line wrapping test
+
+This is a very long line that should demonstrate line wrapping behavior. Use :wrap to toggle wrapping on and off. When wrapping is off this line should extend beyond the viewport and require horizontal scrolling. When wrapping is on it should break at the editor boundary.
+
+Short line.
+
+Another very long line to test with: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+`,
+      },
+    ];
+
+    const startPage = document.getElementById('start-page');
+    const editorPage = document.getElementById('editor-page');
+    const noteListEl = document.getElementById('note-list');
+    const statusEl = document.getElementById('status');
+    let titleHandle = null;
 
     function showStatus(msg, isError = false) {
-      status.textContent = msg;
-      status.className = isError ? 'error' : 'success';
+      statusEl.textContent = msg;
+      statusEl.className = isError ? 'error' : 'success';
       if (!isError) {
-        setTimeout(() => { if (status.textContent === msg) status.textContent = ''; }, 2000);
+        setTimeout(() => { if (statusEl.textContent === msg) statusEl.textContent = ''; }, 2000);
       }
     }
 
-    const titleHandle = createVimInput(
-      document.getElementById('title-container'),
-      {
-        value: 'Demo note title',
-        onEnter: () => focusEditor(),
-        onEscape: () => focusEditor(),
-        onChange: (v) => console.log('title:', v),
-      },
-    );
+    function renderNoteList() {
+      noteListEl.innerHTML = '';
+      notes.forEach((note, i) => {
+        const li = document.createElement('li');
+        li.className = 'note-item';
+        const firstLine = note.body.split('\n').find(l => l.trim() && !l.startsWith('#')) || '';
+        li.innerHTML = `<h2>${note.title}</h2><p>${firstLine.slice(0, 80)}</p>`;
+        li.addEventListener('click', () => openEditor(i));
+        noteListEl.appendChild(li);
+      });
+    }
 
-    createEditor(document.getElementById('editor-container'), sampleContent, {
-      onSave: async () => {
-        const content = getEditorContent();
-        if (content === originalContent) {
-          showStatus('No changes');
-          return;
-        }
-        console.log('Save:', content);
-        originalContent = content;
-        showStatus('Saved (to console)');
-      },
-      onQuit: (force) => {
-        if (!force && isEditorDirty(originalContent)) {
-          showStatus('Unsaved changes! Use :q! to force quit', true);
-          return;
-        }
-        showStatus('Quit (nowhere to go in demo)');
-      },
-    }, {
-      storagePrefix: 'veditor_demo',
-      normalMappings: {
-        'gt': () => titleHandle.focus(),
-      },
-    });
+    function openEditor(index) {
+      const note = notes[index];
+      startPage.classList.add('hidden');
+      editorPage.classList.add('active');
+
+      titleHandle = createVimInput(
+        document.getElementById('title-container'),
+        {
+          value: note.title,
+          onEnter: () => focusEditor(),
+          onEscape: () => focusEditor(),
+          onChange: (v) => { note.title = v; },
+        },
+      );
+
+      createEditor(document.getElementById('editor-container'), note.body, {
+        onSave: async () => {
+          const content = getEditorContent();
+          note.body = content;
+          note.title = titleHandle.getValue();
+          showStatus('Saved');
+        },
+        onQuit: () => closeEditor(),
+        isAppDirty: () => titleHandle ? titleHandle.getValue() !== note.title : false,
+      }, {
+        storagePrefix: 'veditor_demo',
+        normalMappings: {
+          'gt': () => titleHandle.focus(),
+        },
+      });
+    }
+
+    function closeEditor() {
+      destroyEditor();
+      if (titleHandle) {
+        titleHandle.destroy();
+        titleHandle = null;
+      }
+      document.getElementById('title-container').innerHTML = '';
+      statusEl.textContent = '';
+      editorPage.classList.remove('active');
+      startPage.classList.remove('hidden');
+      renderNoteList();
+    }
+
+    document.getElementById('back-btn').addEventListener('click', () => requestQuit());
+
+    renderNoteList();
   </script>
 </body>
 </html>
