@@ -9189,13 +9189,18 @@ var Qa = e.fromClass(class {
 	update(e) {
 		e.docChanged && (this.decorations = Za(e.view));
 	}
-}, { decorations: (e) => e.decorations }), $a = "0.20.0";
+}, { decorations: (e) => e.decorations }), $a = "0.22.0";
 function eo(e, t) {
 	let n = /https?:\/\/[^\s)\]>]+/g, r;
 	for (; (r = n.exec(e)) !== null;) if (t >= r.index && t < r.index + r[0].length) return r[0];
 	return null;
 }
-var to = v.domEventHandlers({ click(e, t) {
+function to(e, t) {
+	let n = /https?:\/\/[^\s)\]>]+/g, r, i = null;
+	for (; (r = n.exec(e)) !== null;) if (i ||= r[0], t >= r.index && t < r.index + r[0].length || r.index >= t) return r[0];
+	return i;
+}
+var no = v.domEventHandlers({ click(e, t) {
 	if (!e.ctrlKey) return !1;
 	let n = t.posAtCoords({
 		x: e.clientX,
@@ -9204,38 +9209,38 @@ var to = v.domEventHandlers({ click(e, t) {
 	if (n == null) return !1;
 	let r = t.state.doc.lineAt(n), i = n - r.from, a = eo(r.text, i);
 	return a ? (window.open(a, Ha(a)), e.preventDefault(), !0) : !1;
-} }), Q = null, no = "", $ = null, ro = "veditor", io = null, ao = new Ee(), oo = new Ee(), so = new Ee(), co = null, lo = null;
-function uo() {
+} }), Q = null, ro = "", $ = null, io = "veditor", ao = null, oo = new Ee(), so = new Ee(), co = new Ee(), lo = null, uo = null;
+function fo() {
 	if (!$) return;
-	let e = xo(no);
+	let e = So(ro);
 	$.classList.toggle("veditor-dirty", e);
 }
-function fo(e) {
+function po(e) {
 	$ && ($.classList.remove("veditor-vim-normal", "veditor-vim-insert"), e === "insert" || e === "replace" ? $.classList.add("veditor-vim-insert") : $.classList.add("veditor-vim-normal"));
 }
-function po() {
+function mo() {
 	if (!Q) return;
 	let e = qi(Q);
 	e && e.on("vim-mode-change", (e) => {
-		fo(e.mode);
+		po(e.mode);
 	});
 }
-function mo(e, t, n) {
+function ho(e, t, n) {
 	return se.of([
 		{
 			key: "Mod-s",
 			run: () => ((async () => {
-				await e.onSave(), no = bo(), uo();
+				await e.onSave(), ro = xo(), fo();
 			})(), !0)
 		},
 		{
 			key: "Escape",
-			run: () => (_o(!1, t, e), !0)
+			run: () => (vo(!1, t, e), !0)
 		},
 		{
 			key: "Mod-Shift-s",
 			run: () => ((async () => {
-				await e.onSave(), no = bo(), uo(), _o(!1, t, e);
+				await e.onSave(), ro = xo(), fo(), vo(!1, t, e);
 			})(), !0)
 		},
 		{
@@ -9243,33 +9248,33 @@ function mo(e, t, n) {
 			run: () => {
 				if (!Q) return !1;
 				let e = !qa(n);
-				return Ja(n, e), Q.dispatch({ effects: ao.reconfigure(e ? v.lineWrapping : []) }), !0;
+				return Ja(n, e), Q.dispatch({ effects: oo.reconfigure(e ? v.lineWrapping : []) }), !0;
 			}
 		}
 	]);
 }
-function ho(e) {
-	co && (co.textContent = `${e ? "VIM" : "CUA"} · v${$a}`, co.title = e ? "Vim mode active — click to switch to standard editing" : "Standard editing — click to switch to Vim mode");
+function go(e) {
+	lo && (lo.textContent = `${e ? "VIM" : "CUA"} · v${$a}`, lo.title = e ? "Vim mode active — click to switch to standard editing" : "Standard editing — click to switch to Vim mode");
 }
-function go(e, t) {
-	co?.remove();
+function _o(e, t) {
+	lo?.remove();
 	let n = document.createElement("button");
-	n.className = "veditor-mode-toggle", n.type = "button", n.addEventListener("click", () => Eo()), e.appendChild(n), co = n, ho(t);
+	n.className = "veditor-mode-toggle", n.type = "button", n.addEventListener("click", () => Do()), e.appendChild(n), lo = n, go(t);
 }
-function _o(e, t, n) {
+function vo(e, t, n) {
 	if (e) {
 		n.onQuit();
 		return;
 	}
-	if (xo(no) || n.isAppDirty?.()) {
-		vo(t, () => n.onQuit(), async () => {
-			await n.onSave(), no = bo(), uo(), n.onQuit();
+	if (So(ro) || n.isAppDirty?.()) {
+		yo(t, () => n.onQuit(), async () => {
+			await n.onSave(), ro = xo(), fo(), n.onQuit();
 		});
 		return;
 	}
 	n.onQuit();
 }
-function vo(e, t, n) {
+function yo(e, t, n) {
 	e.querySelector(".veditor-confirm-bar")?.remove();
 	let r = (e, t) => e.slice(0, t) + `<u>${e[t]}</u>` + e.slice(t + 1), i = document.createElement("div");
 	i.className = "veditor-confirm-bar", i.innerHTML = `
@@ -9291,26 +9296,30 @@ function vo(e, t, n) {
 		a();
 	});
 }
-function yo(e, t, n, r) {
-	Co(), no = t, $ = e, e.classList.add("veditor-dirty-aware"), e.classList.remove("veditor-dirty");
+function bo(e, t, n, r) {
+	wo(), ro = t, $ = e, e.classList.add("veditor-dirty-aware"), e.classList.remove("veditor-dirty");
 	let i = r?.storagePrefix ?? "veditor";
-	ro = i, io = n;
+	io = i, ao = n;
 	let o = r?.clickableLinks ?? !0, s = Wa(i);
 	if (Y.defineEx("w", "w", async () => {
-		await n.onSave(), no = bo(), uo();
+		await n.onSave(), ro = xo(), fo();
 	}), Y.defineEx("q", "q", (t, r) => {
-		_o(r?.bang ?? !1, e, n);
+		vo(r?.bang ?? !1, e, n);
 	}), Y.defineEx("wq", "wq", async () => {
-		await n.onSave(), no = bo(), uo(), _o(!1, e, n);
+		await n.onSave(), ro = xo(), fo(), vo(!1, e, n);
 	}), Y.defineEx("cua", "cua", () => {
-		Wa(ro) && setTimeout(() => Eo(), 0);
+		Wa(io) && setTimeout(() => Do(), 0);
 	}), Y.defineEx("wrap", "wrap", () => {
 		if (!Q) return;
 		let e = !qa(i);
-		Ja(i, e), Q.dispatch({ effects: ao.reconfigure(e ? v.lineWrapping : []) });
+		Ja(i, e), Q.dispatch({ effects: oo.reconfigure(e ? v.lineWrapping : []) });
 	}), Y.map("jk", "<Esc>", "insert"), Y.setOption("insertModeEscKeysTimeout", 750), Y.defineAction("veditor_quit", () => {
-		_o(!1, e, n);
-	}), Y.mapCommand("u", "action", "veditor_quit", {}, { context: "normal" }), r?.exCommands) for (let [e, t] of Object.entries(r.exCommands)) Y.defineEx(e, e, t);
+		vo(!1, e, n);
+	}), Y.mapCommand("u", "action", "veditor_quit", {}, { context: "normal" }), Y.defineAction("veditor_gx", () => {
+		if (!Q) return;
+		let e = Q.state.selection.main.head, t = Q.state.doc.lineAt(e), n = e - t.from, r = to(t.text, n);
+		r && window.open(r, Ha(r));
+	}), Y.mapCommand("gx", "action", "veditor_gx", {}, { context: "normal" }), r?.exCommands) for (let [e, t] of Object.entries(r.exCommands)) Y.defineEx(e, e, t);
 	if (r?.normalMappings) for (let [e, t] of Object.entries(r.normalMappings)) {
 		let n = `veditor_${e}`;
 		Y.defineAction(n, t), Y.mapCommand(e, "action", n, {}, { context: "normal" });
@@ -9319,11 +9328,11 @@ function yo(e, t, n, r) {
 	c.pushText = (e, t, n, r, i) => {
 		l(e, t, n, r, i), e !== "_" && navigator.clipboard.writeText(n).catch(() => {});
 	};
-	let u = mo(n, e, i);
+	let u = ho(n, e, i);
 	console.log("[veditor] Creating editor with urlDecorator extension");
 	let d = [
-		oo.of(s ? Ki() : []),
-		so.of(s ? [] : u),
+		so.of(s ? Ki() : []),
+		co.of(s ? [] : u),
 		Ca,
 		je({ codeLanguages: Yi }),
 		Ba,
@@ -9335,7 +9344,7 @@ function yo(e, t, n, r) {
 			key: "Shift-Tab",
 			run: $r
 		}]),
-		ao.of(qa(i) ? v.lineWrapping : []),
+		oo.of(qa(i) ? v.lineWrapping : []),
 		v.theme({
 			"&": { height: "100%" },
 			".cm-scroller": { overflow: "auto" },
@@ -9357,15 +9366,15 @@ function yo(e, t, n, r) {
 		})
 	];
 	return d.push(v.updateListener.of((e) => {
-		e.docChanged && uo();
-	})), o && d.push(to), r?.extensions && d.push(...r.extensions), Q = new v({
+		e.docChanged && fo();
+	})), o && d.push(no), r?.extensions && d.push(...r.extensions), Q = new v({
 		state: a.create({
 			doc: t,
 			extensions: d
 		}),
 		parent: e
-	}), s && (e.classList.add("veditor-vim-normal"), po()), e.addEventListener("keydown", (t) => {
-		if (t.key !== "p" && t.key !== "P" || !Wa(ro) || !e.classList.contains("veditor-vim-normal") || !Q || t.target?.tagName === "INPUT") return;
+	}), s && (e.classList.add("veditor-vim-normal"), mo()), e.addEventListener("keydown", (t) => {
+		if (t.key !== "p" && t.key !== "P" || !Wa(io) || !e.classList.contains("veditor-vim-normal") || !Q || t.target?.tagName === "INPUT") return;
 		t.preventDefault(), t.stopPropagation();
 		let n = qi(Q), r = t.key;
 		navigator.clipboard.readText().then((e) => {
@@ -9374,56 +9383,56 @@ function yo(e, t, n, r) {
 			Y.handleKey(n, r, "user");
 		});
 	}, { capture: !0 }), Q.contentDOM.addEventListener("paste", (e) => {
-		if (!Wa(ro)) return;
+		if (!Wa(io)) return;
 		let t = e.clipboardData?.getData("text/plain");
 		t && c.unnamedRegister.setText(t);
-	}), lo = new AbortController(), window.addEventListener("beforeunload", (e) => {
-		xo(no) && (e.preventDefault(), e.returnValue = "");
-	}, { signal: lo.signal }), go(e, s), Q.focus(), Q;
+	}), uo = new AbortController(), window.addEventListener("beforeunload", (e) => {
+		So(ro) && (e.preventDefault(), e.returnValue = "");
+	}, { signal: uo.signal }), _o(e, s), Q.focus(), Q;
 }
-function bo() {
+function xo() {
 	return Q ? Q.state.doc.toString() : "";
 }
-function xo(e) {
-	return bo() !== e;
-}
-function So() {
-	Q?.focus();
+function So(e) {
+	return xo() !== e;
 }
 function Co() {
-	Q &&= (Q.destroy(), null), co &&= (co.remove(), null), $ &&= ($.classList.remove("veditor-dirty", "veditor-dirty-aware", "veditor-vim-normal", "veditor-vim-insert"), null), lo &&= (lo.abort(), null), io = null;
+	Q?.focus();
 }
 function wo() {
-	Q && Wa(ro) && Q.contentDOM.dispatchEvent(new KeyboardEvent("keydown", {
+	Q &&= (Q.destroy(), null), lo &&= (lo.remove(), null), $ &&= ($.classList.remove("veditor-dirty", "veditor-dirty-aware", "veditor-vim-normal", "veditor-vim-insert"), null), uo &&= (uo.abort(), null), ao = null;
+}
+function To() {
+	Q && Wa(io) && Q.contentDOM.dispatchEvent(new KeyboardEvent("keydown", {
 		key: "Escape",
 		code: "Escape",
 		bubbles: !0
 	}));
 }
-function To(e) {
-	if (!Q || !Wa(ro)) return;
+function Eo(e) {
+	if (!Q || !Wa(io)) return;
 	let t = qi(Q);
 	t && Y.handleEx(t, e);
 }
-function Eo() {
-	if (!Q) return Wa(ro);
-	let e = !Wa(ro);
-	Ga(ro, e);
-	let t = io && $ ? mo(io, $, ro) : [];
-	return Q.dispatch({ effects: [oo.reconfigure(e ? Ki() : []), so.reconfigure(e ? [] : t)] }), ho(e), e ? ($?.classList.add("veditor-vim-normal"), $?.classList.remove("veditor-vim-insert"), po()) : $?.classList.remove("veditor-vim-normal", "veditor-vim-insert"), Q.focus(), e;
-}
 function Do() {
-	return Wa(ro);
+	if (!Q) return Wa(io);
+	let e = !Wa(io);
+	Ga(io, e);
+	let t = ao && $ ? ho(ao, $, io) : [];
+	return Q.dispatch({ effects: [so.reconfigure(e ? Ki() : []), co.reconfigure(e ? [] : t)] }), go(e), e ? ($?.classList.add("veditor-vim-normal"), $?.classList.remove("veditor-vim-insert"), mo()) : $?.classList.remove("veditor-vim-normal", "veditor-vim-insert"), Q.focus(), e;
 }
-async function Oo() {
-	io && (await io.onSave(), no = bo(), uo());
+function Oo() {
+	return Wa(io);
 }
-function ko(e) {
-	!io || !$ || _o(e ?? !1, $, io);
+async function ko() {
+	ao && (await ao.onSave(), ro = xo(), fo());
+}
+function Ao(e) {
+	!ao || !$ || vo(e ?? !1, $, ao);
 }
 //#endregion
 //#region src/vim-input.ts
-function Ao(e, t) {
+function jo(e, t) {
 	let n = document.createElement("div");
 	n.className = "vim-input", e.appendChild(n);
 	let r = t?.storagePrefix ?? "veditor", i = Wa(r), o = new Ee(), s = v.updateListener.of((e) => {
@@ -9505,51 +9514,51 @@ function Ao(e, t) {
 }
 //#endregion
 //#region src/logging.ts
-var jo = "_app_debug_logs", Mo = 1e3;
-function No() {
+var Mo = "_app_debug_logs", No = 1e3;
+function Po() {
 	try {
-		let e = localStorage.getItem(jo);
+		let e = localStorage.getItem(Mo);
 		return e ? JSON.parse(e) : [];
 	} catch {
 		return [];
 	}
 }
-function Po(e) {
+function Fo(e) {
 	try {
-		let t = e.slice(-Mo);
-		localStorage.setItem(jo, JSON.stringify(t));
+		let t = e.slice(-No);
+		localStorage.setItem(Mo, JSON.stringify(t));
 	} catch {}
 }
-function Fo(e, t) {
+function Io(e, t) {
 	let n = {
 		timestamp: (/* @__PURE__ */ new Date()).toISOString(),
 		level: e,
 		message: t
-	}, r = No();
-	r.push(n), Po(r), console[e === "warn" ? "warn" : e === "error" ? "error" : "log"](`[${e.toUpperCase()}] ${t}`);
-}
-function Io(e) {
-	Fo("error", e);
+	}, r = Po();
+	r.push(n), Fo(r), console[e === "warn" ? "warn" : e === "error" ? "error" : "log"](`[${e.toUpperCase()}] ${t}`);
 }
 function Lo(e) {
-	Fo("warn", e);
+	Io("error", e);
 }
 function Ro(e) {
-	Fo("info", e);
+	Io("warn", e);
 }
 function zo(e) {
-	Fo("debug", e);
+	Io("info", e);
 }
-function Bo() {
-	let e = No();
-	return e.length === 0 ? "(no logs)" : e.map((e) => `[${new Date(e.timestamp).toLocaleTimeString()}] ${e.level.toUpperCase()}: ${e.message}`).join("\n");
+function Bo(e) {
+	Io("debug", e);
 }
 function Vo() {
-	try {
-		localStorage.removeItem(jo);
-	} catch {}
+	let e = Po();
+	return e.length === 0 ? "(no logs)" : e.map((e) => `[${new Date(e.timestamp).toLocaleTimeString()}] ${e.level.toUpperCase()}: ${e.message}`).join("\n");
 }
 function Ho() {
+	try {
+		localStorage.removeItem(Mo);
+	} catch {}
+}
+function Uo() {
 	let e = document.createElement("div");
 	e.id = "log-viewer-modal", e.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    background: rgba(0, 0, 0, 0.7);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 10000;\n  ";
 	let t = document.createElement("div");
@@ -9559,24 +9568,24 @@ function Ho() {
 	let r = document.createElement("button");
 	r.textContent = "×", r.style.cssText = "\n    background: none;\n    border: none;\n    color: #e0e0e0;\n    font-size: 20px;\n    cursor: pointer;\n    padding: 0;\n    width: 30px;\n    height: 30px;\n  ", r.addEventListener("click", () => e.remove()), n.appendChild(r);
 	let i = document.createElement("textarea");
-	i.readOnly = !0, i.value = Bo(), i.style.cssText = "\n    flex: 1;\n    padding: 10px;\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: none;\n    font-family: monospace;\n    font-size: 12px;\n    resize: none;\n    overflow: auto;\n  ", i.scrollTop = i.scrollHeight;
+	i.readOnly = !0, i.value = Vo(), i.style.cssText = "\n    flex: 1;\n    padding: 10px;\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: none;\n    font-family: monospace;\n    font-size: 12px;\n    resize: none;\n    overflow: auto;\n  ", i.scrollTop = i.scrollHeight;
 	let a = document.createElement("div");
 	a.style.cssText = "\n    padding: 10px;\n    border-top: 1px solid #444;\n    display: flex;\n    gap: 10px;\n    justify-content: flex-end;\n  ";
 	let o = document.createElement("button");
 	o.textContent = "Clear Logs", o.style.cssText = "\n    padding: 6px 12px;\n    background: #d32f2f;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", o.addEventListener("click", () => {
-		Vo(), i.value = "(no logs)";
+		Ho(), i.value = "(no logs)";
 	}), a.appendChild(o);
 	let s = document.createElement("button");
 	return s.textContent = "Refresh", s.style.cssText = "\n    padding: 6px 12px;\n    background: #1976d2;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", s.addEventListener("click", () => {
-		i.value = Bo(), i.scrollTop = i.scrollHeight;
+		i.value = Vo(), i.scrollTop = i.scrollHeight;
 	}), a.appendChild(s), t.appendChild(n), t.appendChild(i), t.appendChild(a), e.appendChild(t), e.addEventListener("click", (t) => {
 		t.target === e && e.remove();
 	}), e;
 }
 //#endregion
 //#region src/index.ts
-var Uo = "0.20.0";
+var Wo = "0.22.0";
 //#endregion
-export { Uo as VERSION, Vo as clearLogs, yo as createEditor, Ho as createLogViewer, Ao as createVimInput, Co as destroyEditor, To as executeExCommand, wo as exitInsertMode, So as focusEditor, bo as getEditorContent, Bo as getFormattedLogs, Ha as hashTarget, xo as isEditorDirty, Do as isVimMode, zo as logDebug, Io as logError, Ro as logInfo, Lo as logWarn, ko as requestQuit, Oo as requestSave, Eo as toggleVimMode };
+export { Wo as VERSION, Ho as clearLogs, bo as createEditor, Uo as createLogViewer, jo as createVimInput, wo as destroyEditor, Eo as executeExCommand, To as exitInsertMode, Co as focusEditor, xo as getEditorContent, Vo as getFormattedLogs, Ha as hashTarget, So as isEditorDirty, Oo as isVimMode, Bo as logDebug, Lo as logError, zo as logInfo, Ro as logWarn, Ao as requestQuit, ko as requestSave, Do as toggleVimMode };
 
 //# sourceMappingURL=veditor.js.map
