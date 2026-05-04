@@ -52,6 +52,18 @@ function urlAtPosition(lineText: string, col: number): string | null {
   return null;
 }
 
+function urlOnLine(lineText: string, col: number): string | null {
+  const urlRe = /https?:\/\/[^\s)\]>]+/g;
+  let m;
+  let firstOnLine: string | null = null;
+  while ((m = urlRe.exec(lineText)) !== null) {
+    if (!firstOnLine) firstOnLine = m[0];
+    if (col >= m.index && col < m.index + m[0].length) return m[0];
+    if (m.index >= col) return m[0];
+  }
+  return firstOnLine;
+}
+
 const clickableLinks = EditorView.domEventHandlers({
   click(event: MouseEvent, view: EditorView) {
     if (!event.ctrlKey) return false;
@@ -318,6 +330,17 @@ export function createEditor(
     handleQuitRequest(false, parent, callbacks);
   });
   Vim.mapCommand('u', 'action', 'veditor_quit', {}, { context: 'normal' });
+
+  // 'gx' in normal mode opens the nearest URL on the current line in a hashed tab
+  Vim.defineAction('veditor_gx', () => {
+    if (!editorView) return;
+    const pos = editorView.state.selection.main.head;
+    const line = editorView.state.doc.lineAt(pos);
+    const col = pos - line.from;
+    const url = urlOnLine(line.text, col);
+    if (url) window.open(url, hashTarget(url));
+  });
+  Vim.mapCommand('gx', 'action', 'veditor_gx', {}, { context: 'normal' });
 
   // --- Custom ex commands from host app ---
   if (options?.exCommands) {
