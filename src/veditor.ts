@@ -370,7 +370,9 @@ export function createEditor(
   ) => {
     origPush(regName, op, text, linewise, blockwise);
     if (regName !== '_') {
-      navigator.clipboard.writeText(text).catch(() => {});
+      navigator.clipboard.writeText(text).catch(() => {
+        window.postMessage({ type: 'barouse:clipboard-write', text }, '*');
+      });
     }
   };
 
@@ -480,8 +482,15 @@ export function createEditor(
     });
   }, { capture: true });
 
+  // Prevent vim's Ctrl+V (visual block) so the browser's native paste fires.
+  parent.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (!getVimModePref(currentPrefix)) return;
+    if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+      e.stopPropagation();
+    }
+  }, { capture: true });
+
   // Seed unnamed register from browser-native paste (Ctrl+V / Ctrl+Shift+V).
-  // This is the only clipboard path that works in extension iframes.
   editorView.contentDOM.addEventListener('paste', (event: ClipboardEvent) => {
     if (!getVimModePref(currentPrefix)) return;
     const text = event.clipboardData?.getData('text/plain');
