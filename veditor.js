@@ -9205,7 +9205,7 @@ var eo = e.fromClass(class {
 	update(e) {
 		e.docChanged && (this.decorations = $a(e.view));
 	}
-}, { decorations: (e) => e.decorations }), to = "0.24.0";
+}, { decorations: (e) => e.decorations }), to = "0.25.0";
 function no(e, t) {
 	let n = /https?:\/\/[^\s)\]>]+/g, r;
 	for (; (r = n.exec(e)) !== null;) if (t >= r.index && t < r.index + r[0].length) return r[0];
@@ -9621,7 +9621,7 @@ function Go() {
 }
 //#endregion
 //#region src/index.ts
-var Ko = "0.24.0";
+var Ko = "0.25.0";
 //#endregion
 export { Ko as VERSION, Wo as clearLogs, So as createEditor, Go as createLogViewer, No as createVimInput, Eo as destroyEditor, Oo as executeExCommand, Do as exitInsertMode, To as focusEditor, Co as getEditorContent, Uo as getFormattedLogs, Wa as hashTarget, wo as isEditorDirty, Ao as isVimMode, Ho as logDebug, zo as logError, Vo as logInfo, Bo as logWarn, Mo as requestQuit, jo as requestSave, ko as toggleVimMode };
 
