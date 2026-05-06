@@ -434,11 +434,28 @@ export function createEditor(
     attachVimModeListener();
   }
 
-  // Sync OS clipboard → vim unnamed register on p/P (normal tabs).
-  // navigator.clipboard.readText() requires a user activation; a keydown
-  // qualifies.  In restricted contexts (extension iframes) this is denied
-  // and p/P falls through to whatever is in the register; the user can
-  // Ctrl+Shift+V to paste via the browser's native paste event instead.
+  // Sync OS clipboard → vim unnamed register on p/P.
+  // In restricted contexts (extension sidebar iframes) the Clipboard API
+  // permission prompt cannot appear, so readText() is denied.  Fall back to
+  // a postMessage bridge: the barouse content script reads the clipboard
+  // with the extension's clipboardRead privilege and replies.
+  function readClipboardViaBarouse(): Promise<string | null> {
+    return new Promise((resolve) => {
+      const timeout = setTimeout(() => {
+        window.removeEventListener('message', handler);
+        resolve(null);
+      }, 300);
+      function handler(event: MessageEvent) {
+        if (event.data?.type !== 'barouse:clipboard-read-result') return;
+        clearTimeout(timeout);
+        window.removeEventListener('message', handler);
+        resolve(event.data.text ?? null);
+      }
+      window.addEventListener('message', handler);
+      window.postMessage({ type: 'barouse:clipboard-read' }, '*');
+    });
+  }
+
   parent.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key !== 'p' && e.key !== 'P') return;
     if (!getVimModePref(currentPrefix)) return;
@@ -454,7 +471,11 @@ export function createEditor(
 
     navigator.clipboard.readText().then((text) => {
       if (text) rc.unnamedRegister.setText(text);
-    }).catch(() => {}).finally(() => {
+    }).catch(() => {
+      return readClipboardViaBarouse().then((text) => {
+        if (text) rc.unnamedRegister.setText(text);
+      });
+    }).finally(() => {
       Vim.handleKey(cm, key, 'user');
     });
   }, { capture: true });
