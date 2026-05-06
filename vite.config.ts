@@ -3,7 +3,7 @@ import { resolve } from 'path';
 import { execSync } from 'child_process';
 import pkg from './package.json';
 
-const buildHash = execSync('../scripts/source-hash.sh').toString().trim();
+const buildHash = execSync('(git describe --always; git diff) | sha256sum | cut -c1-12').toString().trim();
 
 export default defineConfig(({ command }) => ({
   root: command === 'serve' ? 'demo' : undefined,
