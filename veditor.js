@@ -9214,7 +9214,7 @@ var io = e.fromClass(class {
 	update(e) {
 		e.docChanged && (this.decorations = ro(e.view));
 	}
-}, { decorations: (e) => e.decorations }), ao = "0.28.0";
+}, { decorations: (e) => e.decorations }), ao = "0.29.0";
 function oo(e, t) {
 	let n = /https?:\/\/[^\s)\]>]+/g, r;
 	for (; (r = n.exec(e)) !== null;) if (t >= r.index && t < r.index + r[0].length) return r[0];
@@ -9686,7 +9686,7 @@ function es() {
 }
 //#endregion
 //#region src/index.ts
-var ts = "0.28.0";
+var ts = "0.29.0";
 //#endregion
 export { ts as VERSION, $o as clearLogs, jo as createEditor, es as createLogViewer, Ho as createVimInput, Fo as destroyEditor, Lo as executeExCommand, Io as exitInsertMode, Po as focusEditor, Mo as getEditorContent, Qo as getFormattedLogs, Ga as hashTarget, No as isEditorDirty, zo as isVimMode, Zo as logDebug, Jo as logError, Xo as logInfo, Yo as logWarn, Vo as requestQuit, Bo as requestSave, Ro as toggleVimMode };
 
