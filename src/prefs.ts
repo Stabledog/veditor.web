@@ -27,3 +27,17 @@ export function getWrapPref(prefix: string): boolean {
 export function setWrapPref(prefix: string, on: boolean): void {
   localStorage.setItem(wrapKey(prefix), String(on));
 }
+
+// --- Show whitespace (list mode) ---
+
+function listKey(prefix: string): string {
+  return `${prefix}_list`;
+}
+
+export function getListPref(prefix: string): boolean {
+  return localStorage.getItem(listKey(prefix)) === 'true'; // default off
+}
+
+export function setListPref(prefix: string, on: boolean): void {
+  localStorage.setItem(listKey(prefix), String(on));
+}

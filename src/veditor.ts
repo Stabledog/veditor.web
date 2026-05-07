@@ -1,4 +1,4 @@
-import { EditorView, keymap } from '@codemirror/view';
+import { EditorView, keymap, highlightWhitespace } from '@codemirror/view';
 import { EditorState, Compartment, type Extension } from '@codemirror/state';
 import { vim, Vim, getCM } from '@replit/codemirror-vim';
 import { markdown } from '@codemirror/lang-markdown';
@@ -7,7 +7,7 @@ import { indentMore, indentLess } from '@codemirror/commands';
 import { basicSetup } from 'codemirror';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { hashTarget } from './util';
-import { getVimModePref, setVimModePref, getWrapPref, setWrapPref } from './prefs';
+import { getVimModePref, setVimModePref, getWrapPref, setWrapPref, getListPref, setListPref } from './prefs';
 import { urlDecorator } from './url-decorator';
 
 declare const __APP_VERSION__: string;
@@ -96,6 +96,7 @@ let currentCallbacks: VEditorCallbacks | null = null;
 const wrapCompartment = new Compartment();
 const vimCompartment = new Compartment();
 const cuaCompartment = new Compartment();
+const listCompartment = new Compartment();
 let modeToggleEl: HTMLButtonElement | null = null;
 let beforeunloadAbort: AbortController | null = null;
 
@@ -322,6 +323,23 @@ export function createEditor(
     });
   });
 
+  Vim.defineEx('list', 'list', () => {
+    if (!editorView) return;
+    const nowOn = !getListPref(prefix);
+    setListPref(prefix, nowOn);
+    editorView.dispatch({
+      effects: listCompartment.reconfigure(nowOn ? highlightWhitespace() : []),
+    });
+  });
+
+  Vim.defineEx('nolist', 'nol', () => {
+    if (!editorView) return;
+    setListPref(prefix, false);
+    editorView.dispatch({
+      effects: listCompartment.reconfigure([]),
+    });
+  });
+
   Vim.map('jk', '<Esc>', 'insert');
   Vim.setOption('insertModeEscKeysTimeout', 750);
 
@@ -393,6 +411,7 @@ export function createEditor(
       { key: 'Shift-Tab', run: indentLess },
     ]),
     wrapCompartment.of(getWrapPref(prefix) ? EditorView.lineWrapping : []),
+    listCompartment.of(getListPref(prefix) ? highlightWhitespace() : []),
     EditorView.theme({
       '&': { height: '100%' },
       '.cm-scroller': { overflow: 'auto' },
