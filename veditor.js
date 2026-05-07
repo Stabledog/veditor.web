@@ -9471,15 +9471,25 @@ function jo(e, t, n, r) {
 	}), vo = new AbortController(), window.addEventListener("beforeunload", (e) => {
 		No(lo) && (e.preventDefault(), e.returnValue = "");
 	}, { signal: vo.signal }), Eo(e, o), yo = new AbortController();
-	let f = { signal: yo.signal }, p = !1, m = 0, h = 0;
+	let f = { signal: yo.signal }, p = !1, m = 0, h = 0, g = null;
 	return e.addEventListener("touchstart", (e) => {
-		e.touches.length === 2 ? (p = !0, m = (e.touches[0].clientX + e.touches[1].clientX) / 2, h = (e.touches[0].clientY + e.touches[1].clientY) / 2) : p = !1;
-	}, f), e.addEventListener("touchmove", () => {
-		p = !1;
-	}, f), e.addEventListener("touchend", () => {
-		p && (p = !1, Ao(m, h, e, n));
+		e.touches.length === 2 ? (g = [
+			e.touches[0].clientX,
+			e.touches[0].clientY,
+			e.touches[1].clientX,
+			e.touches[1].clientY
+		], m = (e.touches[0].clientX + e.touches[1].clientX) / 2, h = (e.touches[0].clientY + e.touches[1].clientY) / 2, p = !0) : (p = !1, g = null);
+	}, f), e.addEventListener("touchmove", (e) => {
+		if (!p || !g || e.touches.length < 2) {
+			p = !1;
+			return;
+		}
+		let [t, n, r, i] = g;
+		(Math.abs(e.touches[0].clientX - t) > 15 || Math.abs(e.touches[0].clientY - n) > 15 || Math.abs(e.touches[1].clientX - r) > 15 || Math.abs(e.touches[1].clientY - i) > 15) && (p = !1);
+	}, f), e.addEventListener("touchend", (t) => {
+		p && t.touches.length === 0 && (p = !1, Ao(m, h, e, n));
 	}, f), e.addEventListener("touchcancel", () => {
-		p = !1;
+		p = !1, g = null;
 	}, f), Q.focus(), Q;
 }
 function Mo() {
