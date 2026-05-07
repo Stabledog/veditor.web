@@ -31,7 +31,8 @@ export default function veditorDev(prefix = '/veditor') {
       }
       server.middlewares.use((req, res, next) => {
         if (!req.url?.startsWith(prefix + '/')) return next();
-        const relPath = req.url.slice(prefix.length);
+        const urlPath = req.url.split('?')[0];
+        const relPath = urlPath.slice(prefix.length);
         const filePath = join(distDir, relPath);
         if (!existsSync(filePath)) return next();
         const ext = extname(filePath);
