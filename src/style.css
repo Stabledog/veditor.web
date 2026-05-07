@@ -115,6 +115,47 @@
   color: #cdd6f4;
 }
 
+/* Mobile long-press context menu */
+
+.veditor-context-menu {
+  position: fixed;
+  z-index: 1000;
+  background: #313244;
+  border: 1px solid #585b70;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  min-width: 160px;
+  overflow: hidden;
+}
+
+.veditor-context-menu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  color: #cdd6f4;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.veditor-context-menu-item:hover,
+.veditor-context-menu-item:active {
+  background: #45475a;
+}
+
+.veditor-context-menu-item.veditor-cm-save {
+  color: #a6e3a1;
+}
+
+.veditor-context-menu-item.veditor-cm-cancel {
+  color: #a6adc8;
+  border-top: 1px solid #45475a;
+}
+
 /* URL decorator — makes plain URLs visually clickable */
 
 .cm-editor .veditor-url {

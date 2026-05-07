@@ -99,6 +99,8 @@ const cuaCompartment = new Compartment();
 const listCompartment = new Compartment();
 let modeToggleEl: HTMLButtonElement | null = null;
 let beforeunloadAbort: AbortController | null = null;
+let touchAbort: AbortController | null = null;
+let contextMenuEl: HTMLElement | null = null;
 
 function updateDirtyClass(): void {
   if (!editorParent) return;
@@ -265,6 +267,83 @@ function showConfirmBar(
   if (onSaveQuit) bar.querySelector('.veditor-confirm-save')!.addEventListener('click', () => { dismiss(); onSaveQuit(); });
   bar.querySelector('.veditor-confirm-yes')!.addEventListener('click', () => { dismiss(); onDiscard(); });
   bar.querySelector('.veditor-confirm-no')!.addEventListener('click', () => { dismiss(); });
+}
+
+// ---------------------------------------------------------------------------
+// Mobile long-press context menu
+// ---------------------------------------------------------------------------
+
+function dismissContextMenu(): void {
+  contextMenuEl?.remove();
+  contextMenuEl = null;
+}
+
+function showMobileContextMenu(
+  clientX: number,
+  clientY: number,
+  parent: HTMLElement,
+  callbacks: VEditorCallbacks,
+): void {
+  dismissContextMenu();
+
+  const menu = document.createElement('div');
+  menu.className = 'veditor-context-menu';
+
+  const makeItem = (label: string, cls: string, onClick: () => void) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `veditor-context-menu-item ${cls}`;
+    btn.textContent = label;
+    btn.addEventListener('click', () => { dismissContextMenu(); onClick(); });
+    menu.appendChild(btn);
+  };
+
+  makeItem('Save & Close', 'veditor-cm-save', async () => {
+    await callbacks.onSave();
+    savedContent = getEditorContent();
+    updateDirtyClass();
+    callbacks.onQuit();
+  });
+
+  makeItem('Close', 'veditor-cm-close', () => {
+    handleQuitRequest(false, parent, callbacks);
+  });
+
+  makeItem('Cancel', 'veditor-cm-cancel', () => { /* dismiss only */ });
+
+  document.body.appendChild(menu);
+  contextMenuEl = menu;
+
+  // Position near touch point, clamped to viewport
+  const menuW = 180;
+  const menuH = 44 * 3 + 2; // approximate
+  const margin = 10;
+  const x = Math.min(Math.max(clientX, margin), window.innerWidth - menuW - margin);
+  const y = Math.min(Math.max(clientY, margin), window.innerHeight - menuH - margin);
+  menu.style.left = `${x}px`;
+  menu.style.top = `${y}px`;
+
+  // Dismiss on outside tap or Escape
+  const onOutside = (e: Event) => {
+    if (!menu.contains(e.target as Node)) {
+      dismissContextMenu();
+      document.removeEventListener('pointerdown', onOutside, true);
+      document.removeEventListener('keydown', onKey, true);
+    }
+  };
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      dismissContextMenu();
+      document.removeEventListener('pointerdown', onOutside, true);
+      document.removeEventListener('keydown', onKey, true);
+    }
+  };
+  // Use setTimeout so this pointerdown doesn't immediately dismiss the menu
+  setTimeout(() => {
+    document.addEventListener('pointerdown', onOutside, true);
+    document.addEventListener('keydown', onKey, true);
+  }, 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -530,6 +609,34 @@ export function createEditor(
   // --- Mode toggle indicator ---
   createToggleIndicator(parent, vimOn);
 
+  // --- Mobile two-finger tap context menu ---
+  touchAbort = new AbortController();
+  const touchSig = { signal: touchAbort.signal };
+  let twoFingerActive = false;
+  let twoFingerX = 0;
+  let twoFingerY = 0;
+
+  parent.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      twoFingerActive = true;
+      twoFingerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      twoFingerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    } else {
+      twoFingerActive = false;
+    }
+  }, touchSig);
+
+  parent.addEventListener('touchmove', () => { twoFingerActive = false; }, touchSig);
+
+  parent.addEventListener('touchend', () => {
+    if (twoFingerActive) {
+      twoFingerActive = false;
+      showMobileContextMenu(twoFingerX, twoFingerY, parent, callbacks);
+    }
+  }, touchSig);
+
+  parent.addEventListener('touchcancel', () => { twoFingerActive = false; }, touchSig);
+
   editorView.focus();
   return editorView;
 }
@@ -564,6 +671,9 @@ export function destroyEditor(): void {
     beforeunloadAbort.abort();
     beforeunloadAbort = null;
   }
+  touchAbort?.abort();
+  touchAbort = null;
+  dismissContextMenu();
   currentCallbacks = null;
 }
 
