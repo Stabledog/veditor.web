@@ -615,27 +615,50 @@ export function createEditor(
   let twoFingerActive = false;
   let twoFingerX = 0;
   let twoFingerY = 0;
+  let twoFingerStart: [number, number, number, number] | null = null;
 
   parent.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
-      twoFingerActive = true;
+      twoFingerStart = [
+        e.touches[0].clientX, e.touches[0].clientY,
+        e.touches[1].clientX, e.touches[1].clientY,
+      ];
       twoFingerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
       twoFingerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      twoFingerActive = true;
     } else {
+      twoFingerActive = false;
+      twoFingerStart = null;
+    }
+  }, touchSig);
+
+  parent.addEventListener('touchmove', (e) => {
+    if (!twoFingerActive || !twoFingerStart || e.touches.length < 2) {
+      twoFingerActive = false;
+      return;
+    }
+    const [sx0, sy0, sx1, sy1] = twoFingerStart;
+    if (
+      Math.abs(e.touches[0].clientX - sx0) > 15 ||
+      Math.abs(e.touches[0].clientY - sy0) > 15 ||
+      Math.abs(e.touches[1].clientX - sx1) > 15 ||
+      Math.abs(e.touches[1].clientY - sy1) > 15
+    ) {
       twoFingerActive = false;
     }
   }, touchSig);
 
-  parent.addEventListener('touchmove', () => { twoFingerActive = false; }, touchSig);
-
-  parent.addEventListener('touchend', () => {
-    if (twoFingerActive) {
+  parent.addEventListener('touchend', (e) => {
+    if (twoFingerActive && e.touches.length === 0) {
       twoFingerActive = false;
       showMobileContextMenu(twoFingerX, twoFingerY, parent, callbacks);
     }
   }, touchSig);
 
-  parent.addEventListener('touchcancel', () => { twoFingerActive = false; }, touchSig);
+  parent.addEventListener('touchcancel', () => {
+    twoFingerActive = false;
+    twoFingerStart = null;
+  }, touchSig);
 
   editorView.focus();
   return editorView;
