@@ -3,12 +3,7 @@ name: Deploy veditor.web
 on:
   push:
     branches: [main]
-    paths:
-      - 'src/**'
-      - 'package.json'
-      - 'vite.config.ts'
-      - 'tsconfig.json'
-      - '.github/workflows/**'
+  workflow_dispatch:
 
 jobs:
   deploy:
