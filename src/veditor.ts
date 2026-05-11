@@ -138,17 +138,6 @@ function buildCuaKeymap(
 ): Extension {
   return keymap.of([
     {
-      key: 'Mod-s',
-      run: () => {
-        (async () => {
-          await callbacks.onSave();
-          savedContent = getEditorContent();
-          updateDirtyClass();
-        })();
-        return true;
-      },
-    },
-    {
       key: 'Escape',
       run: () => {
         handleQuitRequest(false, parent, callbacks);
@@ -488,6 +477,24 @@ export function createEditor(
     keymap.of([
       { key: 'Tab', run: indentMore },
       { key: 'Shift-Tab', run: indentLess },
+      {
+        key: 'Mod-s',
+        run: () => {
+          (async () => {
+            await callbacks.onSave();
+            savedContent = getEditorContent();
+            updateDirtyClass();
+          })();
+          return true;
+        },
+      },
+      {
+        key: 'Mod-w',
+        run: () => {
+          handleQuitRequest(false, parent, callbacks);
+          return true;
+        },
+      },
     ]),
     wrapCompartment.of(getWrapPref(prefix) ? EditorView.lineWrapping : []),
     listCompartment.of(getListPref(prefix) ? highlightWhitespace() : []),
