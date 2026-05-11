@@ -9214,7 +9214,7 @@ var io = e.fromClass(class {
 	update(e) {
 		e.docChanged && (this.decorations = ro(e.view));
 	}
-}, { decorations: (e) => e.decorations }), ao = "0.30.0";
+}, { decorations: (e) => e.decorations }), ao = "0.31.0";
 function oo(e, t) {
 	let n = /https?:\/\/[^\s)\]>]+/g, r;
 	for (; (r = n.exec(e)) !== null;) if (t >= r.index && t < r.index + r[0].length) return r[0];
@@ -9252,12 +9252,6 @@ function Co() {
 }
 function wo(e, t, n) {
 	return Se.of([
-		{
-			key: "Mod-s",
-			run: () => ((async () => {
-				await e.onSave(), lo = Mo(), xo();
-			})(), !0)
-		},
 		{
 			key: "Escape",
 			run: () => (Do(!1, t, e), !0)
@@ -9402,13 +9396,26 @@ function jo(e, t, n, r) {
 		Ne({ codeLanguages: Xi }),
 		Ua,
 		io,
-		Se.of([{
-			key: "Tab",
-			run: Qr
-		}, {
-			key: "Shift-Tab",
-			run: $r
-		}]),
+		Se.of([
+			{
+				key: "Tab",
+				run: Qr
+			},
+			{
+				key: "Shift-Tab",
+				run: $r
+			},
+			{
+				key: "Mod-s",
+				run: () => ((async () => {
+					await n.onSave(), lo = Mo(), xo();
+				})(), !0)
+			},
+			{
+				key: "Mod-w",
+				run: () => (Do(!1, e, n), !0)
+			}
+		]),
 		po.of(Xa(i) ? v.lineWrapping : []),
 		go.of($a(i) ? A() : []),
 		v.theme({
@@ -9686,7 +9693,7 @@ function es() {
 }
 //#endregion
 //#region src/index.ts
-var ts = "0.30.0";
+var ts = "0.31.0";
 //#endregion
 export { ts as VERSION, $o as clearLogs, jo as createEditor, es as createLogViewer, Ho as createVimInput, Fo as destroyEditor, Lo as executeExCommand, Io as exitInsertMode, Po as focusEditor, Mo as getEditorContent, Qo as getFormattedLogs, Ga as hashTarget, No as isEditorDirty, zo as isVimMode, Zo as logDebug, Jo as logError, Xo as logInfo, Yo as logWarn, Vo as requestQuit, Bo as requestSave, Ro as toggleVimMode };
 
