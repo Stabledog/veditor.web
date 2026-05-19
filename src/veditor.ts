@@ -294,6 +294,12 @@ function showMobileContextMenu(
     callbacks.onQuit();
   });
 
+  makeItem('Save', 'veditor-cm-save', async () => {
+    await callbacks.onSave();
+    savedContent = getEditorContent();
+    updateDirtyClass();
+  });
+
   makeItem('Close', 'veditor-cm-close', () => {
     handleQuitRequest(false, parent, callbacks);
   });
@@ -305,7 +311,7 @@ function showMobileContextMenu(
 
   // Position near touch point, clamped to viewport
   const menuW = 180;
-  const menuH = 44 * 3 + 2; // approximate
+  const menuH = 44 * 4 + 2; // approximate
   const margin = 10;
   const x = Math.min(Math.max(clientX, margin), window.innerWidth - menuW - margin);
   const y = Math.min(Math.max(clientY, margin), window.innerHeight - menuH - margin);
