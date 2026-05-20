@@ -21,6 +21,8 @@ export {
 
 export { hashTarget } from './util';
 
+export { getAutoSaveMs } from './prefs';
+
 export {
   createVimInput,
   type VimInputOptions,

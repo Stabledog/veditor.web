@@ -37,6 +37,8 @@ export interface VEditorOptions {
   normalMappings?: Record<string, () => void>;
   /** Additional CodeMirror extensions */
   extensions?: Extension[];
+  /** Auto-save delay in ms after last edit. 0 or omitted = disabled. */
+  autoSaveMs?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -101,6 +103,7 @@ let modeToggleEl: HTMLButtonElement | null = null;
 let beforeunloadAbort: AbortController | null = null;
 let touchAbort: AbortController | null = null;
 let contextMenuEl: HTMLElement | null = null;
+let autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
 
 function updateDirtyClass(): void {
   if (!editorParent) return;
@@ -361,6 +364,7 @@ export function createEditor(
   currentPrefix = prefix;
   currentCallbacks = callbacks;
   const enableLinks = options?.clickableLinks ?? true;
+  const autoSaveMs = options?.autoSaveMs ?? 0;
   const vimOn = getVimModePref(prefix);
 
   // --- Vim ex commands ---
@@ -526,7 +530,13 @@ export function createEditor(
   ];
 
   exts.push(EditorView.updateListener.of((update) => {
-    if (update.docChanged) updateDirtyClass();
+    if (update.docChanged) {
+      updateDirtyClass();
+      if (autoSaveMs > 0) {
+        if (autoSaveTimer !== null) clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => { requestSave(); }, autoSaveMs);
+      }
+    }
   }));
 
   if (enableLinks) {
@@ -709,6 +719,10 @@ export function destroyEditor(): void {
   }
   touchAbort?.abort();
   touchAbort = null;
+  if (autoSaveTimer !== null) {
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = null;
+  }
   dismissContextMenu();
   currentCallbacks = null;
 }

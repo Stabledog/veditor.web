@@ -79,7 +79,7 @@
   </div>
 
   <script type="module">
-    import { createEditor, createVimInput, getEditorContent, destroyEditor, focusEditor, requestQuit } from '../src/index.ts';
+    import { createEditor, createVimInput, getEditorContent, destroyEditor, focusEditor, requestQuit, getAutoSaveMs } from '../src/index.ts';
 
     const notes = [
       {
@@ -183,6 +183,7 @@ Another very long line to test with: Lorem ipsum dolor sit amet, consectetur adi
         isAppDirty: () => titleHandle ? titleHandle.getValue() !== note.title : false,
       }, {
         storagePrefix: 'veditor_demo',
+        autoSaveMs: getAutoSaveMs(),
         normalMappings: {
           'gt': () => titleHandle.focus(),
         },

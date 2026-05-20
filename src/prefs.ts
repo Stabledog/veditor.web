@@ -28,6 +28,15 @@ export function setWrapPref(prefix: string, on: boolean): void {
   localStorage.setItem(wrapKey(prefix), String(on));
 }
 
+// --- Auto-save delay ---
+
+const AUTOSAVE_KEY = 'veditor_autosave_ms';
+
+export function getAutoSaveMs(): number {
+  const val = localStorage.getItem(AUTOSAVE_KEY);
+  return val !== null ? parseInt(val, 10) || 0 : 5000;
+}
+
 // --- Show whitespace (list mode) ---
 
 function listKey(prefix: string): string {
