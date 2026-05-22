@@ -15,7 +15,6 @@ import {
   putBuffer, setActiveBufferId, removeBuffer,
   nextBufferId, prevBufferId, bufferCount, bufferIdByIndex, resetBuffers,
   listBufferEntries, detachActiveView, attachView,
-  setContainer,
 } from './buffer-manager';
 import { showDocPicker } from './doc-picker';
 
@@ -47,28 +46,21 @@ export interface VEditorOptions {
 }
 
 // ---------------------------------------------------------------------------
-// Ctrl+Click link handler
+// Shared URL regex
 // ---------------------------------------------------------------------------
 
-function urlAtPosition(lineText: string, col: number): string | null {
-  const urlRe = /https?:\/\/[^\s)\]>]+/g;
-  let m;
-  while ((m = urlRe.exec(lineText)) !== null) {
-    if (col >= m.index && col < m.index + m[0].length) return m[0];
-  }
-  return null;
-}
+const URL_RE = /https?:\/\/[^\s)\]>]+/g;
 
-function urlOnLine(lineText: string, col: number): string | null {
-  const urlRe = /https?:\/\/[^\s)\]>]+/g;
+function urlOnLine(lineText: string, col: number, exact?: boolean): string | null {
+  URL_RE.lastIndex = 0;
   let m;
   let firstOnLine: string | null = null;
-  while ((m = urlRe.exec(lineText)) !== null) {
+  while ((m = URL_RE.exec(lineText)) !== null) {
     if (!firstOnLine) firstOnLine = m[0];
     if (col >= m.index && col < m.index + m[0].length) return m[0];
-    if (m.index >= col) return m[0];
+    if (!exact && m.index >= col) return m[0];
   }
-  return firstOnLine;
+  return exact ? null : firstOnLine;
 }
 
 const clickableLinks = EditorView.domEventHandlers({
@@ -78,7 +70,7 @@ const clickableLinks = EditorView.domEventHandlers({
     if (pos == null) return false;
     const line = view.state.doc.lineAt(pos);
     const col = pos - line.from;
-    const url = urlAtPosition(line.text, col);
+    const url = urlOnLine(line.text, col, true);
     if (url) {
       window.open(url, hashTarget(url));
       event.preventDefault();
@@ -89,50 +81,48 @@ const clickableLinks = EditorView.domEventHandlers({
 });
 
 // ---------------------------------------------------------------------------
-// Module-level state (shared across all buffers)
+// Module-level state — always uses buffer-manager (even for single buffer)
 // ---------------------------------------------------------------------------
 
 let editorParent: HTMLElement | null = null;
 let currentPrefix = 'veditor';
 let modeToggleEl: HTMLButtonElement | null = null;
 let beforeunloadAbort: AbortController | null = null;
-let multiBufferMode = false;
+let parentListenerAbort: AbortController | null = null;
+let autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
 let editorOptions: VEditorOptions | undefined;
 
-// For single-buffer backward compat (no multi-buffer callbacks)
-let singleView: EditorView | null = null;
-let singleSavedContent = '';
-let singleCallbacks: VEditorCallbacks | null = null;
-
-// Accessors that work in both single and multi-buffer mode
 function activeView(): EditorView | null {
-  if (multiBufferMode) {
-    return getActiveBuffer()?.view ?? null;
-  }
-  return singleView;
+  return getActiveBuffer()?.view ?? null;
 }
 
 function activeSavedContent(): string {
-  if (multiBufferMode) {
-    return getActiveBuffer()?.savedContent ?? '';
-  }
-  return singleSavedContent;
+  return getActiveBuffer()?.savedContent ?? '';
 }
 
 function setActiveSavedContent(content: string): void {
-  if (multiBufferMode) {
-    const buf = getActiveBuffer();
-    if (buf) buf.savedContent = content;
-  } else {
-    singleSavedContent = content;
-  }
+  const buf = getActiveBuffer();
+  if (buf) buf.savedContent = content;
 }
 
 function activeCallbacks(): VEditorCallbacks | null {
-  if (multiBufferMode) {
-    return getActiveBuffer()?.callbacks ?? null;
-  }
-  return singleCallbacks;
+  return getActiveBuffer()?.callbacks ?? null;
+}
+
+function activeCompartments(): ViewCompartments | null {
+  return getActiveBuffer()?.compartments ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// doSave — single helper for save + sync dirty state
+// ---------------------------------------------------------------------------
+
+async function doSave(): Promise<void> {
+  const cbs = activeCallbacks();
+  if (!cbs) return;
+  await cbs.onSave();
+  setActiveSavedContent(getEditorContent());
+  updateDirtyClass();
 }
 
 function updateDirtyClass(): void {
@@ -142,27 +132,28 @@ function updateDirtyClass(): void {
 }
 
 // ---------------------------------------------------------------------------
-// Buffer switching (multi-view)
+// Buffer switching
 // ---------------------------------------------------------------------------
 
 async function switchToBuffer(targetId: string): Promise<void> {
-  if (!multiBufferMode || !editorParent) return;
+  if (!editorParent) return;
   const currentId = getActiveBufferId();
   if (currentId === targetId) return;
 
+  if (autoSaveTimer !== null) { clearTimeout(autoSaveTimer); autoSaveTimer = null; }
+
   const currentBuf = getActiveBuffer();
   if (currentBuf) {
-    // Save-on-switch if dirty
     const content = currentBuf.view.state.doc.toString();
     if (content !== currentBuf.savedContent) {
       await currentBuf.callbacks.onSave();
       currentBuf.savedContent = currentBuf.view.state.doc.toString();
     }
-    detachActiveView();
+    detachActiveView(editorParent);
   }
 
   setActiveBufferId(targetId);
-  attachView(targetId);
+  attachView(targetId, editorParent);
   updateDirtyClass();
 
   const targetBuf = getActiveBuffer();
@@ -196,15 +187,12 @@ async function openDocPicker(): Promise<void> {
     return;
   }
 
-  // Load new document from host
   if (!cbs.onLoadDocument) return;
   const { content, label, callbacks } = await cbs.onLoadDocument(selected);
 
-  // Create a new EditorView for this buffer (not attached to DOM yet)
   const { view: newView, compartments: newCompartments } = buildEditorView(content, callbacks);
   putBuffer(selected, label, newView, content, callbacks, newCompartments);
 
-  // Switch to it
   await switchToBuffer(selected);
 }
 
@@ -223,11 +211,14 @@ function updateVimSubMode(mode: string): void {
 }
 
 function attachVimModeListener(view: EditorView): void {
+  const buf = getActiveBuffer();
+  if (buf?.vimModeListenerAttached) return;
   const cm = getCM(view);
   if (!cm) return;
   cm.on('vim-mode-change', (e: { mode: string }) => {
     updateVimSubMode(e.mode);
   });
+  if (buf) buf.vimModeListenerAttached = true;
 }
 
 // ---------------------------------------------------------------------------
@@ -251,12 +242,9 @@ function buildCuaKeymap(
       key: 'Mod-Shift-s',
       run: () => {
         (async () => {
+          await doSave();
           const cbs = activeCallbacks();
-          if (!cbs) return;
-          await cbs.onSave();
-          setActiveSavedContent(getEditorContent());
-          updateDirtyClass();
-          handleQuitRequest(false, parent, cbs);
+          if (cbs) handleQuitRequest(false, parent, cbs);
         })();
         return true;
       },
@@ -320,9 +308,7 @@ function handleQuitRequest(
     showConfirmBar(parent,
       () => callbacks.onQuit(),
       async () => {
-        await callbacks.onSave();
-        setActiveSavedContent(getEditorContent());
-        updateDirtyClass();
+        await doSave();
         callbacks.onQuit();
       },
     );
@@ -368,12 +354,12 @@ function showConfirmBar(
 // Mobile long-press context menu
 // ---------------------------------------------------------------------------
 
+let contextMenuEl: HTMLElement | null = null;
+
 function dismissContextMenu(): void {
   contextMenuEl?.remove();
   contextMenuEl = null;
 }
-
-let contextMenuEl: HTMLElement | null = null;
 
 function showMobileContextMenu(
   clientX: number,
@@ -395,21 +381,11 @@ function showMobileContextMenu(
   };
 
   makeItem('Save & Close', 'veditor-cm-save', async () => {
-    const cbs = activeCallbacks();
-    if (!cbs) return;
-    await cbs.onSave();
-    setActiveSavedContent(getEditorContent());
-    updateDirtyClass();
-    cbs.onQuit();
+    await doSave();
+    activeCallbacks()?.onQuit();
   });
 
-  makeItem('Save', 'veditor-cm-save', async () => {
-    const cbs = activeCallbacks();
-    if (!cbs) return;
-    await cbs.onSave();
-    setActiveSavedContent(getEditorContent());
-    updateDirtyClass();
-  });
+  makeItem('Save', 'veditor-cm-save', () => { doSave(); });
 
   makeItem('Close', 'veditor-cm-close', () => {
     const cbs = activeCallbacks();
@@ -451,23 +427,7 @@ function showMobileContextMenu(
 }
 
 // ---------------------------------------------------------------------------
-// Per-view compartments accessor
-// ---------------------------------------------------------------------------
-
-// For single-buffer mode, we store one set of compartments
-let singleCompartments: ViewCompartments | null = null;
-
-function activeCompartments(): ViewCompartments | null {
-  if (multiBufferMode) {
-    return getActiveBuffer()?.compartments ?? null;
-  }
-  return singleCompartments;
-}
-
-// ---------------------------------------------------------------------------
-// View factory — builds an EditorView with standard extensions.
-// The view is created with no parent (detached); caller attaches it.
-// Returns { view, compartments }.
+// View factory — builds a detached EditorView with standard extensions
 // ---------------------------------------------------------------------------
 
 function buildEditorView(content: string, _callbacks: VEditorCallbacks): { view: EditorView; compartments: ViewCompartments } {
@@ -477,7 +437,6 @@ function buildEditorView(content: string, _callbacks: VEditorCallbacks): { view:
   const vimOn = getVimModePref(prefix);
   const parent = editorParent!;
 
-  // Each view gets its own compartments
   const compartments: ViewCompartments = {
     vim: new Compartment(),
     cua: new Compartment(),
@@ -499,16 +458,7 @@ function buildEditorView(content: string, _callbacks: VEditorCallbacks): { view:
       { key: 'Shift-Tab', run: indentLess },
       {
         key: 'Mod-s',
-        run: () => {
-          (async () => {
-            const cbs = activeCallbacks();
-            if (!cbs) return;
-            await cbs.onSave();
-            setActiveSavedContent(getEditorContent());
-            updateDirtyClass();
-          })();
-          return true;
-        },
+        run: () => { doSave(); return true; },
       },
       {
         key: 'Mod-w',
@@ -545,12 +495,9 @@ function buildEditorView(content: string, _callbacks: VEditorCallbacks): { view:
   exts.push(EditorView.updateListener.of((update) => {
     if (update.docChanged) {
       updateDirtyClass();
-      if (autoSaveMs > 0) {
-        // Only auto-save if this view is the active one (attached to DOM)
-        if (update.view.dom.parentNode) {
-          if (autoSaveTimer !== null) clearTimeout(autoSaveTimer);
-          autoSaveTimer = setTimeout(() => { requestSave(); }, autoSaveMs);
-        }
+      if (autoSaveMs > 0 && update.view.dom.parentNode) {
+        if (autoSaveTimer !== null) clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => { doSave(); }, autoSaveMs);
       }
     }
   }));
@@ -561,17 +508,13 @@ function buildEditorView(content: string, _callbacks: VEditorCallbacks): { view:
   const state = EditorState.create({ doc: content, extensions: exts });
   const view = new EditorView({ state });
 
-  if (vimOn) {
-    attachVimModeListener(view);
-  }
+  if (vimOn) attachVimModeListener(view);
 
   return { view, compartments };
 }
 
-let autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
-
 // ---------------------------------------------------------------------------
-// Vim ex commands — defined once globally, operate on the active buffer
+// Vim ex commands — registered once globally, operate on active buffer
 // ---------------------------------------------------------------------------
 
 let exCommandsRegistered = false;
@@ -580,28 +523,18 @@ function registerExCommands(): void {
   if (exCommandsRegistered) return;
   exCommandsRegistered = true;
 
-  Vim.defineEx('w', 'w', async () => {
-    const cbs = activeCallbacks();
-    if (!cbs) return;
-    await cbs.onSave();
-    setActiveSavedContent(getEditorContent());
-    updateDirtyClass();
-  });
+  Vim.defineEx('w', 'w', () => { doSave(); });
 
   Vim.defineEx('q', 'q', (_cm: unknown, params: { argString?: string; bang?: boolean }) => {
     const cbs = activeCallbacks();
     if (!cbs || !editorParent) return;
-    const force = params?.bang ?? false;
-    handleQuitRequest(force, editorParent, cbs);
+    handleQuitRequest(params?.bang ?? false, editorParent, cbs);
   });
 
   Vim.defineEx('wq', 'wq', async () => {
+    await doSave();
     const cbs = activeCallbacks();
-    if (!cbs || !editorParent) return;
-    await cbs.onSave();
-    setActiveSavedContent(getEditorContent());
-    updateDirtyClass();
-    handleQuitRequest(false, editorParent, cbs);
+    if (cbs && editorParent) handleQuitRequest(false, editorParent, cbs);
   });
 
   Vim.defineEx('cua', 'cua', () => {
@@ -640,7 +573,6 @@ function registerExCommands(): void {
     });
   });
 
-  // Multi-buffer commands
   Vim.defineEx('ls', 'ls', () => { openDocPicker(); });
   Vim.defineEx('buffers', 'buffers', () => { openDocPicker(); });
 
@@ -716,19 +648,14 @@ export function createEditor(
   currentPrefix = prefix;
   const vimOn = getVimModePref(prefix);
 
-  multiBufferMode = !!(callbacks.onListDocuments && callbacks.onLoadDocument);
-
-  // Register global vim commands (idempotent)
   registerExCommands();
 
-  // Register host-provided ex commands
   if (options?.exCommands) {
     for (const [name, handler] of Object.entries(options.exCommands)) {
       Vim.defineEx(name, name, handler);
     }
   }
 
-  // Register host-provided normal-mode mappings
   if (options?.normalMappings) {
     for (const [key, action] of Object.entries(options.normalMappings)) {
       const actionName = `veditor_${key}`;
@@ -759,26 +686,22 @@ export function createEditor(
   const { view, compartments } = buildEditorView(content, callbacks);
   parent.appendChild(view.dom);
 
-  if (multiBufferMode) {
-    resetBuffers();
-    setContainer(parent);
-    const initialId = options?.initialBufferId ?? '__initial__';
-    const initialLabel = options?.initialBufferLabel ?? 'untitled';
-    putBuffer(initialId, initialLabel, view, content, callbacks, compartments);
-    setActiveBufferId(initialId);
-  } else {
-    singleView = view;
-    singleSavedContent = content;
-    singleCallbacks = callbacks;
-    singleCompartments = compartments;
-  }
+  // Always use buffer-manager — single buffer is just a map with one entry
+  resetBuffers();
+  const initialId = options?.initialBufferId ?? '__initial__';
+  const initialLabel = options?.initialBufferLabel ?? 'untitled';
+  putBuffer(initialId, initialLabel, view, content, callbacks, compartments);
+  setActiveBufferId(initialId);
 
-  // Vim sub-mode indicator
   if (vimOn) {
     parent.classList.add('veditor-vim-normal');
   }
 
-  // Clipboard read on p/P
+  // Clipboard read on p/P — uses AbortController for cleanup
+  parentListenerAbort = new AbortController();
+  const plSig = { signal: parentListenerAbort.signal };
+
+  // Barouse clipboard bridge for restricted contexts (extension sidebar iframes)
   function readClipboardViaBarouse(): Promise<string | null> {
     return new Promise((resolve) => {
       const timeout = setTimeout(() => {
@@ -819,14 +742,14 @@ export function createEditor(
     }).finally(() => {
       Vim.handleKey(cm, key, 'user');
     });
-  }, { capture: true });
+  }, { capture: true, ...plSig });
 
   parent.addEventListener('keydown', (e: KeyboardEvent) => {
     if (!getVimModePref(currentPrefix)) return;
     if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
       e.stopPropagation();
     }
-  }, { capture: true });
+  }, { capture: true, ...plSig });
 
   view.contentDOM.addEventListener('paste', (event: ClipboardEvent) => {
     if (!getVimModePref(currentPrefix)) return;
@@ -843,12 +766,10 @@ export function createEditor(
     }
   }, { signal: beforeunloadAbort.signal });
 
-  // Mode toggle
   createToggleIndicator(parent, vimOn);
 
   // Mobile touch menu
-  let touchAbort = new AbortController();
-  const touchSig = { signal: touchAbort.signal };
+  const touchSig = plSig;
   let twoFingerActive = false;
   let twoFingerX = 0;
   let twoFingerY = 0;
@@ -900,23 +821,16 @@ export function focusEditor(): void {
 }
 
 export function destroyEditor(): void {
-  if (multiBufferMode) {
-    resetBuffers();
-  } else if (singleView) {
-    singleView.destroy();
-    singleView = null;
-    singleSavedContent = '';
-    singleCallbacks = null;
-  }
+  resetBuffers();
   if (modeToggleEl) { modeToggleEl.remove(); modeToggleEl = null; }
   if (editorParent) {
     editorParent.classList.remove('veditor-dirty', 'veditor-dirty-aware', 'veditor-vim-normal', 'veditor-vim-insert');
     editorParent = null;
   }
   if (beforeunloadAbort) { beforeunloadAbort.abort(); beforeunloadAbort = null; }
+  if (parentListenerAbort) { parentListenerAbort.abort(); parentListenerAbort = null; }
   if (autoSaveTimer !== null) { clearTimeout(autoSaveTimer); autoSaveTimer = null; }
   dismissContextMenu();
-  multiBufferMode = false;
   editorOptions = undefined;
 }
 
@@ -970,11 +884,7 @@ export function isVimMode(): boolean {
 }
 
 export async function requestSave(): Promise<void> {
-  const cbs = activeCallbacks();
-  if (!cbs) return;
-  await cbs.onSave();
-  setActiveSavedContent(getEditorContent());
-  updateDirtyClass();
+  await doSave();
 }
 
 export function requestQuit(force?: boolean): void {

@@ -1,15 +1,8 @@
-// doc-picker.ts — <dialog>-based fuzzy document picker for veditor
-//
-// Shows a modal overlay with a filter input and a scrollable list.
-// Arrow keys always navigate; j/k navigate when filter is empty.
-// Typing filters the list fzf-style.  Enter selects, Escape cancels.
-// Uses native <dialog>.showModal() for focus trapping and inertness.
-
 export interface PickerItem {
   id: string;
   label: string;
   active?: boolean;
-  bufferIndex?: number;  // non-null for open buffers
+  bufferIndex?: number;
 }
 
 export function showDocPicker(
@@ -33,6 +26,7 @@ export function showDocPicker(
 
     let filtered = [...items];
     let highlightIdx = 0;
+    let renderedListt: HTMLLIElement[] = [];
 
     function fuzzyMatch(text: string, query: string): boolean {
       const lower = text.toLowerCase();
@@ -51,6 +45,7 @@ export function showDocPicker(
 
     function render() {
       listEl.innerHTML = '';
+      renderedList = [];
       filtered.forEach((item, i) => {
         const li = document.createElement('li');
         li.className = 'veditor-doc-picker-item';
@@ -68,9 +63,9 @@ export function showDocPicker(
           resolve(item.id);
         });
         listEl.appendChild(li);
+        renderedList.push(li);
       });
-      const highlighted = listEl.querySelector('.highlighted') as HTMLElement;
-      highlighted?.scrollIntoView({ block: 'nearest' });
+      renderedList[highlightIdx]?.scrollIntoView({ block: 'nearest' });
     }
 
     function applyFilter() {
@@ -81,8 +76,12 @@ export function showDocPicker(
     }
 
     function moveHighlight(delta: number) {
+      const prev = highlightIdx;
       highlightIdx = Math.max(0, Math.min(highlightIdx + delta, filtered.length - 1));
-      render();
+      if (prev === highlightIdx) return;
+      renderedList[prev]?.classList.remove('highlighted');
+      renderedList[highlightIdx]?.classList.add('highlighted');
+      renderedList[highlightIdx]?.scrollIntoView({ block: 'nearest' });
     }
 
     function cleanup() {
@@ -95,7 +94,6 @@ export function showDocPicker(
       applyFilter();
     });
 
-    // All keyboard handling on the input — since it always has focus
     input.addEventListener('keydown', (e: KeyboardEvent) => {
       const filterEmpty = input.value === '';
 
@@ -118,7 +116,6 @@ export function showDocPicker(
       }
     });
 
-    // click on backdrop dismisses
     dialog.addEventListener('click', (e) => {
       if (e.target === dialog) {
         cleanup();

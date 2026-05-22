@@ -1,9 +1,3 @@
-// buffer-manager.ts — multi-buffer with one EditorView per document.
-//
-// Each buffer owns its own EditorView (with its own vim state, undo history,
-// panels, etc.).  Only one view is attached to the container DOM at a time.
-// Detached views are inert (no events, no rendering) but stay alive in memory.
-
 import type { EditorView } from '@codemirror/view';
 import type { Compartment } from '@codemirror/state';
 import type { VEditorCallbacks } from './veditor';
@@ -22,6 +16,7 @@ export interface BufferEntry {
   savedContent: string;
   callbacks: VEditorCallbacks;
   compartments: ViewCompartments;
+  vimModeListenerAttached?: boolean;
 }
 
 export interface DocEntry {
@@ -31,16 +26,6 @@ export interface DocEntry {
 
 let buffers: Map<string, BufferEntry> = new Map();
 let activeBufferId: string | null = null;
-let bufferOrder: string[] = [];
-let container: HTMLElement | null = null;
-
-export function setContainer(el: HTMLElement): void {
-  container = el;
-}
-
-export function getContainer(): HTMLElement | null {
-  return container;
-}
 
 export function getActiveBufferId(): string | null {
   return activeBufferId;
@@ -54,15 +39,10 @@ export function getActiveBuffer(): BufferEntry | undefined {
   return activeBufferId ? buffers.get(activeBufferId) : undefined;
 }
 
-export function listBufferIds(): string[] {
-  return [...bufferOrder];
-}
-
 export function listBufferEntries(): { id: string; label: string; active: boolean }[] {
-  return bufferOrder.map(id => {
-    const b = buffers.get(id)!;
-    return { id, label: b.label, active: id === activeBufferId };
-  });
+  return [...buffers.entries()].map(([id, b]) => ({
+    id, label: b.label, active: id === activeBufferId,
+  }));
 }
 
 export function putBuffer(
@@ -75,6 +55,7 @@ export function putBuffer(
 ): BufferEntry {
   const existing = buffers.get(id);
   if (existing) {
+    if (existing.view !== view) existing.view.destroy();
     existing.view = view;
     existing.savedContent = savedContent;
     existing.label = label;
@@ -84,7 +65,6 @@ export function putBuffer(
   }
   const entry: BufferEntry = { id, label, view, savedContent, callbacks, compartments };
   buffers.set(id, entry);
-  bufferOrder.push(id);
   return entry;
 }
 
@@ -94,59 +74,53 @@ export function setActiveBufferId(id: string): void {
 
 export function removeBuffer(id: string): void {
   const entry = buffers.get(id);
-  if (entry) {
-    entry.view.destroy();
-  }
+  if (entry) entry.view.destroy();
   buffers.delete(id);
-  bufferOrder = bufferOrder.filter(x => x !== id);
   if (activeBufferId === id) {
-    activeBufferId = bufferOrder.length > 0 ? bufferOrder[0] : null;
+    const ids = [...buffers.keys()];
+    activeBufferId = ids.length > 0 ? ids[0] : null;
   }
 }
 
 export function nextBufferId(): string | null {
-  if (!activeBufferId || bufferOrder.length < 2) return null;
-  const idx = bufferOrder.indexOf(activeBufferId);
-  return bufferOrder[(idx + 1) % bufferOrder.length];
+  const ids = [...buffers.keys()];
+  if (!activeBufferId || ids.length < 2) return null;
+  const idx = ids.indexOf(activeBufferId);
+  return ids[(idx + 1) % ids.length];
 }
 
 export function prevBufferId(): string | null {
-  if (!activeBufferId || bufferOrder.length < 2) return null;
-  const idx = bufferOrder.indexOf(activeBufferId);
-  return bufferOrder[(idx - 1 + bufferOrder.length) % bufferOrder.length];
+  const ids = [...buffers.keys()];
+  if (!activeBufferId || ids.length < 2) return null;
+  const idx = ids.indexOf(activeBufferId);
+  return ids[(idx - 1 + ids.length) % ids.length];
 }
 
 export function bufferCount(): number {
   return buffers.size;
 }
 
-// Get buffer id by 1-based index (as shown in :ls)
 export function bufferIdByIndex(index: number): string | null {
-  if (index < 1 || index > bufferOrder.length) return null;
-  return bufferOrder[index - 1];
+  const ids = [...buffers.keys()];
+  if (index < 1 || index > ids.length) return null;
+  return ids[index - 1];
 }
 
-// Detach the active view's DOM from the container (does not destroy it)
-export function detachActiveView(): void {
-  if (!activeBufferId || !container) return;
+export function detachActiveView(container: HTMLElement): void {
+  if (!activeBufferId) return;
   const entry = buffers.get(activeBufferId);
-  if (!entry) { console.warn('[bufmgr] detach: no entry for', activeBufferId); return; }
+  if (!entry) return;
   if (entry.view.dom.parentNode === container) {
     container.removeChild(entry.view.dom);
-    console.log('[bufmgr] detached', activeBufferId);
-  } else {
-    console.warn('[bufmgr] detach: parentNode mismatch', entry.view.dom.parentNode, '!==', container);
   }
 }
 
-export function attachView(id: string): void {
-  if (!container) { console.warn('[bufmgr] attach: no container'); return; }
+export function attachView(id: string, container: HTMLElement): void {
   const entry = buffers.get(id);
-  if (!entry) { console.warn('[bufmgr] attach: no entry for', id); return; }
+  if (!entry) return;
   container.appendChild(entry.view.dom);
   entry.view.requestMeasure();
   entry.view.focus();
-  console.log('[bufmgr] attached', id, 'children:', container.childNodes.length);
 }
 
 export function resetBuffers(): void {
@@ -155,6 +129,4 @@ export function resetBuffers(): void {
   }
   buffers = new Map();
   activeBufferId = null;
-  bufferOrder = [];
-  container = null;
 }
