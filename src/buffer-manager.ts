@@ -124,18 +124,23 @@ export function bufferCount(): number {
 export function detachActiveView(): void {
   if (!activeBufferId || !container) return;
   const entry = buffers.get(activeBufferId);
-  if (entry && entry.view.dom.parentNode === container) {
+  if (!entry) { console.warn('[bufmgr] detach: no entry for', activeBufferId); return; }
+  if (entry.view.dom.parentNode === container) {
     container.removeChild(entry.view.dom);
+    console.log('[bufmgr] detached', activeBufferId);
+  } else {
+    console.warn('[bufmgr] detach: parentNode mismatch', entry.view.dom.parentNode, '!==', container);
   }
 }
 
-// Attach a view's DOM to the container and focus it
 export function attachView(id: string): void {
-  if (!container) return;
+  if (!container) { console.warn('[bufmgr] attach: no container'); return; }
   const entry = buffers.get(id);
-  if (!entry) return;
+  if (!entry) { console.warn('[bufmgr] attach: no entry for', id); return; }
   container.appendChild(entry.view.dom);
+  entry.view.requestMeasure();
   entry.view.focus();
+  console.log('[bufmgr] attached', id, 'children:', container.childNodes.length);
 }
 
 export function resetBuffers(): void {

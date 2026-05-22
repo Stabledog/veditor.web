@@ -744,8 +744,8 @@ export function createEditor(
   parent.appendChild(view.dom);
 
   if (multiBufferMode) {
-    setContainer(parent);
     resetBuffers();
+    setContainer(parent);
     const initialId = options?.initialBufferId ?? '__initial__';
     const initialLabel = options?.initialBufferLabel ?? 'untitled';
     putBuffer(initialId, initialLabel, view, content, callbacks, compartments);
