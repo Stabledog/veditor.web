@@ -120,6 +120,12 @@ export function bufferCount(): number {
   return buffers.size;
 }
 
+// Get buffer id by 1-based index (as shown in :ls)
+export function bufferIdByIndex(index: number): string | null {
+  if (index < 1 || index > bufferOrder.length) return null;
+  return bufferOrder[index - 1];
+}
+
 // Detach the active view's DOM from the container (does not destroy it)
 export function detachActiveView(): void {
   if (!activeBufferId || !container) return;

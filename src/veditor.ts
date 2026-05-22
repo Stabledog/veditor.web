@@ -13,7 +13,7 @@ import {
   type DocEntry, type ViewCompartments,
   getActiveBufferId, getActiveBuffer,
   putBuffer, setActiveBufferId, removeBuffer,
-  nextBufferId, prevBufferId, bufferCount, resetBuffers,
+  nextBufferId, prevBufferId, bufferCount, bufferIdByIndex, resetBuffers,
   listBufferEntries, detachActiveView, attachView,
   setContainer,
 } from './buffer-manager';
@@ -637,6 +637,16 @@ function registerExCommands(): void {
   // Multi-buffer commands
   Vim.defineEx('ls', 'ls', () => { openDocPicker(); });
   Vim.defineEx('buffers', 'buffers', () => { openDocPicker(); });
+
+  Vim.defineEx('b', 'b', (_cm: unknown, params: { argString?: string }) => {
+    const arg = (params?.argString ?? '').trim();
+    if (!arg) return;
+    const num = parseInt(arg, 10);
+    if (!isNaN(num)) {
+      const id = bufferIdByIndex(num);
+      if (id) switchToBuffer(id);
+    }
+  });
 
   Vim.defineEx('bn', 'bn', () => {
     const next = nextBufferId();
