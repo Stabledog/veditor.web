@@ -26,7 +26,7 @@ export function showDocPicker(
 
     let filtered = [...items];
     let highlightIdx = 0;
-    let renderedListt: HTMLLIElement[] = [];
+    let renderedList: HTMLLIElement[] = [];
 
     function fuzzyMatch(text: string, query: string): boolean {
       const lower = text.toLowerCase();
