@@ -9,6 +9,14 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { hashTarget } from './util';
 import { getVimModePref, setVimModePref, getWrapPref, setWrapPref, getListPref, setListPref } from './prefs';
 import { urlDecorator } from './url-decorator';
+import {
+  type DocEntry,
+  getActiveBufferId, getActiveBuffer, snapshotActiveBuffer,
+  putBuffer, setActiveBufferId, removeBuffer,
+  nextBufferId, prevBufferId, bufferCount, resetBuffers,
+  listBufferEntries,
+} from './buffer-manager';
+import { showDocPicker } from './doc-picker';
 
 declare const __APP_VERSION__: string;
 const VERSION = __APP_VERSION__;
@@ -24,6 +32,10 @@ export interface VEditorCallbacks {
   /** If provided, the quit flow checks this alongside the editor's own dirty state.
    *  Return true if the app has unsaved state the editor doesn't know about. */
   isAppDirty?: () => boolean;
+  /** Return available documents for the :ls picker.  If absent, :ls is disabled. */
+  onListDocuments?: () => Promise<DocEntry[]>;
+  /** Load a document by id.  Returns content and a callbacks object for the new buffer. */
+  onLoadDocument?: (id: string) => Promise<{ content: string; label: string; callbacks: VEditorCallbacks }>;
 }
 
 export interface VEditorOptions {
@@ -39,6 +51,10 @@ export interface VEditorOptions {
   extensions?: Extension[];
   /** Auto-save delay in ms after last edit. 0 or omitted = disabled. */
   autoSaveMs?: number;
+  /** ID for the initial buffer (multi-buffer mode) */
+  initialBufferId?: string;
+  /** Label for the initial buffer (multi-buffer mode) */
+  initialBufferLabel?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -109,6 +125,93 @@ function updateDirtyClass(): void {
   if (!editorParent) return;
   const dirty = isEditorDirty(savedContent);
   editorParent.classList.toggle('veditor-dirty', dirty);
+}
+
+// ---------------------------------------------------------------------------
+// Buffer switching (multi-document)
+// ---------------------------------------------------------------------------
+
+async function switchToBuffer(targetId: string): Promise<void> {
+  if (!editorView || !editorParent) return;
+  const currentId = getActiveBufferId();
+  if (currentId === targetId) return;
+
+  // Save-on-switch: save current buffer if dirty
+  if (currentId && isEditorDirty(savedContent) && currentCallbacks) {
+    await currentCallbacks.onSave();
+    savedContent = getEditorContent();
+    updateDirtyClass();
+  }
+
+  // Snapshot current state
+  if (currentId) {
+    snapshotActiveBuffer(editorView, savedContent);
+  }
+
+  // Activate target
+  setActiveBufferId(targetId);
+  const entry = getActiveBuffer();
+  if (!entry) return;
+
+  // Swap state into view
+  editorView.setState(entry.state);
+  savedContent = entry.savedContent;
+  currentCallbacks = entry.callbacks;
+  updateDirtyClass();
+  editorView.focus();
+}
+
+async function openDocPicker(): Promise<void> {
+  if (!editorView || !editorParent || !currentCallbacks?.onListDocuments) return;
+
+  const docs = await currentCallbacks.onListDocuments();
+  const openBuffers = listBufferEntries();
+  const activeId = getActiveBufferId();
+
+  // Merge: open buffers first (marked), then unloaded docs
+  const openIds = new Set(openBuffers.map(b => b.id));
+  const items = [
+    ...openBuffers.map(b => ({ id: b.id, label: b.label, active: b.id === activeId })),
+    ...docs.filter(d => !openIds.has(d.id)).map(d => ({ id: d.id, label: d.label, active: false })),
+  ];
+
+  const selected = await showDocPicker(items, editorParent);
+  if (!selected) {
+    editorView?.focus();
+    return;
+  }
+
+  if (openIds.has(selected)) {
+    await switchToBuffer(selected);
+    return;
+  }
+
+  // Load new document from host
+  if (!currentCallbacks?.onLoadDocument) return;
+  const { content, label, callbacks } = await currentCallbacks.onLoadDocument(selected);
+
+  // Save-on-switch for current buffer
+  if (getActiveBufferId() && isEditorDirty(savedContent) && currentCallbacks) {
+    await currentCallbacks.onSave();
+    savedContent = getEditorContent();
+  }
+  if (getActiveBufferId()) {
+    snapshotActiveBuffer(editorView!, savedContent);
+  }
+
+  // Create new state by replacing doc content in a transaction from the current state.
+  // This preserves all extensions (vim, theme, etc.) while giving a fresh doc + undo history.
+  const newState = editorView!.state.update({
+    changes: { from: 0, to: editorView!.state.doc.length, insert: content },
+  }).state;
+
+  editorView!.setState(newState);
+  savedContent = content;
+  currentCallbacks = callbacks;
+  putBuffer(selected, label, newState, content, callbacks);
+  setActiveBufferId(selected);
+  updateDirtyClass();
+  editorView!.focus();
 }
 
 function updateVimSubMode(mode: string): void {
@@ -418,6 +521,31 @@ export function createEditor(
     });
   });
 
+  // --- Multi-buffer ex commands ---
+
+  Vim.defineEx('ls', 'ls', () => { openDocPicker(); });
+  Vim.defineEx('buffers', 'buffers', () => { openDocPicker(); });
+
+  Vim.defineEx('bn', 'bn', () => {
+    const next = nextBufferId();
+    if (next) switchToBuffer(next);
+  });
+
+  Vim.defineEx('bp', 'bp', () => {
+    const prev = prevBufferId();
+    if (prev) switchToBuffer(prev);
+  });
+
+  Vim.defineEx('bd', 'bd', () => {
+    const currentId = getActiveBufferId();
+    if (!currentId || bufferCount() <= 1) return;
+    const next = nextBufferId() || prevBufferId();
+    if (next) {
+      removeBuffer(currentId);
+      switchToBuffer(next);
+    }
+  });
+
   Vim.map('jk', '<Esc>', 'insert');
   Vim.setOption('insertModeEscKeysTimeout', 750);
 
@@ -683,6 +811,15 @@ export function createEditor(
     twoFingerStart = null;
   }, touchSig);
 
+  // Register initial buffer if host provides multi-buffer callbacks
+  if (callbacks.onListDocuments && callbacks.onLoadDocument) {
+    resetBuffers();
+    const initialId = options?.initialBufferId ?? '__initial__';
+    const initialLabel = options?.initialBufferLabel ?? 'untitled';
+    putBuffer(initialId, initialLabel, editorView.state, content, callbacks);
+    setActiveBufferId(initialId);
+  }
+
   editorView.focus();
   return editorView;
 }
@@ -725,6 +862,7 @@ export function destroyEditor(): void {
   }
   dismissContextMenu();
   currentCallbacks = null;
+  resetBuffers();
 }
 
 /** Send an Escape key to the editor, exiting insert mode.

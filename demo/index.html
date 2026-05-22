@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>veditor demo</title>
+  <title>veditor multi-buffer demo</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -14,28 +14,6 @@
       flex-direction: column;
     }
 
-    /* -- Start page (note list) -- */
-    #start-page { flex: 1; padding: 2rem; overflow-y: auto; }
-    #start-page h1 { font-size: 1.25rem; color: #89b4fa; margin-bottom: 1rem; }
-    .note-list { list-style: none; max-width: 36rem; }
-    .note-item {
-      padding: 0.75rem 1rem;
-      margin-bottom: 0.5rem;
-      background: #313244;
-      border: 1px solid #45475a;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .note-item:hover { background: #45475a; }
-    .note-item h2 { font-size: 0.95rem; color: #cdd6f4; margin-bottom: 0.25rem; }
-    .note-item p { font-size: 0.8rem; color: #a6adc8; }
-
-    /* -- Editor page -- */
-    #editor-page { display: none; flex: 1; flex-direction: column; }
-    #editor-page.active { display: flex; }
-    #start-page.hidden { display: none; }
-
     #editor-header {
       display: flex;
       align-items: center;
@@ -44,62 +22,62 @@
       background: #181825;
       border-bottom: 1px solid #313244;
     }
-    #back-btn {
-      background: none;
-      border: 1px solid #585b70;
-      border-radius: 4px;
-      color: #a6adc8;
-      padding: 0.2rem 0.5rem;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
-    #back-btn:hover { background: #313244; color: #cdd6f4; }
     #title-container { flex: 1; min-width: 0; font-size: 0.85rem; font-weight: 600; }
     #status { font-size: 0.875rem; margin-left: auto; }
     #status.success { color: #a6e3a1; }
     #status.error { color: #f38ba8; }
-    #editor-container { flex: 1; overflow: hidden; }
+    #buffer-indicator {
+      font-size: 0.75rem;
+      color: #6c7086;
+      padding: 0.2rem 0.5rem;
+      background: #313244;
+      border-radius: 3px;
+    }
+    #editor-container { flex: 1; overflow: hidden; position: relative; }
+    #help-hint {
+      position: fixed;
+      bottom: 8px;
+      right: 8px;
+      font-size: 0.7rem;
+      color: #6c7086;
+      z-index: 5;
+    }
   </style>
 </head>
 <body>
-  <!-- Start page: note list -->
-  <div id="start-page">
-    <h1>veditor demo</h1>
-    <ul class="note-list" id="note-list"></ul>
+  <div id="editor-header">
+    <div id="title-container"></div>
+    <span id="buffer-indicator"></span>
+    <span id="status"></span>
   </div>
-
-  <!-- Editor page -->
-  <div id="editor-page">
-    <div id="editor-header">
-      <button id="back-btn">&larr;</button>
-      <div id="title-container"></div>
-      <span id="status"></span>
-    </div>
-    <div id="editor-container"></div>
-  </div>
+  <div id="editor-container"></div>
+  <div id="help-hint">:ls to switch docs &middot; :bn/:bp next/prev &middot; :bd close buffer</div>
 
   <script type="module">
-    import { createEditor, createVimInput, getEditorContent, destroyEditor, focusEditor, requestQuit, getAutoSaveMs } from '../src/index.ts';
+    import { createEditor, createVimInput, getEditorContent, destroyEditor, focusEditor, getAutoSaveMs } from '../src/index.ts';
 
-    const notes = [
+    // --- Simulated document store (like a host app would have) ---
+    const docs = [
       {
+        id: 'vim-commands',
         title: 'Vim commands',
         body: `# Vim commands
 
 Try these ex commands:
 
-- \`:w\` — save (persists in memory, re-open to verify)
+- \`:w\` — save
 - \`:q\` — quit (returns to note list)
 - \`:wq\` — save and quit
-- \`:q!\` — force quit without saving
-- \`:wrap\` — toggle line wrapping
-- \`jk\` — escape from insert mode
-- \`Ctrl+Click\` — open URL: https://example.com
+- \`:ls\` — open document picker (MULTI-BUFFER!)
+- \`:bn\` — next buffer
+- \`:bp\` — previous buffer
+- \`:bd\` — close current buffer
 
-Edit this text, then use :q to test the confirm bar.
+Edit this text, then switch buffers to test save-on-switch.
 `,
       },
       {
+        id: 'markdown-sample',
         title: 'Markdown sample',
         body: `# Markdown sample
 
@@ -119,6 +97,7 @@ function hello() {
 `,
       },
       {
+        id: 'long-text',
         title: 'Long text (wrap test)',
         body: `# Line wrapping test
 
@@ -129,12 +108,40 @@ Short line.
 Another very long line to test with: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
 `,
       },
+      {
+        id: 'todo-list',
+        title: 'TODO list',
+        body: `# Things to do
+
+- [ ] Test multi-buffer switching
+- [ ] Verify save-on-switch works
+- [ ] Check that undo history is preserved per-buffer
+- [ ] Try the fuzzy filter in :ls
+- [ ] Confirm Escape dismisses the picker
+`,
+      },
+      {
+        id: 'meeting-notes',
+        title: 'Meeting notes 2024-01-15',
+        body: `# Weekly sync — Jan 15
+
+## Attendees
+- Alice, Bob, Charlie
+
+## Decisions
+- Ship v2.0 by end of month
+- Defer the auth refactor to Q2
+
+## Action items
+- Alice: write up the migration plan
+- Bob: benchmark the new cache layer
+- Charlie: update the runbook
+`,
+      },
     ];
 
-    const startPage = document.getElementById('start-page');
-    const editorPage = document.getElementById('editor-page');
-    const noteListEl = document.getElementById('note-list');
     const statusEl = document.getElementById('status');
+    const bufferIndicatorEl = document.getElementById('buffer-indicator');
     let titleHandle = null;
 
     function showStatus(msg, isError = false) {
@@ -145,67 +152,69 @@ Another very long line to test with: Lorem ipsum dolor sit amet, consectetur adi
       }
     }
 
-    function renderNoteList() {
-      noteListEl.innerHTML = '';
-      notes.forEach((note, i) => {
-        const li = document.createElement('li');
-        li.className = 'note-item';
-        const firstLine = note.body.split('\n').find(l => l.trim() && !l.startsWith('#')) || '';
-        li.innerHTML = `<h2>${note.title}</h2><p>${firstLine.slice(0, 80)}</p>`;
-        li.addEventListener('click', () => openEditor(i));
-        noteListEl.appendChild(li);
-      });
+    function updateBufferIndicator(label) {
+      bufferIndicatorEl.textContent = label ? `[${label}]` : '';
     }
 
-    function openEditor(index) {
-      const note = notes[index];
-      startPage.classList.add('hidden');
-      editorPage.classList.add('active');
+    // --- Multi-buffer callbacks ---
 
-      titleHandle = createVimInput(
-        document.getElementById('title-container'),
-        {
-          value: note.title,
-          onEnter: () => focusEditor(),
-          onEscape: () => focusEditor(),
-          onChange: (v) => { note.title = v; },
-        },
-      );
-
-      createEditor(document.getElementById('editor-container'), note.body, {
+    function makeCallbacksForDoc(doc) {
+      return {
         onSave: async () => {
           const content = getEditorContent();
-          note.body = content;
-          note.title = titleHandle.getValue();
-          showStatus('Saved');
+          doc.body = content;
+          if (titleHandle) doc.title = titleHandle.getValue();
+          showStatus(`Saved: ${doc.title}`);
+          updateBufferIndicator(doc.title);
         },
-        onQuit: () => closeEditor(),
-        isAppDirty: () => titleHandle ? titleHandle.getValue() !== note.title : false,
-      }, {
-        storagePrefix: 'veditor_demo',
-        autoSaveMs: getAutoSaveMs(),
-        normalMappings: {
-          'gt': () => titleHandle.focus(),
+        onQuit: () => {
+          // In the demo, quit just logs
+          showStatus('Quit requested (nowhere to go in demo)');
         },
-      });
+        onListDocuments: async () => {
+          // Return all docs — host decides ordering
+          return docs.map(d => ({ id: d.id, label: d.title }));
+        },
+        onLoadDocument: async (id) => {
+          const doc = docs.find(d => d.id === id);
+          if (!doc) throw new Error(`Doc not found: ${id}`);
+          updateBufferIndicator(doc.title);
+          // Update title widget
+          if (titleHandle) titleHandle.setValue(doc.title);
+          return {
+            content: doc.body,
+            label: doc.title,
+            callbacks: makeCallbacksForDoc(doc),
+          };
+        },
+      };
     }
 
-    function closeEditor() {
-      destroyEditor();
-      if (titleHandle) {
-        titleHandle.destroy();
-        titleHandle = null;
-      }
-      document.getElementById('title-container').innerHTML = '';
-      statusEl.textContent = '';
-      editorPage.classList.remove('active');
-      startPage.classList.remove('hidden');
-      renderNoteList();
-    }
+    // --- Boot: open first doc directly in multi-buffer mode ---
+    const firstDoc = docs[0];
+    const callbacks = makeCallbacksForDoc(firstDoc);
 
-    document.getElementById('back-btn').addEventListener('click', () => requestQuit());
+    titleHandle = createVimInput(
+      document.getElementById('title-container'),
+      {
+        value: firstDoc.title,
+        onEnter: () => focusEditor(),
+        onEscape: () => focusEditor(),
+        onChange: (v) => { firstDoc.title = v; },
+      },
+    );
 
-    renderNoteList();
+    createEditor(document.getElementById('editor-container'), firstDoc.body, callbacks, {
+      storagePrefix: 'veditor_demo',
+      autoSaveMs: getAutoSaveMs(),
+      initialBufferId: firstDoc.id,
+      initialBufferLabel: firstDoc.title,
+      normalMappings: {
+        'gt': () => titleHandle.focus(),
+      },
+    });
+
+    updateBufferIndicator(firstDoc.title);
   </script>
 </body>
 </html>

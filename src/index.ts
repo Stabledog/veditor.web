@@ -23,6 +23,8 @@ export { hashTarget } from './util';
 
 export { getAutoSaveMs } from './prefs';
 
+export { type DocEntry } from './buffer-manager';
+
 export {
   createVimInput,
   type VimInputOptions,

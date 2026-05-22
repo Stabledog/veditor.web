@@ -164,3 +164,80 @@
   text-decoration-style: dotted;
   cursor: pointer;
 }
+
+/* Document picker dialog */
+
+.veditor-doc-picker {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(90vw, 32rem);
+  max-height: 60vh;
+  background: #1e1e2e;
+  border: 1px solid #585b70;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  padding: 0;
+  color: #cdd6f4;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.veditor-doc-picker::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.veditor-doc-picker-filter {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: #313244;
+  border: none;
+  border-bottom: 1px solid #585b70;
+  color: #cdd6f4;
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.veditor-doc-picker-filter::placeholder {
+  color: #6c7086;
+}
+
+.veditor-doc-picker-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  overflow-y: auto;
+  max-height: 50vh;
+}
+
+.veditor-doc-picker-item {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.veditor-doc-picker-item:hover {
+  background: #313244;
+}
+
+.veditor-doc-picker-item.highlighted {
+  background: #45475a;
+  color: #89b4fa;
+}
+
+.veditor-doc-picker-item.active-buffer {
+  font-style: italic;
+}
+
+.veditor-doc-picker-badge {
+  color: #6c7086;
+  font-size: 0.75rem;
+  font-style: normal;
+}
