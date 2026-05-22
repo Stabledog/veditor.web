@@ -36,7 +36,7 @@ export function getBuffer(id: string): BufferEntry | undefined {
 }
 
 export function getActiveBuffer(): BufferEntry | undefined {
-  return activeBufferId ? buffers.get(activeBufferId) : undefined;
+  return activeBufferId !== null ? buffers.get(activeBufferId) : undefined;
 }
 
 export function listBufferEntries(): { id: string; label: string; active: boolean }[] {
@@ -84,14 +84,14 @@ export function removeBuffer(id: string): void {
 
 export function nextBufferId(): string | null {
   const ids = [...buffers.keys()];
-  if (!activeBufferId || ids.length < 2) return null;
+  if (activeBufferId === null || ids.length < 2) return null;
   const idx = ids.indexOf(activeBufferId);
   return ids[(idx + 1) % ids.length];
 }
 
 export function prevBufferId(): string | null {
   const ids = [...buffers.keys()];
-  if (!activeBufferId || ids.length < 2) return null;
+  if (activeBufferId === null || ids.length < 2) return null;
   const idx = ids.indexOf(activeBufferId);
   return ids[(idx - 1 + ids.length) % ids.length];
 }
@@ -107,7 +107,7 @@ export function bufferIdByIndex(index: number): string | null {
 }
 
 export function detachActiveView(container: HTMLElement): void {
-  if (!activeBufferId) return;
+  if (activeBufferId === null) return;
   const entry = buffers.get(activeBufferId);
   if (!entry) return;
   if (entry.view.dom.parentNode === container) {

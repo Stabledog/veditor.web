@@ -177,7 +177,7 @@ async function openDocPicker(): Promise<void> {
   ];
 
   const selected = await showDocPicker(items, editorParent);
-  if (!selected) {
+  if (selected === null) {
     activeView()?.focus();
     return;
   }
@@ -582,7 +582,7 @@ function registerExCommands(): void {
     const num = parseInt(arg, 10);
     if (!isNaN(num)) {
       const id = bufferIdByIndex(num);
-      if (id) switchToBuffer(id);
+      if (id !== null) switchToBuffer(id);
     }
   });
 
