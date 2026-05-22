@@ -32,6 +32,7 @@ export interface VEditorCallbacks {
   isAppDirty?: () => boolean;
   onListDocuments?: () => Promise<DocEntry[]>;
   onLoadDocument?: (id: string) => Promise<{ content: string; label: string; callbacks: VEditorCallbacks }>;
+  onBufferSwitch?: (id: string, label: string) => void;
 }
 
 export interface VEditorOptions {
@@ -163,6 +164,11 @@ async function switchToBuffer(targetId: string): Promise<void> {
   setActiveBufferId(targetId);
   attachView(targetId);
   updateDirtyClass();
+
+  const targetBuf = getActiveBuffer();
+  if (targetBuf?.callbacks.onBufferSwitch) {
+    targetBuf.callbacks.onBufferSwitch(targetId, targetBuf.label);
+  }
 }
 
 async function openDocPicker(): Promise<void> {

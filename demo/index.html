@@ -179,13 +179,16 @@ Another very long line to test with: Lorem ipsum dolor sit amet, consectetur adi
           const doc = docs.find(d => d.id === id);
           if (!doc) throw new Error(`Doc not found: ${id}`);
           updateBufferIndicator(doc.title);
-          // Update title widget
           if (titleHandle) titleHandle.setValue(doc.title);
           return {
             content: doc.body,
             label: doc.title,
             callbacks: makeCallbacksForDoc(doc),
           };
+        },
+        onBufferSwitch: (_id, label) => {
+          updateBufferIndicator(label);
+          if (titleHandle) titleHandle.setValue(label);
         },
       };
     }
