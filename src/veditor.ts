@@ -10,11 +10,12 @@ import { hashTarget } from './util';
 import { getVimModePref, setVimModePref, getWrapPref, setWrapPref, getListPref, setListPref } from './prefs';
 import { urlDecorator } from './url-decorator';
 import {
-  type DocEntry,
-  getActiveBufferId, getActiveBuffer, snapshotActiveBuffer,
+  type DocEntry, type ViewCompartments,
+  getActiveBufferId, getActiveBuffer,
   putBuffer, setActiveBufferId, removeBuffer,
   nextBufferId, prevBufferId, bufferCount, resetBuffers,
-  listBufferEntries,
+  listBufferEntries, detachActiveView, attachView,
+  setContainer,
 } from './buffer-manager';
 import { showDocPicker } from './doc-picker';
 
@@ -27,33 +28,20 @@ const VERSION = __APP_VERSION__;
 
 export interface VEditorCallbacks {
   onSave: () => Promise<void>;
-  /** Called when the quit is confirmed (or forced). The app should navigate away / close. */
   onQuit: () => void;
-  /** If provided, the quit flow checks this alongside the editor's own dirty state.
-   *  Return true if the app has unsaved state the editor doesn't know about. */
   isAppDirty?: () => boolean;
-  /** Return available documents for the :ls picker.  If absent, :ls is disabled. */
   onListDocuments?: () => Promise<DocEntry[]>;
-  /** Load a document by id.  Returns content and a callbacks object for the new buffer. */
   onLoadDocument?: (id: string) => Promise<{ content: string; label: string; callbacks: VEditorCallbacks }>;
 }
 
 export interface VEditorOptions {
-  /** localStorage key prefix for preferences (default: 'veditor') */
   storagePrefix?: string;
-  /** Enable Ctrl+Click to open URLs in hashed tabs (default: true) */
   clickableLinks?: boolean;
-  /** Custom vim ex commands: name -> handler */
   exCommands?: Record<string, (...args: unknown[]) => void>;
-  /** Custom vim normal-mode mappings: key -> action */
   normalMappings?: Record<string, () => void>;
-  /** Additional CodeMirror extensions */
   extensions?: Extension[];
-  /** Auto-save delay in ms after last edit. 0 or omitted = disabled. */
   autoSaveMs?: number;
-  /** ID for the initial buffer (multi-buffer mode) */
   initialBufferId?: string;
-  /** Label for the initial buffer (multi-buffer mode) */
   initialBufferLabel?: string;
 }
 
@@ -99,85 +87,101 @@ const clickableLinks = EditorView.domEventHandlers({
   },
 });
 
-// Preferences (getVimModePref, setVimModePref, getWrapPref, setWrapPref)
-// are imported from ./prefs.ts
-
 // ---------------------------------------------------------------------------
-// Editor state
+// Module-level state (shared across all buffers)
 // ---------------------------------------------------------------------------
 
-let editorView: EditorView | null = null;
-let savedContent = '';  // baseline for dirty-checking; updated on save
 let editorParent: HTMLElement | null = null;
 let currentPrefix = 'veditor';
-let currentCallbacks: VEditorCallbacks | null = null;
-const wrapCompartment = new Compartment();
-const vimCompartment = new Compartment();
-const cuaCompartment = new Compartment();
-const listCompartment = new Compartment();
 let modeToggleEl: HTMLButtonElement | null = null;
 let beforeunloadAbort: AbortController | null = null;
-let touchAbort: AbortController | null = null;
-let contextMenuEl: HTMLElement | null = null;
-let autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
+let multiBufferMode = false;
+let editorOptions: VEditorOptions | undefined;
+
+// For single-buffer backward compat (no multi-buffer callbacks)
+let singleView: EditorView | null = null;
+let singleSavedContent = '';
+let singleCallbacks: VEditorCallbacks | null = null;
+
+// Accessors that work in both single and multi-buffer mode
+function activeView(): EditorView | null {
+  if (multiBufferMode) {
+    return getActiveBuffer()?.view ?? null;
+  }
+  return singleView;
+}
+
+function activeSavedContent(): string {
+  if (multiBufferMode) {
+    return getActiveBuffer()?.savedContent ?? '';
+  }
+  return singleSavedContent;
+}
+
+function setActiveSavedContent(content: string): void {
+  if (multiBufferMode) {
+    const buf = getActiveBuffer();
+    if (buf) buf.savedContent = content;
+  } else {
+    singleSavedContent = content;
+  }
+}
+
+function activeCallbacks(): VEditorCallbacks | null {
+  if (multiBufferMode) {
+    return getActiveBuffer()?.callbacks ?? null;
+  }
+  return singleCallbacks;
+}
 
 function updateDirtyClass(): void {
   if (!editorParent) return;
-  const dirty = isEditorDirty(savedContent);
+  const dirty = isEditorDirty(activeSavedContent());
   editorParent.classList.toggle('veditor-dirty', dirty);
 }
 
 // ---------------------------------------------------------------------------
-// Buffer switching (multi-document)
+// Buffer switching (multi-view)
 // ---------------------------------------------------------------------------
 
 async function switchToBuffer(targetId: string): Promise<void> {
-  if (!editorView || !editorParent) return;
+  if (!multiBufferMode || !editorParent) return;
   const currentId = getActiveBufferId();
   if (currentId === targetId) return;
 
-  // Save-on-switch: save current buffer if dirty
-  if (currentId && isEditorDirty(savedContent) && currentCallbacks) {
-    await currentCallbacks.onSave();
-    savedContent = getEditorContent();
-    updateDirtyClass();
+  const currentBuf = getActiveBuffer();
+  if (currentBuf) {
+    // Save-on-switch if dirty
+    const content = currentBuf.view.state.doc.toString();
+    if (content !== currentBuf.savedContent) {
+      await currentBuf.callbacks.onSave();
+      currentBuf.savedContent = currentBuf.view.state.doc.toString();
+    }
+    detachActiveView();
   }
 
-  // Snapshot current state
-  if (currentId) {
-    snapshotActiveBuffer(editorView, savedContent);
-  }
-
-  // Activate target
   setActiveBufferId(targetId);
-  const entry = getActiveBuffer();
-  if (!entry) return;
-
-  // Swap state into view
-  editorView.setState(entry.state);
-  savedContent = entry.savedContent;
-  currentCallbacks = entry.callbacks;
+  attachView(targetId);
   updateDirtyClass();
-  editorView.focus();
 }
 
 async function openDocPicker(): Promise<void> {
-  if (!editorView || !editorParent || !currentCallbacks?.onListDocuments) return;
+  const cbs = activeCallbacks();
+  if (!editorParent || !cbs?.onListDocuments) return;
 
-  const docs = await currentCallbacks.onListDocuments();
+  const docs = await cbs.onListDocuments();
   const openBuffers = listBufferEntries();
   const activeId = getActiveBufferId();
 
-  // Merge: open buffers first (marked), then unloaded docs
   const openIds = new Set(openBuffers.map(b => b.id));
   const items = [
-    ...openBuffers.map(b => ({ id: b.id, label: b.label, active: b.id === activeId })),
-    ...docs.filter(d => !openIds.has(d.id)).map(d => ({ id: d.id, label: d.label, active: false })),
+    ...openBuffers.map((b, i) => ({ id: b.id, label: b.label, active: b.id === activeId, bufferIndex: i + 1 })),
+    ...docs.filter(d => !openIds.has(d.id)).map(d => ({ id: d.id, label: d.label, active: false, bufferIndex: undefined as number | undefined })),
   ];
 
   const selected = await showDocPicker(items, editorParent);
   if (!selected) {
-    editorView?.focus();
+    activeView()?.focus();
     return;
   }
 
@@ -187,32 +191,20 @@ async function openDocPicker(): Promise<void> {
   }
 
   // Load new document from host
-  if (!currentCallbacks?.onLoadDocument) return;
-  const { content, label, callbacks } = await currentCallbacks.onLoadDocument(selected);
+  if (!cbs.onLoadDocument) return;
+  const { content, label, callbacks } = await cbs.onLoadDocument(selected);
 
-  // Save-on-switch for current buffer
-  if (getActiveBufferId() && isEditorDirty(savedContent) && currentCallbacks) {
-    await currentCallbacks.onSave();
-    savedContent = getEditorContent();
-  }
-  if (getActiveBufferId()) {
-    snapshotActiveBuffer(editorView!, savedContent);
-  }
+  // Create a new EditorView for this buffer (not attached to DOM yet)
+  const { view: newView, compartments: newCompartments } = buildEditorView(content, callbacks);
+  putBuffer(selected, label, newView, content, callbacks, newCompartments);
 
-  // Create new state by replacing doc content in a transaction from the current state.
-  // This preserves all extensions (vim, theme, etc.) while giving a fresh doc + undo history.
-  const newState = editorView!.state.update({
-    changes: { from: 0, to: editorView!.state.doc.length, insert: content },
-  }).state;
-
-  editorView!.setState(newState);
-  savedContent = content;
-  currentCallbacks = callbacks;
-  putBuffer(selected, label, newState, content, callbacks);
-  setActiveBufferId(selected);
-  updateDirtyClass();
-  editorView!.focus();
+  // Switch to it
+  await switchToBuffer(selected);
 }
+
+// ---------------------------------------------------------------------------
+// Vim sub-mode indicator
+// ---------------------------------------------------------------------------
 
 function updateVimSubMode(mode: string): void {
   if (!editorParent) return;
@@ -224,9 +216,8 @@ function updateVimSubMode(mode: string): void {
   }
 }
 
-function attachVimModeListener(): void {
-  if (!editorView) return;
-  const cm = getCM(editorView);
+function attachVimModeListener(view: EditorView): void {
+  const cm = getCM(view);
   if (!cm) return;
   cm.on('vim-mode-change', (e: { mode: string }) => {
     updateVimSubMode(e.mode);
@@ -238,7 +229,6 @@ function attachVimModeListener(): void {
 // ---------------------------------------------------------------------------
 
 function buildCuaKeymap(
-  callbacks: VEditorCallbacks,
   parent: HTMLElement,
   prefix: string,
 ): Extension {
@@ -246,7 +236,8 @@ function buildCuaKeymap(
     {
       key: 'Escape',
       run: () => {
-        handleQuitRequest(false, parent, callbacks);
+        const cbs = activeCallbacks();
+        if (cbs) handleQuitRequest(false, parent, cbs);
         return true;
       },
     },
@@ -254,10 +245,12 @@ function buildCuaKeymap(
       key: 'Mod-Shift-s',
       run: () => {
         (async () => {
-          await callbacks.onSave();
-          savedContent = getEditorContent();
+          const cbs = activeCallbacks();
+          if (!cbs) return;
+          await cbs.onSave();
+          setActiveSavedContent(getEditorContent());
           updateDirtyClass();
-          handleQuitRequest(false, parent, callbacks);
+          handleQuitRequest(false, parent, cbs);
         })();
         return true;
       },
@@ -265,11 +258,13 @@ function buildCuaKeymap(
     {
       key: 'Mod-Shift-w',
       run: () => {
-        if (!editorView) return false;
+        const view = activeView();
+        const c = activeCompartments();
+        if (!view || !c) return false;
         const nowOn = !getWrapPref(prefix);
         setWrapPref(prefix, nowOn);
-        editorView.dispatch({
-          effects: wrapCompartment.reconfigure(nowOn ? EditorView.lineWrapping : []),
+        view.dispatch({
+          effects: c.wrap.reconfigure(nowOn ? EditorView.lineWrapping : []),
         });
         return true;
       },
@@ -315,12 +310,12 @@ function handleQuitRequest(
     callbacks.onQuit();
     return;
   }
-  if (isEditorDirty(savedContent) || callbacks.isAppDirty?.()) {
+  if (isEditorDirty(activeSavedContent()) || callbacks.isAppDirty?.()) {
     showConfirmBar(parent,
       () => callbacks.onQuit(),
       async () => {
         await callbacks.onSave();
-        savedContent = getEditorContent();
+        setActiveSavedContent(getEditorContent());
         updateDirtyClass();
         callbacks.onQuit();
       },
@@ -356,7 +351,6 @@ function showConfirmBar(
     else if (e.key === 'd') { e.stopPropagation(); e.preventDefault(); dismiss(); onDiscard(); }
     else if (e.key === 'c' || e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); dismiss(); }
   };
-  // Capture phase so we intercept before CodeMirror consumes the keystroke
   document.addEventListener('keydown', onKey, true);
 
   if (onSaveQuit) bar.querySelector('.veditor-confirm-save')!.addEventListener('click', () => { dismiss(); onSaveQuit(); });
@@ -373,11 +367,12 @@ function dismissContextMenu(): void {
   contextMenuEl = null;
 }
 
+let contextMenuEl: HTMLElement | null = null;
+
 function showMobileContextMenu(
   clientX: number,
   clientY: number,
   parent: HTMLElement,
-  callbacks: VEditorCallbacks,
 ): void {
   dismissContextMenu();
 
@@ -394,37 +389,40 @@ function showMobileContextMenu(
   };
 
   makeItem('Save & Close', 'veditor-cm-save', async () => {
-    await callbacks.onSave();
-    savedContent = getEditorContent();
+    const cbs = activeCallbacks();
+    if (!cbs) return;
+    await cbs.onSave();
+    setActiveSavedContent(getEditorContent());
     updateDirtyClass();
-    callbacks.onQuit();
+    cbs.onQuit();
   });
 
   makeItem('Save', 'veditor-cm-save', async () => {
-    await callbacks.onSave();
-    savedContent = getEditorContent();
+    const cbs = activeCallbacks();
+    if (!cbs) return;
+    await cbs.onSave();
+    setActiveSavedContent(getEditorContent());
     updateDirtyClass();
   });
 
   makeItem('Close', 'veditor-cm-close', () => {
-    handleQuitRequest(false, parent, callbacks);
+    const cbs = activeCallbacks();
+    if (cbs) handleQuitRequest(false, parent, cbs);
   });
 
-  makeItem('Cancel', 'veditor-cm-cancel', () => { /* dismiss only */ });
+  makeItem('Cancel', 'veditor-cm-cancel', () => {});
 
   document.body.appendChild(menu);
   contextMenuEl = menu;
 
-  // Position near touch point, clamped to viewport
   const menuW = 180;
-  const menuH = 44 * 4 + 2; // approximate
+  const menuH = 44 * 4 + 2;
   const margin = 10;
   const x = Math.min(Math.max(clientX, margin), window.innerWidth - menuW - margin);
   const y = Math.min(Math.max(clientY, margin), window.innerHeight - menuH - margin);
   menu.style.left = `${x}px`;
   menu.style.top = `${y}px`;
 
-  // Dismiss on outside tap or Escape
   const onOutside = (e: Event) => {
     if (!menu.contains(e.target as Node)) {
       dismissContextMenu();
@@ -440,7 +438,6 @@ function showMobileContextMenu(
       document.removeEventListener('keydown', onKey, true);
     }
   };
-  // Use setTimeout so this pointerdown doesn't immediately dismiss the menu
   setTimeout(() => {
     document.addEventListener('pointerdown', onOutside, true);
     document.addEventListener('keydown', onKey, true);
@@ -448,166 +445,45 @@ function showMobileContextMenu(
 }
 
 // ---------------------------------------------------------------------------
-// Public API
+// Per-view compartments accessor
 // ---------------------------------------------------------------------------
 
-export function createEditor(
-  parent: HTMLElement,
-  content: string,
-  callbacks: VEditorCallbacks,
-  options?: VEditorOptions,
-): EditorView {
-  destroyEditor();
-  savedContent = content;
-  editorParent = parent;
-  parent.classList.add('veditor-dirty-aware');
-  parent.classList.remove('veditor-dirty');
+// For single-buffer mode, we store one set of compartments
+let singleCompartments: ViewCompartments | null = null;
 
-  const prefix = options?.storagePrefix ?? 'veditor';
-  currentPrefix = prefix;
-  currentCallbacks = callbacks;
-  const enableLinks = options?.clickableLinks ?? true;
-  const autoSaveMs = options?.autoSaveMs ?? 0;
+function activeCompartments(): ViewCompartments | null {
+  if (multiBufferMode) {
+    return getActiveBuffer()?.compartments ?? null;
+  }
+  return singleCompartments;
+}
+
+// ---------------------------------------------------------------------------
+// View factory — builds an EditorView with standard extensions.
+// The view is created with no parent (detached); caller attaches it.
+// Returns { view, compartments }.
+// ---------------------------------------------------------------------------
+
+function buildEditorView(content: string, _callbacks: VEditorCallbacks): { view: EditorView; compartments: ViewCompartments } {
+  const prefix = currentPrefix;
+  const enableLinks = editorOptions?.clickableLinks ?? true;
+  const autoSaveMs = editorOptions?.autoSaveMs ?? 0;
   const vimOn = getVimModePref(prefix);
+  const parent = editorParent!;
 
-  // --- Vim ex commands ---
-
-  Vim.defineEx('w', 'w', async () => {
-    await callbacks.onSave();
-    savedContent = getEditorContent();
-    updateDirtyClass();
-  });
-
-  Vim.defineEx('q', 'q', (_cm: unknown, params: { argString?: string; bang?: boolean }) => {
-    const force = params?.bang ?? false;
-    handleQuitRequest(force, parent, callbacks);
-  });
-
-  Vim.defineEx('wq', 'wq', async () => {
-    await callbacks.onSave();
-    savedContent = getEditorContent();
-    updateDirtyClass();
-    handleQuitRequest(false, parent, callbacks);
-  });
-
-  Vim.defineEx('cua', 'cua', () => {
-    // Defer so the ex command fully completes before vim is removed
-    if (getVimModePref(currentPrefix)) setTimeout(() => toggleVimMode(), 0);
-  });
-
-  Vim.defineEx('wrap', 'wrap', () => {
-    if (!editorView) return;
-    const nowOn = !getWrapPref(prefix);
-    setWrapPref(prefix, nowOn);
-    editorView.dispatch({
-      effects: wrapCompartment.reconfigure(nowOn ? EditorView.lineWrapping : []),
-    });
-  });
-
-  Vim.defineEx('list', 'list', () => {
-    if (!editorView) return;
-    const nowOn = !getListPref(prefix);
-    setListPref(prefix, nowOn);
-    editorView.dispatch({
-      effects: listCompartment.reconfigure(nowOn ? highlightWhitespace() : []),
-    });
-  });
-
-  Vim.defineEx('nolist', 'nol', () => {
-    if (!editorView) return;
-    setListPref(prefix, false);
-    editorView.dispatch({
-      effects: listCompartment.reconfigure([]),
-    });
-  });
-
-  // --- Multi-buffer ex commands ---
-
-  Vim.defineEx('ls', 'ls', () => { openDocPicker(); });
-  Vim.defineEx('buffers', 'buffers', () => { openDocPicker(); });
-
-  Vim.defineEx('bn', 'bn', () => {
-    const next = nextBufferId();
-    if (next) switchToBuffer(next);
-  });
-
-  Vim.defineEx('bp', 'bp', () => {
-    const prev = prevBufferId();
-    if (prev) switchToBuffer(prev);
-  });
-
-  Vim.defineEx('bd', 'bd', () => {
-    const currentId = getActiveBufferId();
-    if (!currentId || bufferCount() <= 1) return;
-    const next = nextBufferId() || prevBufferId();
-    if (next) {
-      removeBuffer(currentId);
-      switchToBuffer(next);
-    }
-  });
-
-  Vim.map('jk', '<Esc>', 'insert');
-  Vim.setOption('insertModeEscKeysTimeout', 750);
-
-  // 'u' in normal mode triggers the quit flow (same as :q)
-  Vim.defineAction('veditor_quit', () => {
-    handleQuitRequest(false, parent, callbacks);
-  });
-  Vim.mapCommand('u', 'action', 'veditor_quit', {}, { context: 'normal' });
-
-  // 'gx' in normal mode opens the nearest URL on the current line in a hashed tab
-  Vim.defineAction('veditor_gx', () => {
-    if (!editorView) return;
-    const pos = editorView.state.selection.main.head;
-    const line = editorView.state.doc.lineAt(pos);
-    const col = pos - line.from;
-    const url = urlOnLine(line.text, col);
-    if (url) window.open(url, hashTarget(url));
-  });
-  Vim.mapCommand('gx', 'action', 'veditor_gx', {}, { context: 'normal' });
-
-  // --- Custom ex commands from host app ---
-  if (options?.exCommands) {
-    for (const [name, handler] of Object.entries(options.exCommands)) {
-      Vim.defineEx(name, name, handler);
-    }
-  }
-
-  // --- Custom normal-mode mappings from host app ---
-  if (options?.normalMappings) {
-    for (const [key, action] of Object.entries(options.normalMappings)) {
-      const actionName = `veditor_${key}`;
-      Vim.defineAction(actionName, action);
-      Vim.mapCommand(key, 'action', actionName, {}, { context: 'normal' });
-    }
-  }
-
-  // --- Clipboard sync ---
-  const rc = (Vim as Record<string, unknown> as { getRegisterController: () => RegisterController }).getRegisterController();
-  const origPush = rc.pushText.bind(rc);
-  rc.pushText = (
-    regName: string | null | undefined,
-    op: string,
-    text: string,
-    linewise?: boolean,
-    blockwise?: boolean,
-  ) => {
-    origPush(regName, op, text, linewise, blockwise);
-    if (regName !== '_') {
-      navigator.clipboard.writeText(text).catch(() => {
-        window.postMessage({ type: 'barouse:clipboard-write', text }, '*');
-      });
-    }
+  // Each view gets its own compartments
+  const compartments: ViewCompartments = {
+    vim: new Compartment(),
+    cua: new Compartment(),
+    wrap: new Compartment(),
+    list: new Compartment(),
   };
 
-  // --- CUA keymap (active when vim is off) ---
-  const cuaKeymap = buildCuaKeymap(callbacks, parent, prefix);
+  const cuaKeymap = buildCuaKeymap(parent, prefix);
 
-  // --- Build extensions ---
-  console.log('[veditor] Creating editor with urlDecorator extension');
   const exts: Extension[] = [
-    vimCompartment.of(vimOn ? vim() : []),
-    cuaCompartment.of(vimOn ? [] : cuaKeymap),
+    compartments.vim.of(vimOn ? vim() : []),
+    compartments.cua.of(vimOn ? [] : cuaKeymap),
     basicSetup,
     markdown({ codeLanguages: languages }),
     oneDark,
@@ -619,8 +495,10 @@ export function createEditor(
         key: 'Mod-s',
         run: () => {
           (async () => {
-            await callbacks.onSave();
-            savedContent = getEditorContent();
+            const cbs = activeCallbacks();
+            if (!cbs) return;
+            await cbs.onSave();
+            setActiveSavedContent(getEditorContent());
             updateDirtyClass();
           })();
           return true;
@@ -629,13 +507,14 @@ export function createEditor(
       {
         key: 'Mod-w',
         run: () => {
-          handleQuitRequest(false, parent, callbacks);
+          const cbs = activeCallbacks();
+          if (cbs && editorParent) handleQuitRequest(false, editorParent, cbs);
           return true;
         },
       },
     ]),
-    wrapCompartment.of(getWrapPref(prefix) ? EditorView.lineWrapping : []),
-    listCompartment.of(getListPref(prefix) ? highlightWhitespace() : []),
+    compartments.wrap.of(getWrapPref(prefix) ? EditorView.lineWrapping : []),
+    compartments.list.of(getListPref(prefix) ? highlightWhitespace() : []),
     EditorView.theme({
       '&': { height: '100%' },
       '.cm-scroller': { overflow: 'auto' },
@@ -661,35 +540,229 @@ export function createEditor(
     if (update.docChanged) {
       updateDirtyClass();
       if (autoSaveMs > 0) {
-        if (autoSaveTimer !== null) clearTimeout(autoSaveTimer);
-        autoSaveTimer = setTimeout(() => { requestSave(); }, autoSaveMs);
+        // Only auto-save if this view is the active one (attached to DOM)
+        if (update.view.dom.parentNode) {
+          if (autoSaveTimer !== null) clearTimeout(autoSaveTimer);
+          autoSaveTimer = setTimeout(() => { requestSave(); }, autoSaveMs);
+        }
       }
     }
   }));
 
-  if (enableLinks) {
-    exts.push(clickableLinks);
-  }
+  if (enableLinks) exts.push(clickableLinks);
+  if (editorOptions?.extensions) exts.push(...editorOptions.extensions);
 
-  if (options?.extensions) {
-    exts.push(...options.extensions);
-  }
-
-  // --- Create editor ---
   const state = EditorState.create({ doc: content, extensions: exts });
-  editorView = new EditorView({ state, parent });
+  const view = new EditorView({ state });
 
-  // --- Vim sub-mode indicator (normal / insert via bottom border) ---
+  if (vimOn) {
+    attachVimModeListener(view);
+  }
+
+  return { view, compartments };
+}
+
+let autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
+
+// ---------------------------------------------------------------------------
+// Vim ex commands — defined once globally, operate on the active buffer
+// ---------------------------------------------------------------------------
+
+let exCommandsRegistered = false;
+
+function registerExCommands(): void {
+  if (exCommandsRegistered) return;
+  exCommandsRegistered = true;
+
+  Vim.defineEx('w', 'w', async () => {
+    const cbs = activeCallbacks();
+    if (!cbs) return;
+    await cbs.onSave();
+    setActiveSavedContent(getEditorContent());
+    updateDirtyClass();
+  });
+
+  Vim.defineEx('q', 'q', (_cm: unknown, params: { argString?: string; bang?: boolean }) => {
+    const cbs = activeCallbacks();
+    if (!cbs || !editorParent) return;
+    const force = params?.bang ?? false;
+    handleQuitRequest(force, editorParent, cbs);
+  });
+
+  Vim.defineEx('wq', 'wq', async () => {
+    const cbs = activeCallbacks();
+    if (!cbs || !editorParent) return;
+    await cbs.onSave();
+    setActiveSavedContent(getEditorContent());
+    updateDirtyClass();
+    handleQuitRequest(false, editorParent, cbs);
+  });
+
+  Vim.defineEx('cua', 'cua', () => {
+    if (getVimModePref(currentPrefix)) setTimeout(() => toggleVimMode(), 0);
+  });
+
+  Vim.defineEx('wrap', 'wrap', () => {
+    const view = activeView();
+    const c = activeCompartments();
+    if (!view || !c) return;
+    const nowOn = !getWrapPref(currentPrefix);
+    setWrapPref(currentPrefix, nowOn);
+    view.dispatch({
+      effects: c.wrap.reconfigure(nowOn ? EditorView.lineWrapping : []),
+    });
+  });
+
+  Vim.defineEx('list', 'list', () => {
+    const view = activeView();
+    const c = activeCompartments();
+    if (!view || !c) return;
+    const nowOn = !getListPref(currentPrefix);
+    setListPref(currentPrefix, nowOn);
+    view.dispatch({
+      effects: c.list.reconfigure(nowOn ? highlightWhitespace() : []),
+    });
+  });
+
+  Vim.defineEx('nolist', 'nol', () => {
+    const view = activeView();
+    const c = activeCompartments();
+    if (!view || !c) return;
+    setListPref(currentPrefix, false);
+    view.dispatch({
+      effects: c.list.reconfigure([]),
+    });
+  });
+
+  // Multi-buffer commands
+  Vim.defineEx('ls', 'ls', () => { openDocPicker(); });
+  Vim.defineEx('buffers', 'buffers', () => { openDocPicker(); });
+
+  Vim.defineEx('bn', 'bn', () => {
+    const next = nextBufferId();
+    if (next) switchToBuffer(next);
+  });
+
+  Vim.defineEx('bp', 'bp', () => {
+    const prev = prevBufferId();
+    if (prev) switchToBuffer(prev);
+  });
+
+  Vim.defineEx('bd', 'bd', () => {
+    const currentId = getActiveBufferId();
+    if (!currentId || bufferCount() <= 1) return;
+    const next = nextBufferId() || prevBufferId();
+    if (!next) return;
+    switchToBuffer(next).then(() => {
+      removeBuffer(currentId);
+    });
+  });
+
+  Vim.map('jk', '<Esc>', 'insert');
+  Vim.setOption('insertModeEscKeysTimeout', 750);
+
+  Vim.defineAction('veditor_quit', () => {
+    const cbs = activeCallbacks();
+    if (cbs && editorParent) handleQuitRequest(false, editorParent, cbs);
+  });
+  Vim.mapCommand('u', 'action', 'veditor_quit', {}, { context: 'normal' });
+
+  Vim.defineAction('veditor_gx', () => {
+    const view = activeView();
+    if (!view) return;
+    const pos = view.state.selection.main.head;
+    const line = view.state.doc.lineAt(pos);
+    const col = pos - line.from;
+    const url = urlOnLine(line.text, col);
+    if (url) window.open(url, hashTarget(url));
+  });
+  Vim.mapCommand('gx', 'action', 'veditor_gx', {}, { context: 'normal' });
+}
+
+// ---------------------------------------------------------------------------
+// Public API
+// ---------------------------------------------------------------------------
+
+export function createEditor(
+  parent: HTMLElement,
+  content: string,
+  callbacks: VEditorCallbacks,
+  options?: VEditorOptions,
+): EditorView {
+  destroyEditor();
+
+  editorParent = parent;
+  editorOptions = options;
+  parent.classList.add('veditor-dirty-aware');
+  parent.classList.remove('veditor-dirty');
+
+  const prefix = options?.storagePrefix ?? 'veditor';
+  currentPrefix = prefix;
+  const vimOn = getVimModePref(prefix);
+
+  multiBufferMode = !!(callbacks.onListDocuments && callbacks.onLoadDocument);
+
+  // Register global vim commands (idempotent)
+  registerExCommands();
+
+  // Register host-provided ex commands
+  if (options?.exCommands) {
+    for (const [name, handler] of Object.entries(options.exCommands)) {
+      Vim.defineEx(name, name, handler);
+    }
+  }
+
+  // Register host-provided normal-mode mappings
+  if (options?.normalMappings) {
+    for (const [key, action] of Object.entries(options.normalMappings)) {
+      const actionName = `veditor_${key}`;
+      Vim.defineAction(actionName, action);
+      Vim.mapCommand(key, 'action', actionName, {}, { context: 'normal' });
+    }
+  }
+
+  // Clipboard sync
+  const rc = (Vim as Record<string, unknown> as { getRegisterController: () => RegisterController }).getRegisterController();
+  const origPush = rc.pushText.bind(rc);
+  rc.pushText = (
+    regName: string | null | undefined,
+    op: string,
+    text: string,
+    linewise?: boolean,
+    blockwise?: boolean,
+  ) => {
+    origPush(regName, op, text, linewise, blockwise);
+    if (regName !== '_') {
+      navigator.clipboard.writeText(text).catch(() => {
+        window.postMessage({ type: 'barouse:clipboard-write', text }, '*');
+      });
+    }
+  };
+
+  // Build the initial view
+  const { view, compartments } = buildEditorView(content, callbacks);
+  parent.appendChild(view.dom);
+
+  if (multiBufferMode) {
+    setContainer(parent);
+    resetBuffers();
+    const initialId = options?.initialBufferId ?? '__initial__';
+    const initialLabel = options?.initialBufferLabel ?? 'untitled';
+    putBuffer(initialId, initialLabel, view, content, callbacks, compartments);
+    setActiveBufferId(initialId);
+  } else {
+    singleView = view;
+    singleSavedContent = content;
+    singleCallbacks = callbacks;
+    singleCompartments = compartments;
+  }
+
+  // Vim sub-mode indicator
   if (vimOn) {
     parent.classList.add('veditor-vim-normal');
-    attachVimModeListener();
   }
 
-  // Sync OS clipboard → vim unnamed register on p/P.
-  // In restricted contexts (extension sidebar iframes) the Clipboard API
-  // permission prompt cannot appear, so readText() is denied.  Fall back to
-  // a postMessage bridge: the barouse content script reads the clipboard
-  // with the extension's clipboardRead privilege and replies.
+  // Clipboard read on p/P
   function readClipboardViaBarouse(): Promise<string | null> {
     return new Promise((resolve) => {
       const timeout = setTimeout(() => {
@@ -711,13 +784,14 @@ export function createEditor(
     if (e.key !== 'p' && e.key !== 'P') return;
     if (!getVimModePref(currentPrefix)) return;
     if (!parent.classList.contains('veditor-vim-normal')) return;
-    if (!editorView) return;
+    const view = activeView();
+    if (!view) return;
     if ((e.target as HTMLElement)?.tagName === 'INPUT') return;
 
     e.preventDefault();
     e.stopPropagation();
 
-    const cm = getCM(editorView)!;
+    const cm = getCM(view)!;
     const key = e.key;
 
     navigator.clipboard.readText().then((text) => {
@@ -731,7 +805,6 @@ export function createEditor(
     });
   }, { capture: true });
 
-  // Prevent vim's Ctrl+V (visual block) so the browser's native paste fires.
   parent.addEventListener('keydown', (e: KeyboardEvent) => {
     if (!getVimModePref(currentPrefix)) return;
     if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
@@ -739,29 +812,26 @@ export function createEditor(
     }
   }, { capture: true });
 
-  // Seed unnamed register from browser-native paste (Ctrl+V / Ctrl+Shift+V).
-  editorView.contentDOM.addEventListener('paste', (event: ClipboardEvent) => {
+  view.contentDOM.addEventListener('paste', (event: ClipboardEvent) => {
     if (!getVimModePref(currentPrefix)) return;
     const text = event.clipboardData?.getData('text/plain');
-    if (text) {
-      rc.unnamedRegister.setText(text);
-    }
+    if (text) rc.unnamedRegister.setText(text);
   });
 
-  // --- Trap tab/window close with unsaved changes ---
+  // Trap tab/window close
   beforeunloadAbort = new AbortController();
   window.addEventListener('beforeunload', (event) => {
-    if (isEditorDirty(savedContent)) {
+    if (isEditorDirty(activeSavedContent())) {
       event.preventDefault();
       event.returnValue = '';
     }
   }, { signal: beforeunloadAbort.signal });
 
-  // --- Mode toggle indicator ---
+  // Mode toggle
   createToggleIndicator(parent, vimOn);
 
-  // --- Mobile two-finger tap context menu ---
-  touchAbort = new AbortController();
+  // Mobile touch menu
+  let touchAbort = new AbortController();
   const touchSig = { signal: touchAbort.signal };
   let twoFingerActive = false;
   let twoFingerX = 0;
@@ -770,31 +840,18 @@ export function createEditor(
 
   parent.addEventListener('touchstart', (e) => {
     if (e.touches.length === 2) {
-      twoFingerStart = [
-        e.touches[0].clientX, e.touches[0].clientY,
-        e.touches[1].clientX, e.touches[1].clientY,
-      ];
+      twoFingerStart = [e.touches[0].clientX, e.touches[0].clientY, e.touches[1].clientX, e.touches[1].clientY];
       twoFingerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
       twoFingerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
       twoFingerActive = true;
-    } else {
-      twoFingerActive = false;
-      twoFingerStart = null;
-    }
+    } else { twoFingerActive = false; twoFingerStart = null; }
   }, touchSig);
 
   parent.addEventListener('touchmove', (e) => {
-    if (!twoFingerActive || !twoFingerStart || e.touches.length < 2) {
-      twoFingerActive = false;
-      return;
-    }
+    if (!twoFingerActive || !twoFingerStart || e.touches.length < 2) { twoFingerActive = false; return; }
     const [sx0, sy0, sx1, sy1] = twoFingerStart;
-    if (
-      Math.abs(e.touches[0].clientX - sx0) > 15 ||
-      Math.abs(e.touches[0].clientY - sy0) > 15 ||
-      Math.abs(e.touches[1].clientX - sx1) > 15 ||
-      Math.abs(e.touches[1].clientY - sy1) > 15
-    ) {
+    if (Math.abs(e.touches[0].clientX - sx0) > 15 || Math.abs(e.touches[0].clientY - sy0) > 15 ||
+        Math.abs(e.touches[1].clientX - sx1) > 15 || Math.abs(e.touches[1].clientY - sy1) > 15) {
       twoFingerActive = false;
     }
   }, touchSig);
@@ -802,31 +859,20 @@ export function createEditor(
   parent.addEventListener('touchend', (e) => {
     if (twoFingerActive && e.touches.length === 0) {
       twoFingerActive = false;
-      showMobileContextMenu(twoFingerX, twoFingerY, parent, callbacks);
+      showMobileContextMenu(twoFingerX, twoFingerY, parent);
     }
   }, touchSig);
 
-  parent.addEventListener('touchcancel', () => {
-    twoFingerActive = false;
-    twoFingerStart = null;
-  }, touchSig);
+  parent.addEventListener('touchcancel', () => { twoFingerActive = false; twoFingerStart = null; }, touchSig);
 
-  // Register initial buffer if host provides multi-buffer callbacks
-  if (callbacks.onListDocuments && callbacks.onLoadDocument) {
-    resetBuffers();
-    const initialId = options?.initialBufferId ?? '__initial__';
-    const initialLabel = options?.initialBufferLabel ?? 'untitled';
-    putBuffer(initialId, initialLabel, editorView.state, content, callbacks);
-    setActiveBufferId(initialId);
-  }
-
-  editorView.focus();
-  return editorView;
+  view.focus();
+  return view;
 }
 
 export function getEditorContent(): string {
-  if (!editorView) return '';
-  return editorView.state.doc.toString();
+  const view = activeView();
+  if (!view) return '';
+  return view.state.doc.toString();
 }
 
 export function isEditorDirty(original: string): boolean {
@@ -834,105 +880,95 @@ export function isEditorDirty(original: string): boolean {
 }
 
 export function focusEditor(): void {
-  editorView?.focus();
+  activeView()?.focus();
 }
 
 export function destroyEditor(): void {
-  if (editorView) {
-    editorView.destroy();
-    editorView = null;
+  if (multiBufferMode) {
+    resetBuffers();
+  } else if (singleView) {
+    singleView.destroy();
+    singleView = null;
+    singleSavedContent = '';
+    singleCallbacks = null;
   }
-  if (modeToggleEl) {
-    modeToggleEl.remove();
-    modeToggleEl = null;
-  }
+  if (modeToggleEl) { modeToggleEl.remove(); modeToggleEl = null; }
   if (editorParent) {
     editorParent.classList.remove('veditor-dirty', 'veditor-dirty-aware', 'veditor-vim-normal', 'veditor-vim-insert');
     editorParent = null;
   }
-  if (beforeunloadAbort) {
-    beforeunloadAbort.abort();
-    beforeunloadAbort = null;
-  }
-  touchAbort?.abort();
-  touchAbort = null;
-  if (autoSaveTimer !== null) {
-    clearTimeout(autoSaveTimer);
-    autoSaveTimer = null;
-  }
+  if (beforeunloadAbort) { beforeunloadAbort.abort(); beforeunloadAbort = null; }
+  if (autoSaveTimer !== null) { clearTimeout(autoSaveTimer); autoSaveTimer = null; }
   dismissContextMenu();
-  currentCallbacks = null;
-  resetBuffers();
+  multiBufferMode = false;
+  editorOptions = undefined;
 }
 
-/** Send an Escape key to the editor, exiting insert mode.
- *  No-op when vim mode is off. */
 export function exitInsertMode(): void {
-  if (!editorView) return;
+  const view = activeView();
+  if (!view) return;
   if (!getVimModePref(currentPrefix)) return;
-  editorView.contentDOM.dispatchEvent(
+  view.contentDOM.dispatchEvent(
     new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', bubbles: true }),
   );
 }
 
-/** Execute a vim ex command programmatically (e.g., 'w', 'q', 'wq').
- *  No-op when vim mode is off. */
 export function executeExCommand(cmd: string): void {
-  if (!editorView) return;
+  const view = activeView();
+  if (!view) return;
   if (!getVimModePref(currentPrefix)) return;
-  const cm = getCM(editorView);
+  const cm = getCM(view);
   if (!cm) return;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (Vim as any).handleEx(cm, cmd);
 }
 
-/** Toggle vim mode on/off. Returns the new state (true = vim). */
 export function toggleVimMode(): boolean {
-  if (!editorView) return getVimModePref(currentPrefix);
+  const view = activeView();
+  const c = activeCompartments();
+  if (!view || !c) return getVimModePref(currentPrefix);
   const nowVim = !getVimModePref(currentPrefix);
   setVimModePref(currentPrefix, nowVim);
-  const cuaKeymap = currentCallbacks && editorParent
-    ? buildCuaKeymap(currentCallbacks, editorParent, currentPrefix)
+  const cuaKeymap = editorParent
+    ? buildCuaKeymap(editorParent, currentPrefix)
     : [];
-  editorView.dispatch({
+  view.dispatch({
     effects: [
-      vimCompartment.reconfigure(nowVim ? vim() : []),
-      cuaCompartment.reconfigure(nowVim ? [] : cuaKeymap),
+      c.vim.reconfigure(nowVim ? vim() : []),
+      c.cua.reconfigure(nowVim ? [] : cuaKeymap),
     ],
   });
   updateToggleIndicator(nowVim);
   if (nowVim) {
     editorParent?.classList.add('veditor-vim-normal');
     editorParent?.classList.remove('veditor-vim-insert');
-    attachVimModeListener();
+    attachVimModeListener(view);
   } else {
     editorParent?.classList.remove('veditor-vim-normal', 'veditor-vim-insert');
   }
-  editorView.focus();
+  view.focus();
   return nowVim;
 }
 
-/** Returns true if vim mode is currently enabled. */
 export function isVimMode(): boolean {
   return getVimModePref(currentPrefix);
 }
 
-/** Trigger a save directly (works in both vim and CUA mode). */
 export async function requestSave(): Promise<void> {
-  if (!currentCallbacks) return;
-  await currentCallbacks.onSave();
-  savedContent = getEditorContent();
+  const cbs = activeCallbacks();
+  if (!cbs) return;
+  await cbs.onSave();
+  setActiveSavedContent(getEditorContent());
   updateDirtyClass();
 }
 
-/** Trigger the quit flow directly (works in both vim and CUA mode). */
 export function requestQuit(force?: boolean): void {
-  if (!currentCallbacks || !editorParent) return;
-  handleQuitRequest(force ?? false, editorParent, currentCallbacks);
+  const cbs = activeCallbacks();
+  if (!cbs || !editorParent) return;
+  handleQuitRequest(force ?? false, editorParent, cbs);
 }
 
 // ---------------------------------------------------------------------------
-// Internal type for vim register controller (not exported by @replit/codemirror-vim)
+// Internal type for vim register controller
 // ---------------------------------------------------------------------------
 
 interface RegisterController {

@@ -1,13 +1,15 @@
 // doc-picker.ts — <dialog>-based fuzzy document picker for veditor
 //
 // Shows a modal overlay with a filter input and a scrollable list.
-// j/k navigate, typing filters, Enter selects, Escape cancels.
+// Arrow keys always navigate; j/k navigate when filter is empty.
+// Typing filters the list fzf-style.  Enter selects, Escape cancels.
 // Uses native <dialog>.showModal() for focus trapping and inertness.
 
 export interface PickerItem {
   id: string;
   label: string;
   active?: boolean;
+  bufferIndex?: number;  // non-null for open buffers
 }
 
 export function showDocPicker(
@@ -42,6 +44,11 @@ export function showDocPicker(
       return qi === q.length;
     }
 
+    function formatLabel(item: PickerItem): string {
+      const prefix = item.bufferIndex != null ? `${item.bufferIndex}: ` : '   ';
+      return prefix + item.label;
+    }
+
     function render() {
       listEl.innerHTML = '';
       filtered.forEach((item, i) => {
@@ -49,11 +56,11 @@ export function showDocPicker(
         li.className = 'veditor-doc-picker-item';
         if (i === highlightIdx) li.classList.add('highlighted');
         if (item.active) li.classList.add('active-buffer');
-        li.textContent = item.label;
+        li.textContent = formatLabel(item);
         if (item.active) {
           const badge = document.createElement('span');
           badge.className = 'veditor-doc-picker-badge';
-          badge.textContent = ' (current)';
+          badge.textContent = ' %';
           li.appendChild(badge);
         }
         li.addEventListener('click', () => {
@@ -62,7 +69,6 @@ export function showDocPicker(
         });
         listEl.appendChild(li);
       });
-      // scroll highlighted into view
       const highlighted = listEl.querySelector('.highlighted') as HTMLElement;
       highlighted?.scrollIntoView({ block: 'nearest' });
     }
@@ -71,6 +77,11 @@ export function showDocPicker(
       const q = input.value;
       filtered = q ? items.filter(it => fuzzyMatch(it.label, q)) : [...items];
       highlightIdx = Math.min(highlightIdx, Math.max(0, filtered.length - 1));
+      render();
+    }
+
+    function moveHighlight(delta: number) {
+      highlightIdx = Math.max(0, Math.min(highlightIdx + delta, filtered.length - 1));
       render();
     }
 
@@ -84,15 +95,16 @@ export function showDocPicker(
       applyFilter();
     });
 
-    dialog.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown' || (e.key === 'j' && e.ctrlKey)) {
+    // All keyboard handling on the input — since it always has focus
+    input.addEventListener('keydown', (e: KeyboardEvent) => {
+      const filterEmpty = input.value === '';
+
+      if (e.key === 'ArrowDown' || (e.key === 'j' && filterEmpty)) {
         e.preventDefault();
-        highlightIdx = Math.min(highlightIdx + 1, filtered.length - 1);
-        render();
-      } else if (e.key === 'ArrowUp' || (e.key === 'k' && e.ctrlKey)) {
+        moveHighlight(1);
+      } else if (e.key === 'ArrowUp' || (e.key === 'k' && filterEmpty)) {
         e.preventDefault();
-        highlightIdx = Math.max(highlightIdx - 1, 0);
-        render();
+        moveHighlight(-1);
       } else if (e.key === 'Enter') {
         e.preventDefault();
         if (filtered.length > 0) {

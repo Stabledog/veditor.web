@@ -1,19 +1,27 @@
-// buffer-manager.ts — multi-buffer state for veditor
+// buffer-manager.ts — multi-buffer with one EditorView per document.
 //
-// Each buffer holds a CM6 EditorState snapshot, a saved-content baseline,
-// and per-buffer callbacks.  The active buffer's state lives in the
-// EditorView; background buffers are frozen snapshots.
+// Each buffer owns its own EditorView (with its own vim state, undo history,
+// panels, etc.).  Only one view is attached to the container DOM at a time.
+// Detached views are inert (no events, no rendering) but stay alive in memory.
 
-import type { EditorState } from '@codemirror/state';
 import type { EditorView } from '@codemirror/view';
+import type { Compartment } from '@codemirror/state';
 import type { VEditorCallbacks } from './veditor';
+
+export interface ViewCompartments {
+  vim: Compartment;
+  cua: Compartment;
+  wrap: Compartment;
+  list: Compartment;
+}
 
 export interface BufferEntry {
   id: string;
   label: string;
-  state: EditorState;
+  view: EditorView;
   savedContent: string;
   callbacks: VEditorCallbacks;
+  compartments: ViewCompartments;
 }
 
 export interface DocEntry {
@@ -23,7 +31,16 @@ export interface DocEntry {
 
 let buffers: Map<string, BufferEntry> = new Map();
 let activeBufferId: string | null = null;
-let bufferOrder: string[] = [];  // tracks insertion order for :bn/:bp
+let bufferOrder: string[] = [];
+let container: HTMLElement | null = null;
+
+export function setContainer(el: HTMLElement): void {
+  container = el;
+}
+
+export function getContainer(): HTMLElement | null {
+  return container;
+}
 
 export function getActiveBufferId(): string | null {
   return activeBufferId;
@@ -48,32 +65,24 @@ export function listBufferEntries(): { id: string; label: string; active: boolea
   });
 }
 
-// Snapshot the current EditorView state into the active buffer entry
-export function snapshotActiveBuffer(view: EditorView, savedContent: string): void {
-  if (!activeBufferId) return;
-  const entry = buffers.get(activeBufferId);
-  if (!entry) return;
-  entry.state = view.state;
-  entry.savedContent = savedContent;
-}
-
-// Add or update a buffer.  Returns the entry.
 export function putBuffer(
   id: string,
   label: string,
-  state: EditorState,
+  view: EditorView,
   savedContent: string,
   callbacks: VEditorCallbacks,
+  compartments: ViewCompartments,
 ): BufferEntry {
   const existing = buffers.get(id);
   if (existing) {
-    existing.state = state;
+    existing.view = view;
     existing.savedContent = savedContent;
     existing.label = label;
     existing.callbacks = callbacks;
+    existing.compartments = compartments;
     return existing;
   }
-  const entry: BufferEntry = { id, label, state, savedContent, callbacks };
+  const entry: BufferEntry = { id, label, view, savedContent, callbacks, compartments };
   buffers.set(id, entry);
   bufferOrder.push(id);
   return entry;
@@ -84,6 +93,10 @@ export function setActiveBufferId(id: string): void {
 }
 
 export function removeBuffer(id: string): void {
+  const entry = buffers.get(id);
+  if (entry) {
+    entry.view.destroy();
+  }
   buffers.delete(id);
   bufferOrder = bufferOrder.filter(x => x !== id);
   if (activeBufferId === id) {
@@ -91,7 +104,6 @@ export function removeBuffer(id: string): void {
   }
 }
 
-// Navigate: returns the next/previous buffer id, or null
 export function nextBufferId(): string | null {
   if (!activeBufferId || bufferOrder.length < 2) return null;
   const idx = bufferOrder.indexOf(activeBufferId);
@@ -108,8 +120,30 @@ export function bufferCount(): number {
   return buffers.size;
 }
 
+// Detach the active view's DOM from the container (does not destroy it)
+export function detachActiveView(): void {
+  if (!activeBufferId || !container) return;
+  const entry = buffers.get(activeBufferId);
+  if (entry && entry.view.dom.parentNode === container) {
+    container.removeChild(entry.view.dom);
+  }
+}
+
+// Attach a view's DOM to the container and focus it
+export function attachView(id: string): void {
+  if (!container) return;
+  const entry = buffers.get(id);
+  if (!entry) return;
+  container.appendChild(entry.view.dom);
+  entry.view.focus();
+}
+
 export function resetBuffers(): void {
+  for (const entry of buffers.values()) {
+    entry.view.destroy();
+  }
   buffers = new Map();
   activeBufferId = null;
   bufferOrder = [];
+  container = null;
 }
