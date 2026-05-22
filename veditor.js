@@ -1,7 +1,7 @@
-import { t as e } from "./rolldown-runtime-CAFD8bLK.js";
-import { $ as t, A as n, At as r, B as i, Bt as a, C as o, Ct as s, D as c, Dt as l, E as u, Et as d, F as f, Ft as p, G as m, Ht as h, It as g, J as _, L as v, Lt as y, M as b, N as x, Nt as ee, O as S, Ot as C, P as w, Q as T, R as E, Rt as te, S as D, St as ne, T as re, Tt as ie, U as O, Ut as k, V as A, Vt as ae, W as oe, Wt as se, X as j, Y as ce, Z as M, _ as le, _t as ue, a as de, at as fe, b as pe, c as me, ct as he, d as ge, dt as _e, et as N, f as ve, ft as ye, gt as be, it as xe, j as Se, jt as Ce, k as we, kt as Te, l as P, lt as Ee, m as De, mt as Oe, nt as ke, o as F, ot as Ae, p as I, pt as je, q as Me, rt as Ne, tt as Pe, u as L, ut as Fe, v as R, vt as z, wt as Ie, xt as B, yt as V, z as Le, zt as Re } from "./dist-COGQ-f_D.js";
-import { i as ze, n as Be, o as Ve, r as He, t as Ue } from "./dist-5tpUC-YF.js";
-import { n as We, r as Ge } from "./dist-Y3JCpojz.js";
+import { t as e } from "./rolldown-runtime-Dy4uBu1J.js";
+import { $ as t, A as n, At as r, B as i, Bt as a, C as o, Ct as s, D as c, Dt as l, E as u, Et as d, F as f, Ft as p, G as m, Ht as h, It as g, J as _, L as v, Lt as y, M as b, N as x, Nt as ee, O as S, Ot as C, P as w, Q as T, R as E, Rt as te, S as D, St as ne, T as re, Tt as ie, U as O, Ut as k, V as A, Vt as ae, W as oe, Wt as se, X as j, Y as ce, Z as M, _ as le, _t as ue, a as de, at as fe, b as pe, c as me, ct as he, d as ge, dt as _e, et as N, f as ve, ft as ye, gt as be, it as xe, j as Se, jt as Ce, k as we, kt as Te, l as P, lt as Ee, m as De, mt as Oe, nt as ke, o as F, ot as Ae, p as I, pt as je, q as Me, rt as Ne, tt as Pe, u as L, ut as Fe, v as R, vt as z, wt as Ie, xt as B, yt as V, z as Le, zt as Re } from "./dist-1T0MK0Nn.js";
+import { i as ze, n as Be, o as Ve, r as He, t as Ue } from "./dist-8AphrkCp.js";
+import { n as We, r as Ge } from "./dist-DjI0KX1F.js";
 //#region node_modules/@codemirror/search/dist/index.js
 var Ke = typeof String.prototype.normalize == "function" ? (e) => e.normalize("NFKD") : (e) => e, qe = class {
 	constructor(e, t, n = 0, r = e.length, i, a) {
@@ -8846,7 +8846,7 @@ function Z(e) {
 	return new L(ve.define(e));
 }
 function Cs(e) {
-	return import("./dist-DNH5bxY6.js").then((t) => t.sql({ dialect: t[e] }));
+	return import("./dist-1bV2aa3m.js").then((t) => t.sql({ dialect: t[e] }));
 }
 var ws = [
 	/* @__PURE__ */ P.of({
@@ -8857,7 +8857,7 @@ var ws = [
 			"ino"
 		],
 		load() {
-			return import("./dist-DGm6zNd2.js").then((e) => e.cpp());
+			return import("./dist-CTc-0JNc.js").then((e) => e.cpp());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -8874,7 +8874,7 @@ var ws = [
 			"hxx"
 		],
 		load() {
-			return import("./dist-DGm6zNd2.js").then((e) => e.cpp());
+			return import("./dist-CTc-0JNc.js").then((e) => e.cpp());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -8889,14 +8889,14 @@ var ws = [
 		name: "CSS",
 		extensions: ["css"],
 		load() {
-			return import("./dist-CaU0qitZ.js").then((e) => e.i).then((e) => e.css());
+			return import("./dist-OwXP4Aeu.js").then((e) => e.i).then((e) => e.css());
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Go",
 		extensions: ["go"],
 		load() {
-			return import("./dist-FlFvO5a0.js").then((e) => e.go());
+			return import("./dist-D9J0UEkS.js").then((e) => e.go());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -8909,14 +8909,14 @@ var ws = [
 			"hbs"
 		],
 		load() {
-			return import("./dist-Y3JCpojz.js").then((e) => e.t).then((e) => e.html());
+			return import("./dist-DjI0KX1F.js").then((e) => e.t).then((e) => e.html());
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Java",
 		extensions: ["java"],
 		load() {
-			return import("./dist-BPYJvI4w.js").then((e) => e.java());
+			return import("./dist-BReE0ufc.js").then((e) => e.java());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -8932,7 +8932,7 @@ var ws = [
 			"cjs"
 		],
 		load() {
-			return import("./dist-BRn8DJc-.js").then((e) => e.t).then((e) => e.javascript());
+			return import("./dist-9mBnHYqk.js").then((e) => e.t).then((e) => e.javascript());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -8943,7 +8943,7 @@ var ws = [
 			"jinja2"
 		],
 		load() {
-			return import("./dist-JJWz_8Qh.js").then((e) => e.jinja());
+			return import("./dist-KZOCyihY.js").then((e) => e.jinja());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -8951,28 +8951,28 @@ var ws = [
 		alias: ["json5"],
 		extensions: ["json", "map"],
 		load() {
-			return import("./dist-D82OE7zY.js").then((e) => e.json());
+			return import("./dist-CVP1Dace.js").then((e) => e.json());
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "JSX",
 		extensions: ["jsx"],
 		load() {
-			return import("./dist-BRn8DJc-.js").then((e) => e.t).then((e) => e.javascript({ jsx: !0 }));
+			return import("./dist-9mBnHYqk.js").then((e) => e.t).then((e) => e.javascript({ jsx: !0 }));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "LESS",
 		extensions: ["less"],
 		load() {
-			return import("./dist-BXWWyCNl.js").then((e) => e.less());
+			return import("./dist-DyrE8SkY.js").then((e) => e.less());
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Liquid",
 		extensions: ["liquid"],
 		load() {
-			return import("./dist-D3W_7fgW.js").then((e) => e.liquid());
+			return import("./dist-DG-OWzll.js").then((e) => e.liquid());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9015,7 +9015,7 @@ var ws = [
 			"phtml"
 		],
 		load() {
-			return import("./dist-c7X-cQM3.js").then((e) => e.php());
+			return import("./dist-DyXX9r5A.js").then((e) => e.php());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9041,28 +9041,28 @@ var ws = [
 		],
 		filename: /^(BUCK|BUILD)$/,
 		load() {
-			return import("./dist-BLjO90a5.js").then((e) => e.python());
+			return import("./dist-DFl3pJTh.js").then((e) => e.python());
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Rust",
 		extensions: ["rs"],
 		load() {
-			return import("./dist-Dsyo5cXj.js").then((e) => e.rust());
+			return import("./dist-ifYb7LjA.js").then((e) => e.rust());
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Sass",
 		extensions: ["sass"],
 		load() {
-			return import("./dist-0QHYDfmX.js").then((e) => e.sass({ indented: !0 }));
+			return import("./dist-CMFRu0K-.js").then((e) => e.sass({ indented: !0 }));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "SCSS",
 		extensions: ["scss"],
 		load() {
-			return import("./dist-0QHYDfmX.js").then((e) => e.sass());
+			return import("./dist-CMFRu0K-.js").then((e) => e.sass());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9082,7 +9082,7 @@ var ws = [
 		name: "TSX",
 		extensions: ["tsx"],
 		load() {
-			return import("./dist-BRn8DJc-.js").then((e) => e.t).then((e) => e.javascript({
+			return import("./dist-9mBnHYqk.js").then((e) => e.t).then((e) => e.javascript({
 				jsx: !0,
 				typescript: !0
 			}));
@@ -9097,14 +9097,14 @@ var ws = [
 			"cts"
 		],
 		load() {
-			return import("./dist-BRn8DJc-.js").then((e) => e.t).then((e) => e.javascript({ typescript: !0 }));
+			return import("./dist-9mBnHYqk.js").then((e) => e.t).then((e) => e.javascript({ typescript: !0 }));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "WebAssembly",
 		extensions: ["wat", "wast"],
 		load() {
-			return import("./dist-BZYDUP5M.js").then((e) => e.wast());
+			return import("./dist-iNOiQ2RR.js").then((e) => e.wast());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9121,7 +9121,7 @@ var ws = [
 			"svg"
 		],
 		load() {
-			return import("./dist-ChecZsjM.js").then((e) => e.xml());
+			return import("./dist-PRY4xFOJ.js").then((e) => e.xml());
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9129,14 +9129,14 @@ var ws = [
 		alias: ["yml"],
 		extensions: ["yaml", "yml"],
 		load() {
-			return import("./dist-cY-yetHw.js").then((e) => e.yaml());
+			return import("./dist-DTCqNkLI.js").then((e) => e.yaml());
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "APL",
 		extensions: ["dyalog", "apl"],
 		load() {
-			return import("./apl-BzE4eA64.js").then((e) => Z(e.apl));
+			return import("./apl-CV6eBKLj.js").then((e) => Z(e.apl));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9148,35 +9148,35 @@ var ws = [
 			"sig"
 		],
 		load() {
-			return import("./asciiarmor-CfHxJtYc.js").then((e) => Z(e.asciiArmor));
+			return import("./asciiarmor-DbteC7tD.js").then((e) => Z(e.asciiArmor));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "ASN.1",
 		extensions: ["asn", "asn1"],
 		load() {
-			return import("./asn1-DDv4ziov.js").then((e) => Z(e.asn1({})));
+			return import("./asn1-DibYTi7G.js").then((e) => Z(e.asn1({})));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Asterisk",
 		filename: /^extensions\.conf$/i,
 		load() {
-			return import("./asterisk-Cb9CaJJv.js").then((e) => Z(e.asterisk));
+			return import("./asterisk-Bxn6UXTI.js").then((e) => Z(e.asterisk));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Brainfuck",
 		extensions: ["b", "bf"],
 		load() {
-			return import("./brainfuck-B313OUpW.js").then((e) => Z(e.brainfuck));
+			return import("./brainfuck-lm4BpXQT.js").then((e) => Z(e.brainfuck));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Cobol",
 		extensions: ["cob", "cpy"],
 		load() {
-			return import("./cobol-Dn75rJxi.js").then((e) => Z(e.cobol));
+			return import("./cobol-BD9gtADG.js").then((e) => Z(e.cobol));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9184,7 +9184,7 @@ var ws = [
 		alias: ["csharp", "cs"],
 		extensions: ["cs"],
 		load() {
-			return import("./clike-D3hTnfQI.js").then((e) => Z(e.csharp));
+			return import("./clike-BQDf0gbC.js").then((e) => Z(e.csharp));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9195,21 +9195,21 @@ var ws = [
 			"cljx"
 		],
 		load() {
-			return import("./clojure-fqJC7HBN.js").then((e) => Z(e.clojure));
+			return import("./clojure-D9uYfCVP.js").then((e) => Z(e.clojure));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "ClojureScript",
 		extensions: ["cljs"],
 		load() {
-			return import("./clojure-fqJC7HBN.js").then((e) => Z(e.clojure));
+			return import("./clojure-D9uYfCVP.js").then((e) => Z(e.clojure));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Closure Stylesheets (GSS)",
 		extensions: ["gss"],
 		load() {
-			return import("./css-CY8qgm3Y.js").then((e) => Z(e.gss));
+			return import("./css-BQWeBXmt.js").then((e) => Z(e.gss));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9217,7 +9217,7 @@ var ws = [
 		extensions: ["cmake", "cmake.in"],
 		filename: /^CMakeLists\.txt$/,
 		load() {
-			return import("./cmake-DIWAhvbO.js").then((e) => Z(e.cmake));
+			return import("./cmake-Dg8wFv3P.js").then((e) => Z(e.cmake));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9225,7 +9225,7 @@ var ws = [
 		alias: ["coffee", "coffee-script"],
 		extensions: ["coffee"],
 		load() {
-			return import("./coffeescript-DXFHZ34z.js").then((e) => Z(e.coffeeScript));
+			return import("./coffeescript-BoWlfF5W.js").then((e) => Z(e.coffeeScript));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9237,14 +9237,14 @@ var ws = [
 			"el"
 		],
 		load() {
-			return import("./commonlisp-DmfozmXD.js").then((e) => Z(e.commonLisp));
+			return import("./commonlisp-DXb5JKP4.js").then((e) => Z(e.commonLisp));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Cypher",
 		extensions: ["cyp", "cypher"],
 		load() {
-			return import("./cypher-BRZkgyNx.js").then((e) => Z(e.cypher));
+			return import("./cypher-BW60-ri4.js").then((e) => Z(e.cypher));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9255,49 +9255,49 @@ var ws = [
 			"pxi"
 		],
 		load() {
-			return import("./python-DJnT6g_f.js").then((e) => Z(e.cython));
+			return import("./python-C2-y2SY5.js").then((e) => Z(e.cython));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Crystal",
 		extensions: ["cr"],
 		load() {
-			return import("./crystal-gxva6WLv.js").then((e) => Z(e.crystal));
+			return import("./crystal-DuYzN9x3.js").then((e) => Z(e.crystal));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "D",
 		extensions: ["d"],
 		load() {
-			return import("./d-CoRLNZUk.js").then((e) => Z(e.d));
+			return import("./d-C0q6d_5Y.js").then((e) => Z(e.d));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Dart",
 		extensions: ["dart"],
 		load() {
-			return import("./clike-D3hTnfQI.js").then((e) => Z(e.dart));
+			return import("./clike-BQDf0gbC.js").then((e) => Z(e.dart));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "diff",
 		extensions: ["diff", "patch"],
 		load() {
-			return import("./diff-DA2te4Ha.js").then((e) => Z(e.diff));
+			return import("./diff-DDml1c90.js").then((e) => Z(e.diff));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Dockerfile",
 		filename: /^Dockerfile$/,
 		load() {
-			return import("./dockerfile-Dre874g5.js").then((e) => Z(e.dockerFile));
+			return import("./dockerfile-CJ7z7SOp.js").then((e) => Z(e.dockerFile));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "DTD",
 		extensions: ["dtd"],
 		load() {
-			return import("./dtd-K40gmnLX.js").then((e) => Z(e.dtd));
+			return import("./dtd-BeFB66od.js").then((e) => Z(e.dtd));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9308,67 +9308,67 @@ var ws = [
 			"intr"
 		],
 		load() {
-			return import("./dylan-CzUmDe8I.js").then((e) => Z(e.dylan));
+			return import("./dylan-C-3uiUIB.js").then((e) => Z(e.dylan));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "EBNF",
 		load() {
-			return import("./ebnf-DLgMXKo_.js").then((e) => Z(e.ebnf));
+			return import("./ebnf-CWyol0yz.js").then((e) => Z(e.ebnf));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "ECL",
 		extensions: ["ecl"],
 		load() {
-			return import("./ecl-NgMfb1L3.js").then((e) => Z(e.ecl));
+			return import("./ecl-jpLZv7aS.js").then((e) => Z(e.ecl));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "edn",
 		extensions: ["edn"],
 		load() {
-			return import("./clojure-fqJC7HBN.js").then((e) => Z(e.clojure));
+			return import("./clojure-D9uYfCVP.js").then((e) => Z(e.clojure));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Eiffel",
 		extensions: ["e"],
 		load() {
-			return import("./eiffel-Dgw3jzRu.js").then((e) => Z(e.eiffel));
+			return import("./eiffel-hv3EEqzZ.js").then((e) => Z(e.eiffel));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Elm",
 		extensions: ["elm"],
 		load() {
-			return import("./elm-CwxPwdHv.js").then((e) => Z(e.elm));
+			return import("./elm-CT9utmH9.js").then((e) => Z(e.elm));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Erlang",
 		extensions: ["erl"],
 		load() {
-			return import("./erlang-CLww_2qX.js").then((e) => Z(e.erlang));
+			return import("./erlang-HHNJwBor.js").then((e) => Z(e.erlang));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Esper",
 		load() {
-			return import("./sql-BmX1hgU5.js").then((e) => Z(e.esper));
+			return import("./sql-3cIBsSNG.js").then((e) => Z(e.esper));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Factor",
 		extensions: ["factor"],
 		load() {
-			return import("./factor-DTScj3xX.js").then((e) => Z(e.factor));
+			return import("./factor-BAX83gB_.js").then((e) => Z(e.factor));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "FCL",
 		load() {
-			return import("./fcl-DYukozGo.js").then((e) => Z(e.fcl));
+			return import("./fcl-BYuIpqDP.js").then((e) => Z(e.fcl));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9379,7 +9379,7 @@ var ws = [
 			"4th"
 		],
 		load() {
-			return import("./forth-CFwjyv5J.js").then((e) => Z(e.forth));
+			return import("./forth-CF2hbYa1.js").then((e) => Z(e.forth));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9392,7 +9392,7 @@ var ws = [
 			"f95"
 		],
 		load() {
-			return import("./fortran-DfBkhZFF.js").then((e) => Z(e.fortran));
+			return import("./fortran-LJ1SLl7q.js").then((e) => Z(e.fortran));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9400,21 +9400,21 @@ var ws = [
 		alias: ["fsharp"],
 		extensions: ["fs"],
 		load() {
-			return import("./mllike-B-F5iuTv.js").then((e) => Z(e.fSharp));
+			return import("./mllike-CuP49gNE.js").then((e) => Z(e.fSharp));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Gas",
 		extensions: ["s"],
 		load() {
-			return import("./gas-Ckuw7Aa_.js").then((e) => Z(e.gas));
+			return import("./gas-DV9Dcz3h.js").then((e) => Z(e.gas));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Gherkin",
 		extensions: ["feature"],
 		load() {
-			return import("./gherkin-CP_-3FrN.js").then((e) => Z(e.gherkin));
+			return import("./gherkin-BRvFCLlm.js").then((e) => Z(e.gherkin));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9422,41 +9422,41 @@ var ws = [
 		extensions: ["groovy", "gradle"],
 		filename: /^Jenkinsfile$/,
 		load() {
-			return import("./groovy-TXk5g5Ao.js").then((e) => Z(e.groovy));
+			return import("./groovy-B8QvAaK1.js").then((e) => Z(e.groovy));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Haskell",
 		extensions: ["hs"],
 		load() {
-			return import("./haskell-Da234ifE.js").then((e) => Z(e.haskell));
+			return import("./haskell-D68UT879.js").then((e) => Z(e.haskell));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Haxe",
 		extensions: ["hx"],
 		load() {
-			return import("./haxe-Djk6byVO.js").then((e) => Z(e.haxe));
+			return import("./haxe-C1Ke4V1M.js").then((e) => Z(e.haxe));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "HXML",
 		extensions: ["hxml"],
 		load() {
-			return import("./haxe-Djk6byVO.js").then((e) => Z(e.hxml));
+			return import("./haxe-C1Ke4V1M.js").then((e) => Z(e.hxml));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "HTTP",
 		load() {
-			return import("./http-C5sd0NyW.js").then((e) => Z(e.http));
+			return import("./http-Cc_B2k6T.js").then((e) => Z(e.http));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "IDL",
 		extensions: ["pro"],
 		load() {
-			return import("./idl-BaFIYbGJ.js").then((e) => Z(e.idl));
+			return import("./idl-CQz7Swwd.js").then((e) => Z(e.idl));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9464,21 +9464,21 @@ var ws = [
 		alias: ["jsonld"],
 		extensions: ["jsonld"],
 		load() {
-			return import("./javascript-BlpxG3mC.js").then((e) => Z(e.jsonld));
+			return import("./javascript-BXLN1dMS.js").then((e) => Z(e.jsonld));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Julia",
 		extensions: ["jl"],
 		load() {
-			return import("./julia-CWNNJzP9.js").then((e) => Z(e.julia));
+			return import("./julia-DxU7bNNF.js").then((e) => Z(e.julia));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Kotlin",
 		extensions: ["kt", "kts"],
 		load() {
-			return import("./clike-D3hTnfQI.js").then((e) => Z(e.kotlin));
+			return import("./clike-BQDf0gbC.js").then((e) => Z(e.kotlin));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9486,21 +9486,21 @@ var ws = [
 		alias: ["ls"],
 		extensions: ["ls"],
 		load() {
-			return import("./livescript-DYicdgFb.js").then((e) => Z(e.liveScript));
+			return import("./livescript-CUXucnZu.js").then((e) => Z(e.liveScript));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Lua",
 		extensions: ["lua"],
 		load() {
-			return import("./lua-CoW83mgw.js").then((e) => Z(e.lua));
+			return import("./lua-CXKbZXEr.js").then((e) => Z(e.lua));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "mIRC",
 		extensions: ["mrc"],
 		load() {
-			return import("./mirc-wc4vpHUH.js").then((e) => Z(e.mirc));
+			return import("./mirc-RLmK6mzY.js").then((e) => Z(e.mirc));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9512,49 +9512,49 @@ var ws = [
 			"wls"
 		],
 		load() {
-			return import("./mathematica-G-c8u_gL.js").then((e) => Z(e.mathematica));
+			return import("./mathematica-9S8qXTAX.js").then((e) => Z(e.mathematica));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Modelica",
 		extensions: ["mo"],
 		load() {
-			return import("./modelica-CaP_Puag.js").then((e) => Z(e.modelica));
+			return import("./modelica-C42lTy2Y.js").then((e) => Z(e.modelica));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "MUMPS",
 		extensions: ["mps"],
 		load() {
-			return import("./mumps-oWLwWehM.js").then((e) => Z(e.mumps));
+			return import("./mumps-CSAk_T0d.js").then((e) => Z(e.mumps));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Mbox",
 		extensions: ["mbox"],
 		load() {
-			return import("./mbox-Dm3SIStZ.js").then((e) => Z(e.mbox));
+			return import("./mbox-B9BUrPcY.js").then((e) => Z(e.mbox));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Nginx",
 		filename: /nginx.*\.conf$/i,
 		load() {
-			return import("./nginx-BCMNCFt8.js").then((e) => Z(e.nginx));
+			return import("./nginx-DUP57iSQ.js").then((e) => Z(e.nginx));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "NSIS",
 		extensions: ["nsh", "nsi"],
 		load() {
-			return import("./nsis-IXqCMsuR.js").then((e) => Z(e.nsis));
+			return import("./nsis-BjywV0DW.js").then((e) => Z(e.nsis));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "NTriples",
 		extensions: ["nt", "nq"],
 		load() {
-			return import("./ntriples-D3pFMJm-.js").then((e) => Z(e.ntriples));
+			return import("./ntriples-DJanlB2r.js").then((e) => Z(e.ntriples));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9562,7 +9562,7 @@ var ws = [
 		alias: ["objective-c", "objc"],
 		extensions: ["m"],
 		load() {
-			return import("./clike-D3hTnfQI.js").then((e) => Z(e.objectiveC));
+			return import("./clike-BQDf0gbC.js").then((e) => Z(e.objectiveC));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9570,7 +9570,7 @@ var ws = [
 		alias: ["objective-c++", "objc++"],
 		extensions: ["mm"],
 		load() {
-			return import("./clike-D3hTnfQI.js").then((e) => Z(e.objectiveCpp));
+			return import("./clike-BQDf0gbC.js").then((e) => Z(e.objectiveCpp));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9582,42 +9582,42 @@ var ws = [
 			"mly"
 		],
 		load() {
-			return import("./mllike-B-F5iuTv.js").then((e) => Z(e.oCaml));
+			return import("./mllike-CuP49gNE.js").then((e) => Z(e.oCaml));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Octave",
 		extensions: ["m"],
 		load() {
-			return import("./octave-tStl3-oj.js").then((e) => Z(e.octave));
+			return import("./octave-D0GJG_l2.js").then((e) => Z(e.octave));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Oz",
 		extensions: ["oz"],
 		load() {
-			return import("./oz-MyfFmBnG.js").then((e) => Z(e.oz));
+			return import("./oz-BpXMqSV8.js").then((e) => Z(e.oz));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Pascal",
 		extensions: ["p", "pas"],
 		load() {
-			return import("./pascal-CZEG_jqc.js").then((e) => Z(e.pascal));
+			return import("./pascal-Crp-T9Zt.js").then((e) => Z(e.pascal));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Perl",
 		extensions: ["pl", "pm"],
 		load() {
-			return import("./perl-DFAC46Ti.js").then((e) => Z(e.perl));
+			return import("./perl-B7vqqAqX.js").then((e) => Z(e.perl));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Pig",
 		extensions: ["pig"],
 		load() {
-			return import("./pig-CtiVFgU_.js").then((e) => Z(e.pig));
+			return import("./pig-CFRjgX9A.js").then((e) => Z(e.pig));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9628,7 +9628,7 @@ var ws = [
 			"psm1"
 		],
 		load() {
-			return import("./powershell-DW8zvHAe.js").then((e) => Z(e.powerShell));
+			return import("./powershell-CMi1r39u.js").then((e) => Z(e.powerShell));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9640,14 +9640,14 @@ var ws = [
 			"in"
 		],
 		load() {
-			return import("./properties-DIh0cAjy.js").then((e) => Z(e.properties));
+			return import("./properties-CYGPwUh9.js").then((e) => Z(e.properties));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "ProtoBuf",
 		extensions: ["proto"],
 		load() {
-			return import("./protobuf-CfBFRheJ.js").then((e) => Z(e.protobuf));
+			return import("./protobuf-BtVohQAh.js").then((e) => Z(e.protobuf));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9655,21 +9655,21 @@ var ws = [
 		alias: ["jade"],
 		extensions: ["pug", "jade"],
 		load() {
-			return import("./pug-D5RpQjAN.js").then((e) => Z(e.pug));
+			return import("./pug-DJfwVnvo.js").then((e) => Z(e.pug));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Puppet",
 		extensions: ["pp"],
 		load() {
-			return import("./puppet-ByecDUDc.js").then((e) => Z(e.puppet));
+			return import("./puppet-pyi7gdbN.js").then((e) => Z(e.puppet));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Q",
 		extensions: ["q"],
 		load() {
-			return import("./q-IYLUYy6Y.js").then((e) => Z(e.q));
+			return import("./q-B3vByUOp.js").then((e) => Z(e.q));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9677,20 +9677,20 @@ var ws = [
 		alias: ["rscript"],
 		extensions: ["r", "R"],
 		load() {
-			return import("./r-BkwF2YtE.js").then((e) => Z(e.r));
+			return import("./r-Cy0gFR1U.js").then((e) => Z(e.r));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "RPM Changes",
 		load() {
-			return import("./rpm-qJjOQMgz.js").then((e) => Z(e.rpmChanges));
+			return import("./rpm-_GxzLaz-.js").then((e) => Z(e.rpmChanges));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "RPM Spec",
 		extensions: ["spec"],
 		load() {
-			return import("./rpm-qJjOQMgz.js").then((e) => Z(e.rpmSpec));
+			return import("./rpm-_GxzLaz-.js").then((e) => Z(e.rpmSpec));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9705,28 +9705,28 @@ var ws = [
 		extensions: ["rb"],
 		filename: /^(Gemfile|Rakefile)$/,
 		load() {
-			return import("./ruby-B1dcsZCX.js").then((e) => Z(e.ruby));
+			return import("./ruby-CkvgvAji.js").then((e) => Z(e.ruby));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "SAS",
 		extensions: ["sas"],
 		load() {
-			return import("./sas-DYOimTYU.js").then((e) => Z(e.sas));
+			return import("./sas-y7gVjwir.js").then((e) => Z(e.sas));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Scala",
 		extensions: ["scala"],
 		load() {
-			return import("./clike-D3hTnfQI.js").then((e) => Z(e.scala));
+			return import("./clike-BQDf0gbC.js").then((e) => Z(e.scala));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Scheme",
 		extensions: ["scm", "ss"],
 		load() {
-			return import("./scheme-z_YGYeS8.js").then((e) => Z(e.scheme));
+			return import("./scheme-B_A8HZXG.js").then((e) => Z(e.scheme));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9743,27 +9743,27 @@ var ws = [
 		],
 		filename: /^PKGBUILD$/,
 		load() {
-			return import("./shell-CJpWgRbV.js").then((e) => Z(e.shell));
+			return import("./shell-COb1weP5.js").then((e) => Z(e.shell));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Sieve",
 		extensions: ["siv", "sieve"],
 		load() {
-			return import("./sieve-DFUvZlrO.js").then((e) => Z(e.sieve));
+			return import("./sieve--Gp_8McL.js").then((e) => Z(e.sieve));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Smalltalk",
 		extensions: ["st"],
 		load() {
-			return import("./smalltalk-eJTnISYC.js").then((e) => Z(e.smalltalk));
+			return import("./smalltalk-CeUQZ-vC.js").then((e) => Z(e.smalltalk));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Solr",
 		load() {
-			return import("./solr-BedJHRKs.js").then((e) => Z(e.solr));
+			return import("./solr-Btb7qNjM.js").then((e) => Z(e.solr));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9775,7 +9775,7 @@ var ws = [
 			"smackspec"
 		],
 		load() {
-			return import("./mllike-B-F5iuTv.js").then((e) => Z(e.sml));
+			return import("./mllike-CuP49gNE.js").then((e) => Z(e.sml));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9783,41 +9783,41 @@ var ws = [
 		alias: ["sparul"],
 		extensions: ["rq", "sparql"],
 		load() {
-			return import("./sparql-ck4ioIjx.js").then((e) => Z(e.sparql));
+			return import("./sparql-4ogoOKKn.js").then((e) => Z(e.sparql));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Spreadsheet",
 		alias: ["excel", "formula"],
 		load() {
-			return import("./spreadsheet-Bz5oaGs_.js").then((e) => Z(e.spreadsheet));
+			return import("./spreadsheet-DZF_3zkJ.js").then((e) => Z(e.spreadsheet));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Squirrel",
 		extensions: ["nut"],
 		load() {
-			return import("./clike-D3hTnfQI.js").then((e) => Z(e.squirrel));
+			return import("./clike-BQDf0gbC.js").then((e) => Z(e.squirrel));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Stylus",
 		extensions: ["styl"],
 		load() {
-			return import("./stylus-acJG6DEz.js").then((e) => Z(e.stylus));
+			return import("./stylus-Dn5mRARQ.js").then((e) => Z(e.stylus));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Swift",
 		extensions: ["swift"],
 		load() {
-			return import("./swift-C1gcZ8H0.js").then((e) => Z(e.swift));
+			return import("./swift-D6Aje7xD.js").then((e) => Z(e.swift));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "sTeX",
 		load() {
-			return import("./stex-CX8XP39V.js").then((e) => Z(e.stex));
+			return import("./stex-8Uaksf4i.js").then((e) => Z(e.stex));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9829,7 +9829,7 @@ var ws = [
 			"tex"
 		],
 		load() {
-			return import("./stex-CX8XP39V.js").then((e) => Z(e.stex));
+			return import("./stex-8Uaksf4i.js").then((e) => Z(e.stex));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9840,40 +9840,40 @@ var ws = [
 			"svh"
 		],
 		load() {
-			return import("./verilog-BiKCt-3F.js").then((e) => Z(e.verilog));
+			return import("./verilog-CAPDpcFC.js").then((e) => Z(e.verilog));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Tcl",
 		extensions: ["tcl"],
 		load() {
-			return import("./tcl-BVS5foUk.js").then((e) => Z(e.tcl));
+			return import("./tcl-A92p9aRx.js").then((e) => Z(e.tcl));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Textile",
 		extensions: ["textile"],
 		load() {
-			return import("./textile-Ba7Bsjhd.js").then((e) => Z(e.textile));
+			return import("./textile-sc6Midk1.js").then((e) => Z(e.textile));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "TiddlyWiki",
 		load() {
-			return import("./tiddlywiki-B-LKn7d_.js").then((e) => Z(e.tiddlyWiki));
+			return import("./tiddlywiki-C91zthtA.js").then((e) => Z(e.tiddlyWiki));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Tiki wiki",
 		load() {
-			return import("./tiki-lXDu0UlT.js").then((e) => Z(e.tiki));
+			return import("./tiki-KeYJ3fE8.js").then((e) => Z(e.tiki));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "TOML",
 		extensions: ["toml"],
 		load() {
-			return import("./toml-D4cu8WNN.js").then((e) => Z(e.toml));
+			return import("./toml-C7tXKGzm.js").then((e) => Z(e.toml));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9890,7 +9890,7 @@ var ws = [
 			"9"
 		],
 		load() {
-			return import("./troff-Bh3xoE5D.js").then((e) => Z(e.troff));
+			return import("./troff-D_RUQsS2.js").then((e) => Z(e.troff));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9901,63 +9901,63 @@ var ws = [
 			"ttcnpp"
 		],
 		load() {
-			return import("./ttcn-O5CiIIhU.js").then((e) => Z(e.ttcn));
+			return import("./ttcn-D8Azr9t3.js").then((e) => Z(e.ttcn));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "TTCN_CFG",
 		extensions: ["cfg"],
 		load() {
-			return import("./ttcn-cfg-BT6u3xll.js").then((e) => Z(e.ttcnCfg));
+			return import("./ttcn-cfg-Dgvx7Sdi.js").then((e) => Z(e.ttcnCfg));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Turtle",
 		extensions: ["ttl"],
 		load() {
-			return import("./turtle-Ce0p6RXS.js").then((e) => Z(e.turtle));
+			return import("./turtle-vdIZyhVy.js").then((e) => Z(e.turtle));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Web IDL",
 		extensions: ["webidl"],
 		load() {
-			return import("./webidl--CeNnPY_.js").then((e) => Z(e.webIDL));
+			return import("./webidl-DDl5OUBH.js").then((e) => Z(e.webIDL));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "VB.NET",
 		extensions: ["vb"],
 		load() {
-			return import("./vb-D4qylwvH.js").then((e) => Z(e.vb));
+			return import("./vb-BT4InImt.js").then((e) => Z(e.vb));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "VBScript",
 		extensions: ["vbs"],
 		load() {
-			return import("./vbscript-3x2v2Znk.js").then((e) => Z(e.vbScript));
+			return import("./vbscript-DZZYr3Hu.js").then((e) => Z(e.vbScript));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Velocity",
 		extensions: ["vtl"],
 		load() {
-			return import("./velocity-ChryW8-n.js").then((e) => Z(e.velocity));
+			return import("./velocity-DHZtzyuC.js").then((e) => Z(e.velocity));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Verilog",
 		extensions: ["v"],
 		load() {
-			return import("./verilog-BiKCt-3F.js").then((e) => Z(e.verilog));
+			return import("./verilog-CAPDpcFC.js").then((e) => Z(e.verilog));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "VHDL",
 		extensions: ["vhd", "vhdl"],
 		load() {
-			return import("./vhdl-Cihk3vc0.js").then((e) => Z(e.vhdl));
+			return import("./vhdl-CFW_iYNI.js").then((e) => Z(e.vhdl));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9970,21 +9970,21 @@ var ws = [
 			"xqy"
 		],
 		load() {
-			return import("./xquery-C5xTXbmH.js").then((e) => Z(e.xQuery));
+			return import("./xquery-hpRT2Dww.js").then((e) => Z(e.xQuery));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Yacas",
 		extensions: ["ys"],
 		load() {
-			return import("./yacas-cHual4Td.js").then((e) => Z(e.yacas));
+			return import("./yacas-whoxMgik.js").then((e) => Z(e.yacas));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Z80",
 		extensions: ["z80"],
 		load() {
-			return import("./z80-B7aH5DYh.js").then((e) => Z(e.z80));
+			return import("./z80-DC65NJMu.js").then((e) => Z(e.z80));
 		}
 	}),
 	/* @__PURE__ */ P.of({
@@ -9995,34 +9995,34 @@ var ws = [
 			"msc"
 		],
 		load() {
-			return import("./mscgen-Bj5ffxs9.js").then((e) => Z(e.mscgen));
+			return import("./mscgen-B0d4g41-.js").then((e) => Z(e.mscgen));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Xù",
 		extensions: ["xu"],
 		load() {
-			return import("./mscgen-Bj5ffxs9.js").then((e) => Z(e.xu));
+			return import("./mscgen-B0d4g41-.js").then((e) => Z(e.xu));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "MsGenny",
 		extensions: ["msgenny"],
 		load() {
-			return import("./mscgen-Bj5ffxs9.js").then((e) => Z(e.msgenny));
+			return import("./mscgen-B0d4g41-.js").then((e) => Z(e.msgenny));
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Vue",
 		extensions: ["vue"],
 		load() {
-			return import("./dist-LpH7mzPN.js").then((e) => e.vue());
+			return import("./dist-Dj_3pQ8M.js").then((e) => e.vue());
 		}
 	}),
 	/* @__PURE__ */ P.of({
 		name: "Angular Template",
 		load() {
-			return import("./dist-DxkFVZUE.js").then((e) => e.angular());
+			return import("./dist-XsXHQzIT.js").then((e) => e.angular());
 		}
 	})
 ], Ts = class {
@@ -10485,11 +10485,7 @@ var Qs = /* @__PURE__ */ ye(Fs, { hideOn: Os }), $s = [
 		...Ve,
 		...zs
 	])
-];
-Fe(), hn(), Ne(), v(le, { fallback: !0 }), je.of([...Si, ...Pn]);
-//#endregion
-//#region node_modules/@codemirror/theme-one-dark/dist/index.js
-var tc = "#e5c07b", nc = "#e06c75", rc = "#56b6c2", ic = "#ffffff", ac = "#abb2bf", oc = "#7d8799", sc = "#61afef", cc = "#98c379", lc = "#d19a66", uc = "#c678dd", dc = "#21252b", fc = "#2c313a", pc = "#282c34", mc = "#353a42", hc = "#3E4451", gc = "#528bff", _c = [/* @__PURE__ */ T.theme({
+], tc = "#e5c07b", nc = "#e06c75", rc = "#56b6c2", ic = "#ffffff", ac = "#abb2bf", oc = "#7d8799", sc = "#61afef", cc = "#98c379", lc = "#d19a66", uc = "#c678dd", dc = "#21252b", fc = "#2c313a", pc = "#282c34", mc = "#353a42", hc = "#3E4451", gc = "#528bff", _c = [/* @__PURE__ */ T.theme({
 	"&": {
 		color: ac,
 		backgroundColor: pc
@@ -10803,7 +10799,7 @@ var Pc = t.fromClass(class {
 	update(e) {
 		e.docChanged && (this.decorations = Nc(e.view));
 	}
-}, { decorations: (e) => e.decorations }), Fc = "0.33.0";
+}, { decorations: (e) => e.decorations }), Fc = "0.34.0";
 function Ic(e, t) {
 	let n = /https?:\/\/[^\s)\]>]+/g, r;
 	for (; (r = n.exec(e)) !== null;) if (t >= r.index && t < r.index + r[0].length) return r[0];
@@ -11216,8 +11212,8 @@ function vl(e, t) {
 }
 //#endregion
 //#region src/logging.ts
-var yl = "_app_debug_logs", bl = 1e3;
-function xl() {
+var yl = "_app_debug_logs";
+function bl() {
 	try {
 		let e = localStorage.getItem(yl);
 		return e ? JSON.parse(e) : [];
@@ -11225,42 +11221,42 @@ function xl() {
 		return [];
 	}
 }
-function Sl(e) {
+function xl(e) {
 	try {
-		let t = e.slice(-bl);
+		let t = e.slice(-1e3);
 		localStorage.setItem(yl, JSON.stringify(t));
 	} catch {}
 }
-function Cl(e, t) {
+function Sl(e, t) {
 	let n = {
 		timestamp: (/* @__PURE__ */ new Date()).toISOString(),
 		level: e,
 		message: t
-	}, r = xl();
-	r.push(n), Sl(r), console[e === "warn" ? "warn" : e === "error" ? "error" : "log"](`[${e.toUpperCase()}] ${t}`);
+	}, r = bl();
+	r.push(n), xl(r), console[e === "warn" ? "warn" : e === "error" ? "error" : "log"](`[${e.toUpperCase()}] ${t}`);
+}
+function Cl(e) {
+	Sl("error", e);
 }
 function wl(e) {
-	Cl("error", e);
+	Sl("warn", e);
 }
 function Tl(e) {
-	Cl("warn", e);
+	Sl("info", e);
 }
 function El(e) {
-	Cl("info", e);
+	Sl("debug", e);
 }
-function Dl(e) {
-	Cl("debug", e);
-}
-function Ol() {
-	let e = xl();
+function Dl() {
+	let e = bl();
 	return e.length === 0 ? "(no logs)" : e.map((e) => `[${new Date(e.timestamp).toLocaleTimeString()}] ${e.level.toUpperCase()}: ${e.message}`).join("\n");
 }
-function kl() {
+function Ol() {
 	try {
 		localStorage.removeItem(yl);
 	} catch {}
 }
-function Al() {
+function kl() {
 	let e = document.createElement("div");
 	e.id = "log-viewer-modal", e.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    background: rgba(0, 0, 0, 0.7);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 10000;\n  ";
 	let t = document.createElement("div");
@@ -11270,24 +11266,24 @@ function Al() {
 	let r = document.createElement("button");
 	r.textContent = "×", r.style.cssText = "\n    background: none;\n    border: none;\n    color: #e0e0e0;\n    font-size: 20px;\n    cursor: pointer;\n    padding: 0;\n    width: 30px;\n    height: 30px;\n  ", r.addEventListener("click", () => e.remove()), n.appendChild(r);
 	let i = document.createElement("textarea");
-	i.readOnly = !0, i.value = Ol(), i.style.cssText = "\n    flex: 1;\n    padding: 10px;\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: none;\n    font-family: monospace;\n    font-size: 12px;\n    resize: none;\n    overflow: auto;\n  ", i.scrollTop = i.scrollHeight;
+	i.readOnly = !0, i.value = Dl(), i.style.cssText = "\n    flex: 1;\n    padding: 10px;\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: none;\n    font-family: monospace;\n    font-size: 12px;\n    resize: none;\n    overflow: auto;\n  ", i.scrollTop = i.scrollHeight;
 	let a = document.createElement("div");
 	a.style.cssText = "\n    padding: 10px;\n    border-top: 1px solid #444;\n    display: flex;\n    gap: 10px;\n    justify-content: flex-end;\n  ";
 	let o = document.createElement("button");
 	o.textContent = "Clear Logs", o.style.cssText = "\n    padding: 6px 12px;\n    background: #d32f2f;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", o.addEventListener("click", () => {
-		kl(), i.value = "(no logs)";
+		Ol(), i.value = "(no logs)";
 	}), a.appendChild(o);
 	let s = document.createElement("button");
 	return s.textContent = "Refresh", s.style.cssText = "\n    padding: 6px 12px;\n    background: #1976d2;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", s.addEventListener("click", () => {
-		i.value = Ol(), i.scrollTop = i.scrollHeight;
+		i.value = Dl(), i.scrollTop = i.scrollHeight;
 	}), a.appendChild(s), t.appendChild(n), t.appendChild(i), t.appendChild(a), e.appendChild(t), e.addEventListener("click", (t) => {
 		t.target === e && e.remove();
 	}), e;
 }
 //#endregion
 //#region src/index.ts
-var jl = "0.33.0";
+var Al = "0.34.0";
 //#endregion
-export { jl as VERSION, kl as clearLogs, sl as createEditor, Al as createLogViewer, vl as createVimInput, dl as destroyEditor, pl as executeExCommand, fl as exitInsertMode, ul as focusEditor, Dc as getAutoSaveMs, cl as getEditorContent, Ol as getFormattedLogs, yc as hashTarget, ll as isEditorDirty, hl as isVimMode, Dl as logDebug, wl as logError, El as logInfo, Tl as logWarn, _l as requestQuit, gl as requestSave, ml as toggleVimMode };
+export { Al as VERSION, Ol as clearLogs, sl as createEditor, kl as createLogViewer, vl as createVimInput, dl as destroyEditor, pl as executeExCommand, fl as exitInsertMode, ul as focusEditor, Dc as getAutoSaveMs, cl as getEditorContent, Dl as getFormattedLogs, yc as hashTarget, ll as isEditorDirty, hl as isVimMode, El as logDebug, Cl as logError, Tl as logInfo, wl as logWarn, _l as requestQuit, gl as requestSave, ml as toggleVimMode };
 
 //# sourceMappingURL=veditor.js.map
