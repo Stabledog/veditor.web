@@ -755,7 +755,7 @@ export function createEditor(
     if (!getVimModePref(currentPrefix)) return;
     const text = event.clipboardData?.getData('text/plain');
     if (text) rc.unnamedRegister.setText(text);
-  });
+  }, plSig);
 
   // Trap tab/window close
   beforeunloadAbort = new AbortController();

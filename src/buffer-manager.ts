@@ -82,19 +82,15 @@ export function removeBuffer(id: string): void {
   }
 }
 
-export function nextBufferId(): string | null {
+function rotateBufferId(delta: number): string | null {
   const ids = [...buffers.keys()];
   if (activeBufferId === null || ids.length < 2) return null;
   const idx = ids.indexOf(activeBufferId);
-  return ids[(idx + 1) % ids.length];
+  return ids[(idx + delta + ids.length) % ids.length];
 }
 
-export function prevBufferId(): string | null {
-  const ids = [...buffers.keys()];
-  if (activeBufferId === null || ids.length < 2) return null;
-  const idx = ids.indexOf(activeBufferId);
-  return ids[(idx - 1 + ids.length) % ids.length];
-}
+export function nextBufferId(): string | null { return rotateBufferId(1); }
+export function prevBufferId(): string | null { return rotateBufferId(-1); }
 
 export function bufferCount(): number {
   return buffers.size;
