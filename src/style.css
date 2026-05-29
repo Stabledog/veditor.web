@@ -241,3 +241,74 @@
   font-size: 0.75rem;
   font-style: normal;
 }
+
+/* Help dialog */
+
+dialog.veditor-help {
+  background: #1e1e2e;
+  border: 1px solid #585b70;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  padding: 1.25rem 1.5rem;
+  color: #cdd6f4;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.875rem;
+  width: min(90vw, 52rem);
+  max-height: 80vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+dialog.veditor-help::-webkit-scrollbar {
+  display: none;
+}
+
+dialog.veditor-help::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.veditor-help-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #585b70;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #89b4fa;
+}
+
+.veditor-help-hint {
+  font-size: 0.75rem;
+  color: #6c7086;
+  font-weight: 400;
+}
+
+.veditor-help-section {
+  margin-bottom: 1rem;
+}
+
+.veditor-help-title {
+  color: #a6adc8;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+}
+
+.veditor-help-row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.1rem 0;
+}
+
+.veditor-help-key {
+  color: #a6e3a1;
+  min-width: 14rem;
+  flex-shrink: 0;
+}
+
+.veditor-help-desc {
+  color: #cdd6f4;
+}

@@ -17,6 +17,7 @@ export {
   requestQuit,
   type VEditorCallbacks,
   type VEditorOptions,
+  type HelpSection,
 } from './veditor';
 
 export { hashTarget } from './util';

@@ -34,6 +34,11 @@ export interface VEditorCallbacks {
   onBufferSwitch?: (id: string, label: string) => void;
 }
 
+export interface HelpSection {
+  title: string;
+  entries: Array<[key: string, desc: string]>;
+}
+
 export interface VEditorOptions {
   storagePrefix?: string;
   clickableLinks?: boolean;
@@ -43,6 +48,7 @@ export interface VEditorOptions {
   autoSaveMs?: number;
   initialBufferId?: string;
   initialBufferLabel?: string;
+  helpSections?: HelpSection[];
 }
 
 // ---------------------------------------------------------------------------
@@ -427,6 +433,95 @@ function showMobileContextMenu(
 }
 
 // ---------------------------------------------------------------------------
+// Help overlay
+// ---------------------------------------------------------------------------
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function showHelpOverlay(extraSections: HelpSection[]): void {
+  document.querySelector('dialog.veditor-help')?.remove();
+
+  const builtin: HelpSection[] = [
+    {
+      title: 'Ex commands',
+      entries: [
+        [':w', 'Save current buffer'],
+        [':q', 'Quit (checks unsaved changes)'],
+        [':q!', 'Force quit without saving'],
+        [':wq', 'Save and quit'],
+        [':cua', 'Switch to CUA (standard) editing mode'],
+        [':wrap', 'Toggle line wrapping'],
+        [':list / :nol', 'Toggle whitespace character display'],
+        [':ls / :buffers', 'Open buffer/document picker'],
+        [':b N', 'Switch to buffer N (1-based)'],
+        [':bn', 'Next buffer'],
+        [':bp', 'Previous buffer'],
+        [':bd', 'Delete current buffer'],
+        [':help / :h', 'Show this help'],
+      ],
+    },
+    {
+      title: 'Normal mode',
+      entries: [
+        ['u', 'Quit buffer (same as :q)'],
+        ['gx', 'Open URL under cursor in new tab'],
+        ['jk', 'Exit insert mode'],
+      ],
+    },
+    {
+      title: 'CUA mode (vim off)',
+      entries: [
+        ['Ctrl+s', 'Save'],
+        ['Ctrl+w', 'Quit'],
+        ['Ctrl+Shift+s', 'Save and quit'],
+        ['Ctrl+Shift+w', 'Toggle line wrapping'],
+        ['Escape', 'Quit'],
+      ],
+    },
+    {
+      title: 'Features',
+      entries: [
+        ['Ctrl+click URL', 'Open link in new/reused tab'],
+        ['Two-finger long-press', 'Mobile context menu (Save, Close, …)'],
+        ['Auto-save', 'Configurable delay via autoSaveMs option'],
+      ],
+    },
+  ];
+
+  const allSections = [...builtin, ...extraSections];
+
+  let html = '<div class="veditor-help-header">veditor help <span class="veditor-help-hint">j/k scroll · q, Esc, or Enter to close</span></div>';
+  for (const section of allSections) {
+    html += `<div class="veditor-help-section"><div class="veditor-help-title">${escapeHtml(section.title)}</div>`;
+    for (const [key, desc] of section.entries) {
+      html += `<div class="veditor-help-row"><span class="veditor-help-key">${escapeHtml(key)}</span><span class="veditor-help-desc">${escapeHtml(desc)}</span></div>`;
+    }
+    html += '</div>';
+  }
+
+  const dialog = document.createElement('dialog');
+  dialog.className = 'veditor-help';
+  dialog.innerHTML = html;
+
+  const dismiss = () => { dialog.close(); dialog.remove(); activeView()?.focus(); };
+
+  dialog.addEventListener('cancel', (e) => { e.preventDefault(); dismiss(); });
+  dialog.addEventListener('keydown', (e) => {
+    if (e.key === 'q' || e.key === 'Enter') { e.preventDefault(); dismiss(); }
+    else if (e.key === 'j') { e.preventDefault(); dialog.scrollBy(0, 40); }
+    else if (e.key === 'k') { e.preventDefault(); dialog.scrollBy(0, -40); }
+  });
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dismiss();
+  });
+
+  document.body.appendChild(dialog);
+  dialog.showModal();
+}
+
+// ---------------------------------------------------------------------------
 // View factory — builds a detached EditorView with standard extensions
 // ---------------------------------------------------------------------------
 
@@ -604,6 +699,10 @@ function registerExCommands(): void {
     switchToBuffer(next).then(() => {
       removeBuffer(currentId);
     });
+  });
+
+  Vim.defineEx('help', 'h', () => {
+    showHelpOverlay(editorOptions?.helpSections ?? []);
   });
 
   Vim.map('jk', '<Esc>', 'insert');
