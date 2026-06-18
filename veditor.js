@@ -1,7 +1,7 @@
 import { t as e } from "./rolldown-runtime-Dy4uBu1J.js";
-import { $ as t, A as n, At as r, B as i, Bt as a, C as o, Ct as s, D as c, Dt as l, E as u, Et as d, F as f, Ft as p, G as m, Ht as h, It as g, J as _, L as v, Lt as y, M as b, N as x, Nt as ee, O as S, Ot as C, P as w, Q as T, R as E, Rt as te, S as D, St as ne, T as re, Tt as ie, U as O, Ut as k, V as A, Vt as ae, W as oe, Wt as se, X as j, Y as ce, Z as M, _ as le, _t as ue, a as de, at as fe, b as pe, c as me, ct as he, d as ge, dt as _e, et as N, f as ve, ft as ye, gt as be, it as xe, j as Se, jt as Ce, k as we, kt as Te, l as P, lt as Ee, m as De, mt as Oe, nt as ke, o as F, ot as Ae, p as I, pt as je, q as Me, rt as Ne, tt as Pe, u as L, ut as Fe, v as R, vt as z, wt as Ie, xt as B, yt as V, z as Le, zt as Re } from "./dist-1T0MK0Nn.js";
-import { i as ze, n as Be, o as Ve, r as He, t as Ue } from "./dist-8AphrkCp.js";
-import { n as We, r as Ge } from "./dist-DjI0KX1F.js";
+import { $ as t, A as n, At as r, B as i, Bt as a, C as o, Ct as s, D as c, Dt as l, E as u, Et as d, F as f, Ft as p, G as m, Ht as h, It as g, J as _, L as v, Lt as y, M as b, N as x, Nt as ee, O as S, Ot as C, P as w, Q as T, R as E, Rt as te, S as D, St as ne, T as re, Tt as ie, U as O, Ut as k, V as A, Vt as ae, W as oe, Wt as se, X as j, Y as ce, Z as M, _ as le, _t as ue, a as de, at as fe, b as pe, c as me, ct as he, d as ge, dt as _e, et as N, f as ve, ft as ye, gt as be, it as xe, j as Se, jt as Ce, k as we, kt as Te, l as P, lt as Ee, m as De, mt as Oe, nt as ke, o as F, ot as Ae, p as I, pt as je, q as Me, rt as Ne, tt as Pe, u as L, ut as Fe, v as R, vt as z, wt as Ie, xt as B, yt as V, z as Le, zt as Re } from "./dist-DGDkAs66.js";
+import { i as ze, n as Be, o as Ve, r as He, t as Ue } from "./dist-CSQ4JRyB.js";
+import { n as We, r as Ge } from "./dist-CXm4RwUn.js";
 //#region node_modules/@codemirror/search/dist/index.js
 var Ke = typeof String.prototype.normalize == "function" ? (e) => e.normalize("NFKD") : (e) => e, qe = class {
 	constructor(e, t, n = 0, r = e.length, i, a) {
@@ -64,7 +64,7 @@ typeof Symbol < "u" && (qe.prototype[Symbol.iterator] = function() {
 var Je = {
 	from: -1,
 	to: -1,
-	match: /* @__PURE__ */ /.*/.exec(""),
+	match: /*@__PURE__*/ /.*/.exec(""),
 	precise: !0
 }, Ye = "gm" + (/x/.unicode == null ? "" : "u"), Xe = class {
 	constructor(e, t, n, r = 0, i = e.length) {
@@ -96,7 +96,7 @@ var Je = {
 			else return this.done = !0, this;
 		}
 	}
-}, Ze = /* @__PURE__ */ new WeakMap(), Qe = class e {
+}, Ze = /*@__PURE__*/ new WeakMap(), Qe = class e {
 	constructor(e, t) {
 		this.from = e, this.text = t;
 	}
@@ -186,7 +186,7 @@ var nt = (e) => {
 	minSelectionLength: 1,
 	maxMatches: 100,
 	wholeWords: !1
-}, it = /* @__PURE__ */ Te.define({ combine(e) {
+}, it = /*@__PURE__*/ Te.define({ combine(e) {
 	return ae(e, rt, {
 		highlightWordAroundCursor: (e, t) => e || t,
 		minSelectionLength: Math.min,
@@ -197,14 +197,14 @@ function at(e) {
 	let t = [dt, ut];
 	return e && t.push(it.of(e)), t;
 }
-var ot = /* @__PURE__ */ j.mark({ class: "cm-selectionMatch" }), st = /* @__PURE__ */ j.mark({ class: "cm-selectionMatch cm-selectionMatch-main" });
+var ot = /*@__PURE__*/ j.mark({ class: "cm-selectionMatch" }), st = /*@__PURE__*/ j.mark({ class: "cm-selectionMatch cm-selectionMatch-main" });
 function ct(e, t, n, r) {
 	return (n == 0 || e(t.sliceDoc(n - 1, n)) != ie.Word) && (r == t.doc.length || e(t.sliceDoc(r, r + 1)) != ie.Word);
 }
 function lt(e, t, n, r) {
 	return e(t.sliceDoc(n, n + 1)) == ie.Word && e(t.sliceDoc(r - 1, r)) == ie.Word;
 }
-var ut = /* @__PURE__ */ t.fromClass(class {
+var ut = /*@__PURE__*/ t.fromClass(class {
 	constructor(e) {
 		this.decorations = this.getDeco(e);
 	}
@@ -237,7 +237,7 @@ var ut = /* @__PURE__ */ t.fromClass(class {
 		}
 		return j.set(s);
 	}
-}, { decorations: (e) => e.decorations }), dt = /* @__PURE__ */ T.baseTheme({
+}, { decorations: (e) => e.decorations }), dt = /*@__PURE__*/ T.baseTheme({
 	".cm-selectionMatch": { backgroundColor: "#99ff7780" },
 	".cm-searchMatch .cm-selectionMatch": { backgroundColor: "transparent" }
 }), ft = ({ state: e, dispatch: t }) => {
@@ -271,7 +271,7 @@ var mt = ({ state: e, dispatch: t }) => {
 		selection: e.selection.addRange(l.range(i.from, i.to), !1),
 		effects: T.scrollIntoView(i.to)
 	})), !0) : !1;
-}, ht = /* @__PURE__ */ Te.define({ combine(e) {
+}, ht = /*@__PURE__*/ Te.define({ combine(e) {
 	return ae(e, {
 		top: !1,
 		caseSensitive: !1,
@@ -412,7 +412,7 @@ var Et = class extends _t {
 		let i = St(this.spec, e, Math.max(0, t - 250), Math.min(n + 250, e.doc.length));
 		for (; !i.next().done;) r(i.value.from, i.value.to);
 	}
-}, Dt = /* @__PURE__ */ p.define(), Ot = /* @__PURE__ */ p.define(), U = /* @__PURE__ */ g.define({
+}, Dt = /*@__PURE__*/ p.define(), Ot = /*@__PURE__*/ p.define(), U = /*@__PURE__*/ g.define({
 	create(e) {
 		return new W(Bt(e).create(), null);
 	},
@@ -425,7 +425,7 @@ var Et = class extends _t {
 	constructor(e, t) {
 		this.query = e, this.panel = t;
 	}
-}, kt = /* @__PURE__ */ j.mark({ class: "cm-searchMatch" }), At = /* @__PURE__ */ j.mark({ class: "cm-searchMatch cm-searchMatch-selected" }), jt = /* @__PURE__ */ t.fromClass(class {
+}, kt = /*@__PURE__*/ j.mark({ class: "cm-searchMatch" }), At = /*@__PURE__*/ j.mark({ class: "cm-searchMatch cm-searchMatch-selected" }), jt = /*@__PURE__*/ t.fromClass(class {
 	constructor(e) {
 		this.view = e, this.decorations = this.highlight(e.state.field(U));
 	}
@@ -453,7 +453,7 @@ function Mt(e) {
 		return n && n.query.spec.valid ? e(t, n) : Ut(t);
 	};
 }
-var Nt = /* @__PURE__ */ Mt((e, { query: t }) => {
+var Nt = /*@__PURE__*/ Mt((e, { query: t }) => {
 	let { to: n } = e.state.selection.main, r = t.nextMatch(e.state, n, n);
 	if (!r) return !1;
 	let i = l.single(r.from, r.to), a = e.state.facet(ht);
@@ -462,7 +462,7 @@ var Nt = /* @__PURE__ */ Mt((e, { query: t }) => {
 		effects: [Yt(e, r), a.scrollToMatch(i.main, e)],
 		userEvent: "select.search"
 	}), Ht(e), !0;
-}), Pt = /* @__PURE__ */ Mt((e, { query: t }) => {
+}), Pt = /*@__PURE__*/ Mt((e, { query: t }) => {
 	let { state: n } = e, { from: r } = n.selection.main, i = t.prevMatch(n, r, r);
 	if (!i) return !1;
 	let a = l.single(i.from, i.to), o = e.state.facet(ht);
@@ -471,7 +471,7 @@ var Nt = /* @__PURE__ */ Mt((e, { query: t }) => {
 		effects: [Yt(e, i), o.scrollToMatch(a.main, e)],
 		userEvent: "select.search"
 	}), Ht(e), !0;
-}), Ft = /* @__PURE__ */ Mt((e, { query: t }) => {
+}), Ft = /*@__PURE__*/ Mt((e, { query: t }) => {
 	let n = t.matchAll(e.state, 1e3);
 	return !n || !n.length ? !1 : (e.dispatch({
 		selection: l.create(n.map((e) => l.range(e.from, e.to))),
@@ -489,7 +489,7 @@ var Nt = /* @__PURE__ */ Mt((e, { query: t }) => {
 		selection: l.create(a, o),
 		userEvent: "select.search.matches"
 	})), !0;
-}, Lt = /* @__PURE__ */ Mt((e, { query: t }) => {
+}, Lt = /*@__PURE__*/ Mt((e, { query: t }) => {
 	let { state: n } = e, { from: r, to: i } = n.selection.main;
 	if (n.readOnly) return !1;
 	let a = t.nextMatch(n, r, r);
@@ -499,7 +499,7 @@ var Nt = /* @__PURE__ */ Mt((e, { query: t }) => {
 		from: o.from,
 		to: o.to,
 		insert: u
-	}), d.push(T.announce.of(n.phrase("replaced match on line $", n.doc.lineAt(r).number) + "."))) : o = t.nextMatch(n, o.from, o.to);
+	}), o = t.nextMatch(n, o.from, o.to), d.push(T.announce.of(n.phrase("replaced match on line $", n.doc.lineAt(r).number) + "."))) : o = t.nextMatch(n, o.from, o.to);
 	let f = e.state.changes(s);
 	return o && (c = l.single(o.from, o.to).map(f), d.push(Yt(e, o)), d.push(n.facet(ht).scrollToMatch(c.main, e))), e.dispatch({
 		changes: f,
@@ -507,7 +507,7 @@ var Nt = /* @__PURE__ */ Mt((e, { query: t }) => {
 		effects: d,
 		userEvent: "input.replace"
 	}), !0;
-}), Rt = /* @__PURE__ */ Mt((e, { query: t }) => {
+}), Rt = /*@__PURE__*/ Mt((e, { query: t }) => {
 	if (e.state.readOnly) return !1;
 	let n = [];
 	for (let r of t.matchAll(e.state, 1e9)) {
@@ -726,7 +726,7 @@ function Yt(e, { from: t, to: n }) {
 	}
 	return T.announce.of(`${e.state.phrase("current match")}. ${s} ${e.state.phrase("on line")} ${r.number}.`);
 }
-var Xt = /* @__PURE__ */ T.baseTheme({
+var Xt = /*@__PURE__*/ T.baseTheme({
 	".cm-panel.cm-search": {
 		padding: "2px 6px 4px",
 		position: "relative",
@@ -753,7 +753,7 @@ var Xt = /* @__PURE__ */ T.baseTheme({
 	"&dark .cm-searchMatch-selected": { backgroundColor: "#ff00ff8a" }
 }), Zt = [
 	U,
-	/* @__PURE__ */ Ce.low(jt),
+	/*@__PURE__*/ Ce.low(jt),
 	Xt
 ], Qt = (e) => {
 	let { state: t } = e, n = t.doc.lineAt(t.selection.main.from), r = rn(e.state, n.from);
@@ -766,7 +766,7 @@ function $t(e, t) {
 		return i ? (r(n.update(i)), !0) : !1;
 	};
 }
-var en = /* @__PURE__ */ $t(ln, 0), tn = /* @__PURE__ */ $t(cn, 0), nn = /* @__PURE__ */ $t((e, t) => cn(e, t, sn(t)), 0);
+var en = /*@__PURE__*/ $t(ln, 0), tn = /*@__PURE__*/ $t(cn, 0), nn = /*@__PURE__*/ $t((e, t) => cn(e, t, sn(t)), 0);
 function rn(e, t) {
 	let n = e.languageDataAt("commentTokens", t, 1);
 	return n.length ? n[0] : {};
@@ -886,7 +886,7 @@ function ln(e, t, n = t.selection.ranges) {
 	}
 	return null;
 }
-var un = /* @__PURE__ */ ne.define(), dn = /* @__PURE__ */ ne.define(), fn = /* @__PURE__ */ Te.define(), pn = /* @__PURE__ */ Te.define({ combine(e) {
+var un = /*@__PURE__*/ ne.define(), dn = /*@__PURE__*/ ne.define(), fn = /*@__PURE__*/ Te.define(), pn = /*@__PURE__*/ Te.define({ combine(e) {
 	return ae(e, {
 		minDepth: 100,
 		newGroupDelay: 500,
@@ -896,7 +896,7 @@ var un = /* @__PURE__ */ ne.define(), dn = /* @__PURE__ */ ne.define(), fn = /* 
 		newGroupDelay: Math.min,
 		joinToEvent: (e, t) => (n, r) => e(n, r) || t(n, r)
 	});
-} }), mn = /* @__PURE__ */ g.define({
+} }), mn = /*@__PURE__*/ g.define({
 	create() {
 		return Nn.empty;
 	},
@@ -940,7 +940,7 @@ function gn(e, t) {
 		return a ? (r(a), !0) : !1;
 	};
 }
-var _n = /* @__PURE__ */ gn(0, !1), vn = /* @__PURE__ */ gn(1, !1), yn = /* @__PURE__ */ gn(0, !0), bn = /* @__PURE__ */ gn(1, !0), xn = class e {
+var _n = /*@__PURE__*/ gn(0, !1), vn = /*@__PURE__*/ gn(1, !1), yn = /*@__PURE__*/ gn(0, !0), bn = /*@__PURE__*/ gn(1, !0), xn = class e {
 	constructor(e, t, n, r, i) {
 		this.changes = e, this.effects = t, this.mapped = n, this.startSelection = r, this.selectionsAfter = i;
 	}
@@ -1068,7 +1068,7 @@ var Mn = /^(input\.type|delete)($|\.)/, Nn = class e {
 		} else return null;
 	}
 };
-Nn.empty = /* @__PURE__ */ new Nn(En, En);
+Nn.empty = /*@__PURE__*/ new Nn(En, En);
 var Pn = [
 	{
 		key: "Mod-z",
@@ -1465,7 +1465,7 @@ function di(e, t) {
 		to: i.from
 	} : null;
 }
-var fi = /* @__PURE__ */ mi(!1), pi = /* @__PURE__ */ mi(!0);
+var fi = /*@__PURE__*/ mi(!1), pi = /*@__PURE__*/ mi(!0);
 function mi(e) {
 	return ({ state: t, dispatch: n }) => {
 		if (t.readOnly) return !1;
@@ -1598,7 +1598,7 @@ var gi = ({ state: e, dispatch: t }) => {
 		key: "Ctrl-v",
 		run: nr
 	}
-], xi = /* @__PURE__ */ [
+], xi = /*@__PURE__*/ [
 	{
 		key: "ArrowLeft",
 		run: Bn,
@@ -1743,11 +1743,11 @@ var gi = ({ state: e, dispatch: t }) => {
 		run: ei,
 		preventDefault: !0
 	}
-].concat(/* @__PURE__ */ bi.map((e) => ({
+].concat(/*@__PURE__*/ bi.map((e) => ({
 	mac: e.key,
 	run: e.run,
 	shift: e.shift
-}))), Si = /* @__PURE__ */ [
+}))), Si = /*@__PURE__*/ [
 	{
 		key: "Alt-ArrowLeft",
 		mac: "Ctrl-ArrowLeft",
@@ -6302,7 +6302,7 @@ function Ai(e, ...t) {
 }
 var ji;
 try {
-	ji = /* @__PURE__ */ RegExp("[\\w\\p{Alphabetic}\\p{Number}_]", "u");
+	ji = /*@__PURE__*/ RegExp("[\\w\\p{Alphabetic}\\p{Number}_]", "u");
 } catch {
 	ji = /[\w]/;
 }
@@ -6748,7 +6748,7 @@ var Pi = {
 		return Ji(this, e);
 	}
 };
-q.isMac = typeof navigator < "u" && /* @__PURE__ */ /Mac/.test(navigator.platform), q.Pos = Ei, q.StringStream = I, q.commands = {
+q.isMac = typeof navigator < "u" && /*@__PURE__*/ /Mac/.test(navigator.platform), q.Pos = Ei, q.StringStream = I, q.commands = {
 	cursorCharLeft: function(e) {
 		Bn(e.cm6);
 	},
@@ -6934,7 +6934,7 @@ function Ji(e, t) {
 		}
 	}
 }
-var Yi = fe || /* @__PURE__ */ function() {
+var Yi = fe || /*@__PURE__*/ function() {
 	let e = { cursorBlinkRate: 1200 };
 	return function() {
 		return e;
@@ -6995,7 +6995,7 @@ var Yi = fe || /* @__PURE__ */ function() {
 function Qi(e) {
 	return Yi(e.startState) != Yi(e.state);
 }
-var $i = /* @__PURE__ */ Ce.highest(/* @__PURE__ */ T.theme({
+var $i = /*@__PURE__*/ Ce.highest(/*@__PURE__*/ T.theme({
 	".cm-vimMode .cm-line": {
 		"& ::selection": { backgroundColor: "transparent !important" },
 		"&::selection": { backgroundColor: "transparent !important" },
@@ -7055,7 +7055,7 @@ function ta(e, t, n, r) {
 		return new Xi((f - o.left) / t.scaleX, (n.top - o.top + m * (1 - s)) / t.scaleY, m * s / t.scaleY, d.fontFamily, d.fontSize, d.fontWeight, d.color, r ? "cm-fat-cursor cm-cursor-primary" : "cm-fat-cursor cm-cursor-secondary", e, s != 1);
 	} else return null;
 }
-var na = typeof navigator < "u" && /* @__PURE__ */ /linux/i.test(navigator.platform) && /* @__PURE__ */ / Gecko\/\d+/.exec(navigator.userAgent), J = /* @__PURE__ */ Ci(q), ra = 250, ia = /* @__PURE__ */ T.baseTheme({
+var na = typeof navigator < "u" && /*@__PURE__*/ /linux/i.test(navigator.platform) && /*@__PURE__*/ / Gecko\/\d+/.exec(navigator.userAgent), J = /*@__PURE__*/ Ci(q), ra = 250, ia = /*@__PURE__*/ T.baseTheme({
 	".cm-vimMode .cm-cursorLayer:not(.cm-vimCursorLayer)": { display: "none" },
 	".cm-vim-panel": {
 		padding: "0px 10px",
@@ -7070,7 +7070,7 @@ var na = typeof navigator < "u" && /* @__PURE__ */ /linux/i.test(navigator.platf
 	},
 	"&light .cm-searchMatch": { backgroundColor: "#ffff0054" },
 	"&dark .cm-searchMatch": { backgroundColor: "#00ffff8a" }
-}), aa = /* @__PURE__ */ t.fromClass(class {
+}), aa = /*@__PURE__*/ t.fromClass(class {
 	constructor(e) {
 		this.status = "", this.query = null, this.decorations = j.none, this.waitForCopy = !1, this.lastKeydown = "", this.useNextTextInput = !1, this.compositionText = "", this.view = e;
 		let t = this.cm = new q(e);
@@ -7223,7 +7223,7 @@ function oa(e) {
 		e.focus(), e.contentDOM.dispatchEvent(new CustomEvent("compositionend"));
 	}
 }
-var sa = /* @__PURE__ */ j.mark({ class: "cm-searchMatch" }), ca = /* @__PURE__ */ p.define(), la = /* @__PURE__ */ g.define({
+var sa = /*@__PURE__*/ j.mark({ class: "cm-searchMatch" }), ca = /*@__PURE__*/ p.define(), la = /*@__PURE__*/ g.define({
 	create: () => !1,
 	update(e, t) {
 		for (let n of t.effects) n.is(ca) && (e = n.value);
@@ -8504,17 +8504,17 @@ var Ho = {
 	markdownKeymap: () => hs,
 	markdownLanguage: () => ts,
 	pasteURLAsLink: () => Ss
-}), Ko = /* @__PURE__ */ R({ commentTokens: { block: {
+}), Ko = /*@__PURE__*/ R({ commentTokens: { block: {
 	open: "<!--",
 	close: "-->"
-} } }), qo = /* @__PURE__ */ new O(), Jo = /* @__PURE__ */ bo.configure({ props: [
-	/* @__PURE__ */ u.add((e) => !e.is("Block") || e.is("Document") || Yo(e) != null || Xo(e) ? void 0 : (e, t) => ({
+} } }), qo = /*@__PURE__*/ new O(), Jo = /*@__PURE__*/ bo.configure({ props: [
+	/*@__PURE__*/ u.add((e) => !e.is("Block") || e.is("Document") || Yo(e) != null || Xo(e) ? void 0 : (e, t) => ({
 		from: t.doc.lineAt(e.from).to,
 		to: e.to
 	})),
-	/* @__PURE__ */ qo.add(Yo),
-	/* @__PURE__ */ n.add({ Document: () => null }),
-	/* @__PURE__ */ w.add({ Document: Ko })
+	/*@__PURE__*/ qo.add(Yo),
+	/*@__PURE__*/ n.add({ Document: () => null }),
+	/*@__PURE__*/ w.add({ Document: Ko })
 ] });
 function Yo(e) {
 	let t = /^(?:ATX|Setext)Heading(\d)$/.exec(e.name);
@@ -8532,7 +8532,7 @@ function Zo(e, t) {
 	}
 	return n.to;
 }
-var Qo = /* @__PURE__ */ c.of((e, t, n) => {
+var Qo = /*@__PURE__*/ c.of((e, t, n) => {
 	for (let r = E(e).resolveInner(n, -1); r && !(r.from < t); r = r.parent) {
 		let e = r.type.prop(qo);
 		if (e == null) continue;
@@ -8547,12 +8547,12 @@ var Qo = /* @__PURE__ */ c.of((e, t, n) => {
 function $o(e) {
 	return new me(Ko, e, [], "markdown");
 }
-var es = /* @__PURE__ */ $o(Jo), ts = /* @__PURE__ */ $o(/* @__PURE__ */ Jo.configure([
+var es = /*@__PURE__*/ $o(Jo), ts = /*@__PURE__*/ $o(/* @__PURE__ */ Jo.configure([
 	Bo,
 	Uo,
 	Ho,
 	Wo,
-	{ props: [/* @__PURE__ */ u.add({ Table: (e, t) => ({
+	{ props: [/*@__PURE__*/ u.add({ Table: (e, t) => ({
 		from: t.doc.lineAt(e.from).to,
 		to: e.to
 	}) })] }
@@ -8705,7 +8705,7 @@ var cs = (e = {}) => ({ state: t, dispatch: n }) => {
 		scrollIntoView: !0,
 		userEvent: "input"
 	})), !0);
-}, ls = /* @__PURE__ */ cs();
+}, ls = /*@__PURE__*/ cs();
 function us(e) {
 	return e.name == "QuoteMark" || e.name == "ListMark";
 }
@@ -8778,7 +8778,7 @@ var ms = ({ state: e, dispatch: t }) => {
 }, {
 	key: "Backspace",
 	run: ms
-}], gs = /* @__PURE__ */ We({ matchClosingTags: !1 });
+}], gs = /*@__PURE__*/ We({ matchClosingTags: !1 });
 function _s(e = {}) {
 	let { codeLanguages: t, defaultCodeLanguage: n, addKeymap: r = !0, base: { parser: i } = es, completeHTMLTags: a = !0, pasteURLAsLink: o = !0, htmlTagLanguage: s = gs } = e;
 	if (!(i instanceof Ka)) throw RangeError("Base parser provided to `markdown` should be a Markdown parser");
@@ -8813,7 +8813,7 @@ function bs() {
 	let e = Ge(new Ue(C.create({ extensions: gs }), 0, !0));
 	return ys = e ? e.options : [];
 }
-var xs = /code|horizontalrule|html|link|comment|processing|escape|entity|image|mark|url/i, Ss = /* @__PURE__ */ T.domEventHandlers({ paste: (e, t) => {
+var xs = /code|horizontalrule|html|link|comment|processing|escape|entity|image|mark|url/i, Ss = /*@__PURE__*/ T.domEventHandlers({ paste: (e, t) => {
 	let { main: n } = t.state.selection;
 	if (n.empty) return !1;
 	let r = e.clipboardData?.getData("text/plain");
@@ -8846,10 +8846,10 @@ function Z(e) {
 	return new L(ve.define(e));
 }
 function Cs(e) {
-	return import("./dist-1bV2aa3m.js").then((t) => t.sql({ dialect: t[e] }));
+	return import("./dist-BirIida6.js").then((t) => t.sql({ dialect: t[e] }));
 }
 var ws = [
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "C",
 		extensions: [
 			"c",
@@ -8857,10 +8857,10 @@ var ws = [
 			"ino"
 		],
 		load() {
-			return import("./dist-bvrRqTrI.js").then((e) => e.cpp());
+			return import("./dist-QenIwGc5.js").then((e) => e.cpp());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "C++",
 		alias: ["cpp"],
 		extensions: [
@@ -8874,10 +8874,10 @@ var ws = [
 			"hxx"
 		],
 		load() {
-			return import("./dist-bvrRqTrI.js").then((e) => e.cpp());
+			return import("./dist-QenIwGc5.js").then((e) => e.cpp());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "CQL",
 		alias: ["cassandra"],
 		extensions: ["cql"],
@@ -8885,21 +8885,21 @@ var ws = [
 			return Cs("Cassandra");
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "CSS",
 		extensions: ["css"],
 		load() {
-			return import("./dist-OwXP4Aeu.js").then((e) => e.i).then((e) => e.css());
+			return import("./dist-DPNYUcE9.js").then((e) => e.i).then((e) => e.css());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Go",
 		extensions: ["go"],
 		load() {
-			return import("./dist-D9J0UEkS.js").then((e) => e.go());
+			return import("./dist-BdwsDtEB.js").then((e) => e.go());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "HTML",
 		alias: ["xhtml"],
 		extensions: [
@@ -8909,17 +8909,17 @@ var ws = [
 			"hbs"
 		],
 		load() {
-			return import("./dist-DjI0KX1F.js").then((e) => e.t).then((e) => e.html());
+			return import("./dist-CXm4RwUn.js").then((e) => e.t).then((e) => e.html());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Java",
 		extensions: ["java"],
 		load() {
-			return import("./dist-BReE0ufc.js").then((e) => e.java());
+			return import("./dist-BlSqTEuL.js").then((e) => e.java());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "JavaScript",
 		alias: [
 			"ecmascript",
@@ -8932,10 +8932,10 @@ var ws = [
 			"cjs"
 		],
 		load() {
-			return import("./dist-9mBnHYqk.js").then((e) => e.t).then((e) => e.javascript());
+			return import("./dist-CscoD-Bx.js").then((e) => e.t).then((e) => e.javascript());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Jinja",
 		extensions: [
 			"j2",
@@ -8943,45 +8943,45 @@ var ws = [
 			"jinja2"
 		],
 		load() {
-			return import("./dist-KZOCyihY.js").then((e) => e.jinja());
+			return import("./dist-CV5dPe2L.js").then((e) => e.jinja());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "JSON",
 		alias: ["json5"],
 		extensions: ["json", "map"],
 		load() {
-			return import("./dist-CVP1Dace.js").then((e) => e.json());
+			return import("./dist-BCLYsOPy.js").then((e) => e.json());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "JSX",
 		extensions: ["jsx"],
 		load() {
-			return import("./dist-9mBnHYqk.js").then((e) => e.t).then((e) => e.javascript({ jsx: !0 }));
+			return import("./dist-CscoD-Bx.js").then((e) => e.t).then((e) => e.javascript({ jsx: !0 }));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "LESS",
 		extensions: ["less"],
 		load() {
-			return import("./dist-DyrE8SkY.js").then((e) => e.less());
+			return import("./dist-D0N3FWQ0.js").then((e) => e.less());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Liquid",
 		extensions: ["liquid"],
 		load() {
-			return import("./dist-DG-OWzll.js").then((e) => e.liquid());
+			return import("./dist-Dxjuaq81.js").then((e) => e.liquid());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "MariaDB SQL",
 		load() {
 			return Cs("MariaSQL");
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Markdown",
 		extensions: [
 			"md",
@@ -8992,19 +8992,19 @@ var ws = [
 			return Promise.resolve().then(() => Go).then((e) => e.markdown());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "MS SQL",
 		load() {
 			return Cs("MSSQL");
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "MySQL",
 		load() {
 			return Cs("MySQL");
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "PHP",
 		extensions: [
 			"php",
@@ -9015,23 +9015,23 @@ var ws = [
 			"phtml"
 		],
 		load() {
-			return import("./dist-DyXX9r5A.js").then((e) => e.php());
+			return import("./dist-BYVDd2YW.js").then((e) => e.php());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "PLSQL",
 		extensions: ["pls"],
 		load() {
 			return Cs("PLSQL");
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "PostgreSQL",
 		load() {
 			return Cs("PostgreSQL");
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Python",
 		extensions: [
 			"BUILD",
@@ -9041,54 +9041,54 @@ var ws = [
 		],
 		filename: /^(BUCK|BUILD)$/,
 		load() {
-			return import("./dist-oCXYxAl5.js").then((e) => e.python());
+			return import("./dist-Bea0yN9T.js").then((e) => e.python());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Rust",
 		extensions: ["rs"],
 		load() {
-			return import("./dist-ifYb7LjA.js").then((e) => e.rust());
+			return import("./dist-BN8QlUBL.js").then((e) => e.rust());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Sass",
 		extensions: ["sass"],
 		load() {
-			return import("./dist-CMFRu0K-.js").then((e) => e.sass({ indented: !0 }));
+			return import("./dist-B0zwPGgB.js").then((e) => e.sass({ indented: !0 }));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "SCSS",
 		extensions: ["scss"],
 		load() {
-			return import("./dist-CMFRu0K-.js").then((e) => e.sass());
+			return import("./dist-B0zwPGgB.js").then((e) => e.sass());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "SQL",
 		extensions: ["sql"],
 		load() {
 			return Cs("StandardSQL");
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "SQLite",
 		load() {
 			return Cs("SQLite");
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "TSX",
 		extensions: ["tsx"],
 		load() {
-			return import("./dist-9mBnHYqk.js").then((e) => e.t).then((e) => e.javascript({
+			return import("./dist-CscoD-Bx.js").then((e) => e.t).then((e) => e.javascript({
 				jsx: !0,
 				typescript: !0
 			}));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "TypeScript",
 		alias: ["ts"],
 		extensions: [
@@ -9097,17 +9097,17 @@ var ws = [
 			"cts"
 		],
 		load() {
-			return import("./dist-9mBnHYqk.js").then((e) => e.t).then((e) => e.javascript({ typescript: !0 }));
+			return import("./dist-CscoD-Bx.js").then((e) => e.t).then((e) => e.javascript({ typescript: !0 }));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "WebAssembly",
 		extensions: ["wat", "wast"],
 		load() {
-			return import("./dist-iNOiQ2RR.js").then((e) => e.wast());
+			return import("./dist-YycLYVwD.js").then((e) => e.wast());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "XML",
 		alias: [
 			"rss",
@@ -9121,25 +9121,25 @@ var ws = [
 			"svg"
 		],
 		load() {
-			return import("./dist-PRY4xFOJ.js").then((e) => e.xml());
+			return import("./dist-BAQwPN5b.js").then((e) => e.xml());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "YAML",
 		alias: ["yml"],
 		extensions: ["yaml", "yml"],
 		load() {
-			return import("./dist-DTCqNkLI.js").then((e) => e.yaml());
+			return import("./dist-C0hizDVy.js").then((e) => e.yaml());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "APL",
 		extensions: ["dyalog", "apl"],
 		load() {
 			return import("./apl-CV6eBKLj.js").then((e) => Z(e.apl));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "PGP",
 		alias: ["asciiarmor"],
 		extensions: [
@@ -9151,35 +9151,35 @@ var ws = [
 			return import("./asciiarmor-DbteC7tD.js").then((e) => Z(e.asciiArmor));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "ASN.1",
 		extensions: ["asn", "asn1"],
 		load() {
 			return import("./asn1-DibYTi7G.js").then((e) => Z(e.asn1({})));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Asterisk",
 		filename: /^extensions\.conf$/i,
 		load() {
 			return import("./asterisk-Bxn6UXTI.js").then((e) => Z(e.asterisk));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Brainfuck",
 		extensions: ["b", "bf"],
 		load() {
 			return import("./brainfuck-lm4BpXQT.js").then((e) => Z(e.brainfuck));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Cobol",
 		extensions: ["cob", "cpy"],
 		load() {
 			return import("./cobol-BD9gtADG.js").then((e) => Z(e.cobol));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "C#",
 		alias: ["csharp", "cs"],
 		extensions: ["cs"],
@@ -9187,7 +9187,7 @@ var ws = [
 			return import("./clike-BQDf0gbC.js").then((e) => Z(e.csharp));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Clojure",
 		extensions: [
 			"clj",
@@ -9198,21 +9198,21 @@ var ws = [
 			return import("./clojure-D9uYfCVP.js").then((e) => Z(e.clojure));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "ClojureScript",
 		extensions: ["cljs"],
 		load() {
 			return import("./clojure-D9uYfCVP.js").then((e) => Z(e.clojure));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Closure Stylesheets (GSS)",
 		extensions: ["gss"],
 		load() {
 			return import("./css-BQWeBXmt.js").then((e) => Z(e.gss));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "CMake",
 		extensions: ["cmake", "cmake.in"],
 		filename: /^CMakeLists\.txt$/,
@@ -9220,7 +9220,7 @@ var ws = [
 			return import("./cmake-Dg8wFv3P.js").then((e) => Z(e.cmake));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "CoffeeScript",
 		alias: ["coffee", "coffee-script"],
 		extensions: ["coffee"],
@@ -9228,7 +9228,7 @@ var ws = [
 			return import("./coffeescript-BoWlfF5W.js").then((e) => Z(e.coffeeScript));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Common Lisp",
 		alias: ["lisp"],
 		extensions: [
@@ -9240,14 +9240,14 @@ var ws = [
 			return import("./commonlisp-DXb5JKP4.js").then((e) => Z(e.commonLisp));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Cypher",
 		extensions: ["cyp", "cypher"],
 		load() {
 			return import("./cypher-BW60-ri4.js").then((e) => Z(e.cypher));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Cython",
 		extensions: [
 			"pyx",
@@ -9258,49 +9258,49 @@ var ws = [
 			return import("./python-C2-y2SY5.js").then((e) => Z(e.cython));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Crystal",
 		extensions: ["cr"],
 		load() {
 			return import("./crystal-DuYzN9x3.js").then((e) => Z(e.crystal));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "D",
 		extensions: ["d"],
 		load() {
 			return import("./d-C0q6d_5Y.js").then((e) => Z(e.d));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Dart",
 		extensions: ["dart"],
 		load() {
 			return import("./clike-BQDf0gbC.js").then((e) => Z(e.dart));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "diff",
 		extensions: ["diff", "patch"],
 		load() {
 			return import("./diff-DDml1c90.js").then((e) => Z(e.diff));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Dockerfile",
 		filename: /^Dockerfile$/,
 		load() {
 			return import("./dockerfile-CJ7z7SOp.js").then((e) => Z(e.dockerFile));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "DTD",
 		extensions: ["dtd"],
 		load() {
 			return import("./dtd-BeFB66od.js").then((e) => Z(e.dtd));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Dylan",
 		extensions: [
 			"dylan",
@@ -9311,67 +9311,67 @@ var ws = [
 			return import("./dylan-C-3uiUIB.js").then((e) => Z(e.dylan));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "EBNF",
 		load() {
 			return import("./ebnf-CWyol0yz.js").then((e) => Z(e.ebnf));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "ECL",
 		extensions: ["ecl"],
 		load() {
 			return import("./ecl-jpLZv7aS.js").then((e) => Z(e.ecl));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "edn",
 		extensions: ["edn"],
 		load() {
 			return import("./clojure-D9uYfCVP.js").then((e) => Z(e.clojure));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Eiffel",
 		extensions: ["e"],
 		load() {
 			return import("./eiffel-hv3EEqzZ.js").then((e) => Z(e.eiffel));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Elm",
 		extensions: ["elm"],
 		load() {
 			return import("./elm-CT9utmH9.js").then((e) => Z(e.elm));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Erlang",
 		extensions: ["erl"],
 		load() {
 			return import("./erlang-HHNJwBor.js").then((e) => Z(e.erlang));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Esper",
 		load() {
 			return import("./sql-3cIBsSNG.js").then((e) => Z(e.esper));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Factor",
 		extensions: ["factor"],
 		load() {
 			return import("./factor-BAX83gB_.js").then((e) => Z(e.factor));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "FCL",
 		load() {
 			return import("./fcl-BYuIpqDP.js").then((e) => Z(e.fcl));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Forth",
 		extensions: [
 			"forth",
@@ -9382,7 +9382,7 @@ var ws = [
 			return import("./forth-CF2hbYa1.js").then((e) => Z(e.forth));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Fortran",
 		extensions: [
 			"f",
@@ -9395,7 +9395,7 @@ var ws = [
 			return import("./fortran-LJ1SLl7q.js").then((e) => Z(e.fortran));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "F#",
 		alias: ["fsharp"],
 		extensions: ["fs"],
@@ -9403,21 +9403,21 @@ var ws = [
 			return import("./mllike-CuP49gNE.js").then((e) => Z(e.fSharp));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Gas",
 		extensions: ["s"],
 		load() {
 			return import("./gas-DV9Dcz3h.js").then((e) => Z(e.gas));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Gherkin",
 		extensions: ["feature"],
 		load() {
 			return import("./gherkin-BRvFCLlm.js").then((e) => Z(e.gherkin));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Groovy",
 		extensions: ["groovy", "gradle"],
 		filename: /^Jenkinsfile$/,
@@ -9425,41 +9425,41 @@ var ws = [
 			return import("./groovy-B8QvAaK1.js").then((e) => Z(e.groovy));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Haskell",
 		extensions: ["hs"],
 		load() {
 			return import("./haskell-D68UT879.js").then((e) => Z(e.haskell));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Haxe",
 		extensions: ["hx"],
 		load() {
 			return import("./haxe-C1Ke4V1M.js").then((e) => Z(e.haxe));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "HXML",
 		extensions: ["hxml"],
 		load() {
 			return import("./haxe-C1Ke4V1M.js").then((e) => Z(e.hxml));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "HTTP",
 		load() {
 			return import("./http-Cc_B2k6T.js").then((e) => Z(e.http));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "IDL",
 		extensions: ["pro"],
 		load() {
 			return import("./idl-CQz7Swwd.js").then((e) => Z(e.idl));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "JSON-LD",
 		alias: ["jsonld"],
 		extensions: ["jsonld"],
@@ -9467,21 +9467,21 @@ var ws = [
 			return import("./javascript-BXLN1dMS.js").then((e) => Z(e.jsonld));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Julia",
 		extensions: ["jl"],
 		load() {
 			return import("./julia-DxU7bNNF.js").then((e) => Z(e.julia));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Kotlin",
 		extensions: ["kt", "kts"],
 		load() {
 			return import("./clike-BQDf0gbC.js").then((e) => Z(e.kotlin));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "LiveScript",
 		alias: ["ls"],
 		extensions: ["ls"],
@@ -9489,21 +9489,21 @@ var ws = [
 			return import("./livescript-CUXucnZu.js").then((e) => Z(e.liveScript));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Lua",
 		extensions: ["lua"],
 		load() {
 			return import("./lua-CXKbZXEr.js").then((e) => Z(e.lua));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "mIRC",
 		extensions: ["mrc"],
 		load() {
 			return import("./mirc-RLmK6mzY.js").then((e) => Z(e.mirc));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Mathematica",
 		extensions: [
 			"m",
@@ -9515,49 +9515,49 @@ var ws = [
 			return import("./mathematica-9S8qXTAX.js").then((e) => Z(e.mathematica));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Modelica",
 		extensions: ["mo"],
 		load() {
 			return import("./modelica-C42lTy2Y.js").then((e) => Z(e.modelica));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "MUMPS",
 		extensions: ["mps"],
 		load() {
 			return import("./mumps-CSAk_T0d.js").then((e) => Z(e.mumps));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Mbox",
 		extensions: ["mbox"],
 		load() {
 			return import("./mbox-B9BUrPcY.js").then((e) => Z(e.mbox));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Nginx",
 		filename: /nginx.*\.conf$/i,
 		load() {
 			return import("./nginx-DUP57iSQ.js").then((e) => Z(e.nginx));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "NSIS",
 		extensions: ["nsh", "nsi"],
 		load() {
 			return import("./nsis-BjywV0DW.js").then((e) => Z(e.nsis));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "NTriples",
 		extensions: ["nt", "nq"],
 		load() {
 			return import("./ntriples-DJanlB2r.js").then((e) => Z(e.ntriples));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Objective-C",
 		alias: ["objective-c", "objc"],
 		extensions: ["m"],
@@ -9565,7 +9565,7 @@ var ws = [
 			return import("./clike-BQDf0gbC.js").then((e) => Z(e.objectiveC));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Objective-C++",
 		alias: ["objective-c++", "objc++"],
 		extensions: ["mm"],
@@ -9573,7 +9573,7 @@ var ws = [
 			return import("./clike-BQDf0gbC.js").then((e) => Z(e.objectiveCpp));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "OCaml",
 		extensions: [
 			"ml",
@@ -9585,42 +9585,42 @@ var ws = [
 			return import("./mllike-CuP49gNE.js").then((e) => Z(e.oCaml));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Octave",
 		extensions: ["m"],
 		load() {
 			return import("./octave-D0GJG_l2.js").then((e) => Z(e.octave));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Oz",
 		extensions: ["oz"],
 		load() {
 			return import("./oz-BpXMqSV8.js").then((e) => Z(e.oz));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Pascal",
 		extensions: ["p", "pas"],
 		load() {
 			return import("./pascal-Crp-T9Zt.js").then((e) => Z(e.pascal));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Perl",
 		extensions: ["pl", "pm"],
 		load() {
 			return import("./perl-B7vqqAqX.js").then((e) => Z(e.perl));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Pig",
 		extensions: ["pig"],
 		load() {
 			return import("./pig-CFRjgX9A.js").then((e) => Z(e.pig));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "PowerShell",
 		extensions: [
 			"ps1",
@@ -9631,7 +9631,7 @@ var ws = [
 			return import("./powershell-CMi1r39u.js").then((e) => Z(e.powerShell));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Properties files",
 		alias: ["ini", "properties"],
 		extensions: [
@@ -9643,14 +9643,14 @@ var ws = [
 			return import("./properties-CYGPwUh9.js").then((e) => Z(e.properties));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "ProtoBuf",
 		extensions: ["proto"],
 		load() {
 			return import("./protobuf-BtVohQAh.js").then((e) => Z(e.protobuf));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Pug",
 		alias: ["jade"],
 		extensions: ["pug", "jade"],
@@ -9658,21 +9658,21 @@ var ws = [
 			return import("./pug-DJfwVnvo.js").then((e) => Z(e.pug));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Puppet",
 		extensions: ["pp"],
 		load() {
 			return import("./puppet-pyi7gdbN.js").then((e) => Z(e.puppet));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Q",
 		extensions: ["q"],
 		load() {
 			return import("./q-B3vByUOp.js").then((e) => Z(e.q));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "R",
 		alias: ["rscript"],
 		extensions: ["r", "R"],
@@ -9680,20 +9680,20 @@ var ws = [
 			return import("./r-Cy0gFR1U.js").then((e) => Z(e.r));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "RPM Changes",
 		load() {
 			return import("./rpm-_GxzLaz-.js").then((e) => Z(e.rpmChanges));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "RPM Spec",
 		extensions: ["spec"],
 		load() {
 			return import("./rpm-_GxzLaz-.js").then((e) => Z(e.rpmSpec));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Ruby",
 		alias: [
 			"jruby",
@@ -9708,28 +9708,28 @@ var ws = [
 			return import("./ruby-CkvgvAji.js").then((e) => Z(e.ruby));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "SAS",
 		extensions: ["sas"],
 		load() {
 			return import("./sas-y7gVjwir.js").then((e) => Z(e.sas));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Scala",
 		extensions: ["scala"],
 		load() {
 			return import("./clike-BQDf0gbC.js").then((e) => Z(e.scala));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Scheme",
 		extensions: ["scm", "ss"],
 		load() {
 			return import("./scheme-B_A8HZXG.js").then((e) => Z(e.scheme));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Shell",
 		alias: [
 			"bash",
@@ -9746,27 +9746,27 @@ var ws = [
 			return import("./shell-COb1weP5.js").then((e) => Z(e.shell));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Sieve",
 		extensions: ["siv", "sieve"],
 		load() {
 			return import("./sieve--Gp_8McL.js").then((e) => Z(e.sieve));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Smalltalk",
 		extensions: ["st"],
 		load() {
 			return import("./smalltalk-CeUQZ-vC.js").then((e) => Z(e.smalltalk));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Solr",
 		load() {
 			return import("./solr-Btb7qNjM.js").then((e) => Z(e.solr));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "SML",
 		extensions: [
 			"sml",
@@ -9778,7 +9778,7 @@ var ws = [
 			return import("./mllike-CuP49gNE.js").then((e) => Z(e.sml));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "SPARQL",
 		alias: ["sparul"],
 		extensions: ["rq", "sparql"],
@@ -9786,41 +9786,41 @@ var ws = [
 			return import("./sparql-4ogoOKKn.js").then((e) => Z(e.sparql));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Spreadsheet",
 		alias: ["excel", "formula"],
 		load() {
 			return import("./spreadsheet-DZF_3zkJ.js").then((e) => Z(e.spreadsheet));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Squirrel",
 		extensions: ["nut"],
 		load() {
 			return import("./clike-BQDf0gbC.js").then((e) => Z(e.squirrel));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Stylus",
 		extensions: ["styl"],
 		load() {
 			return import("./stylus-Dn5mRARQ.js").then((e) => Z(e.stylus));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Swift",
 		extensions: ["swift"],
 		load() {
 			return import("./swift-D6Aje7xD.js").then((e) => Z(e.swift));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "sTeX",
 		load() {
 			return import("./stex-8Uaksf4i.js").then((e) => Z(e.stex));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "LaTeX",
 		alias: ["tex"],
 		extensions: [
@@ -9832,7 +9832,7 @@ var ws = [
 			return import("./stex-8Uaksf4i.js").then((e) => Z(e.stex));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "SystemVerilog",
 		extensions: [
 			"v",
@@ -9843,40 +9843,40 @@ var ws = [
 			return import("./verilog-CAPDpcFC.js").then((e) => Z(e.verilog));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Tcl",
 		extensions: ["tcl"],
 		load() {
 			return import("./tcl-A92p9aRx.js").then((e) => Z(e.tcl));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Textile",
 		extensions: ["textile"],
 		load() {
 			return import("./textile-sc6Midk1.js").then((e) => Z(e.textile));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "TiddlyWiki",
 		load() {
 			return import("./tiddlywiki-C91zthtA.js").then((e) => Z(e.tiddlyWiki));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Tiki wiki",
 		load() {
 			return import("./tiki-KeYJ3fE8.js").then((e) => Z(e.tiki));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "TOML",
 		extensions: ["toml"],
 		load() {
 			return import("./toml-C7tXKGzm.js").then((e) => Z(e.toml));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Troff",
 		extensions: [
 			"1",
@@ -9893,7 +9893,7 @@ var ws = [
 			return import("./troff-D_RUQsS2.js").then((e) => Z(e.troff));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "TTCN",
 		extensions: [
 			"ttcn",
@@ -9904,63 +9904,63 @@ var ws = [
 			return import("./ttcn-D8Azr9t3.js").then((e) => Z(e.ttcn));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "TTCN_CFG",
 		extensions: ["cfg"],
 		load() {
 			return import("./ttcn-cfg-Dgvx7Sdi.js").then((e) => Z(e.ttcnCfg));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Turtle",
 		extensions: ["ttl"],
 		load() {
-			return import("./turtle-vdIZyhVy.js").then((e) => Z(e.turtle));
+			return import("./turtle-D9vqYup1.js").then((e) => Z(e.turtle));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Web IDL",
 		extensions: ["webidl"],
 		load() {
 			return import("./webidl-DDl5OUBH.js").then((e) => Z(e.webIDL));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "VB.NET",
 		extensions: ["vb"],
 		load() {
 			return import("./vb-BT4InImt.js").then((e) => Z(e.vb));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "VBScript",
 		extensions: ["vbs"],
 		load() {
 			return import("./vbscript-DZZYr3Hu.js").then((e) => Z(e.vbScript));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Velocity",
 		extensions: ["vtl"],
 		load() {
 			return import("./velocity-DHZtzyuC.js").then((e) => Z(e.velocity));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Verilog",
 		extensions: ["v"],
 		load() {
 			return import("./verilog-CAPDpcFC.js").then((e) => Z(e.verilog));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "VHDL",
 		extensions: ["vhd", "vhdl"],
 		load() {
 			return import("./vhdl-CFW_iYNI.js").then((e) => Z(e.vhdl));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "XQuery",
 		extensions: [
 			"xy",
@@ -9973,21 +9973,21 @@ var ws = [
 			return import("./xquery-hpRT2Dww.js").then((e) => Z(e.xQuery));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Yacas",
 		extensions: ["ys"],
 		load() {
 			return import("./yacas-whoxMgik.js").then((e) => Z(e.yacas));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Z80",
 		extensions: ["z80"],
 		load() {
 			return import("./z80-DC65NJMu.js").then((e) => Z(e.z80));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "MscGen",
 		extensions: [
 			"mscgen",
@@ -9998,31 +9998,31 @@ var ws = [
 			return import("./mscgen-B0d4g41-.js").then((e) => Z(e.mscgen));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Xù",
 		extensions: ["xu"],
 		load() {
 			return import("./mscgen-B0d4g41-.js").then((e) => Z(e.xu));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "MsGenny",
 		extensions: ["msgenny"],
 		load() {
 			return import("./mscgen-B0d4g41-.js").then((e) => Z(e.msgenny));
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Vue",
 		extensions: ["vue"],
 		load() {
-			return import("./dist-Dj_3pQ8M.js").then((e) => e.vue());
+			return import("./dist-DBt4CCFE.js").then((e) => e.vue());
 		}
 	}),
-	/* @__PURE__ */ P.of({
+	/*@__PURE__*/ P.of({
 		name: "Angular Template",
 		load() {
-			return import("./dist-XsXHQzIT.js").then((e) => e.angular());
+			return import("./dist-YRh5IJIH.js").then((e) => e.angular());
 		}
 	})
 ], Ts = class {
@@ -10105,7 +10105,7 @@ function Os(e, t) {
 function ks(e, t) {
 	return e.field(Ns, !1) ? t : t.concat(p.appendConfig.of($s));
 }
-var As = /* @__PURE__ */ p.define(), js = /* @__PURE__ */ p.define(), Ms = /* @__PURE__ */ p.define(), Ns = /* @__PURE__ */ g.define({
+var As = /*@__PURE__*/ p.define(), js = /*@__PURE__*/ p.define(), Ms = /*@__PURE__*/ p.define(), Ns = /*@__PURE__*/ g.define({
 	create() {
 		return new Es(j.none, null, null);
 	},
@@ -10125,7 +10125,7 @@ var As = /* @__PURE__ */ p.define(), js = /* @__PURE__ */ p.define(), Ms = /* @_
 		return e;
 	},
 	provide: (e) => [V.from(e, (e) => e.panel), T.decorations.from(e, (e) => e.diagnostics)]
-}), Ps = /* @__PURE__ */ j.mark({ class: "cm-lintRange cm-lintRange-active" });
+}), Ps = /*@__PURE__*/ j.mark({ class: "cm-lintRange cm-lintRange-active" });
 function Fs(e, t, n) {
 	let { diagnostics: r } = e.state.field(Ns), i, a = -1, o = -1;
 	r.between(t - +(n < 0), t + +(n > 0), (e, r, { spec: s }) => {
@@ -10135,7 +10135,7 @@ function Fs(e, t, n) {
 	return i && s && (i = s(i, e.state)), i ? {
 		pos: a,
 		end: o,
-		above: e.state.doc.lineAt(a).to < o,
+		above: !0,
 		create() {
 			return { dom: Is(e, i) };
 		}
@@ -10173,7 +10173,7 @@ var Ls = (e) => {
 			until: (e) => e.docChanged || e.newSelection.main.head < r.from || e.newSelection.main.head > r.to
 		}), !0);
 	}
-}], Bs = /* @__PURE__ */ Te.define({ combine(e) {
+}], Bs = /*@__PURE__*/ Te.define({ combine(e) {
 	return {
 		sources: e.map((e) => e.source).filter((e) => e != null),
 		...ae(e.map((e) => e.config), {
@@ -10352,7 +10352,7 @@ function qs(e, t = "viewBox=\"0 0 40 40\"") {
 function Js(e) {
 	return qs(`<path d="m0 2.5 l2 -1.5 l1 0 l2 1.5 l1 0" stroke="${e}" fill="none" stroke-width=".7"/>`, "width=\"6\" height=\"3\"");
 }
-var Ys = /* @__PURE__ */ T.baseTheme({
+var Ys = /*@__PURE__*/ T.baseTheme({
 	".cm-diagnostic": {
 		padding: "3px 6px 3px 8px",
 		marginLeft: "-1px",
@@ -10382,10 +10382,10 @@ var Ys = /* @__PURE__ */ T.baseTheme({
 		backgroundRepeat: "repeat-x",
 		paddingBottom: "0.7px"
 	},
-	".cm-lintRange-error": { backgroundImage: /* @__PURE__ */ Js("#f11") },
-	".cm-lintRange-warning": { backgroundImage: /* @__PURE__ */ Js("orange") },
-	".cm-lintRange-info": { backgroundImage: /* @__PURE__ */ Js("#999") },
-	".cm-lintRange-hint": { backgroundImage: /* @__PURE__ */ Js("#66d") },
+	".cm-lintRange-error": { backgroundImage: /*@__PURE__*/ Js("#f11") },
+	".cm-lintRange-warning": { backgroundImage: /*@__PURE__*/ Js("orange") },
+	".cm-lintRange-info": { backgroundImage: /*@__PURE__*/ Js("#999") },
+	".cm-lintRange-hint": { backgroundImage: /*@__PURE__*/ Js("#66d") },
 	".cm-lintRange-active": { backgroundColor: "#ffdd9980" },
 	".cm-tooltip-lint": {
 		padding: 0,
@@ -10450,9 +10450,9 @@ function Zs(e) {
 	}
 	return t;
 }
-var Qs = /* @__PURE__ */ ye(Fs, { hideOn: Os }), $s = [
+var Qs = /*@__PURE__*/ ye(Fs, { hideOn: Os }), $s = [
 	Ns,
-	/* @__PURE__ */ T.decorations.compute([Ns], (e) => {
+	/*@__PURE__*/ T.decorations.compute([Ns], (e) => {
 		let { selected: t, panel: n } = e.field(Ns);
 		return !t || !n || t.from == t.to ? j.none : j.set([Ps.range(t.from, t.to)]);
 	}),
@@ -10534,7 +10534,7 @@ var Qs = /* @__PURE__ */ ye(Fs, { hideOn: Os }), $s = [
 		backgroundColor: fc,
 		color: ac
 	} }
-}, { dark: !0 }), /* @__PURE__ */ v(/* @__PURE__ */ de.define([
+}, { dark: !0 }), /*@__PURE__*/ v(/* @__PURE__ */ de.define([
 	{
 		tag: A.keyword,
 		color: uc
@@ -10550,19 +10550,19 @@ var Qs = /* @__PURE__ */ ye(Fs, { hideOn: Os }), $s = [
 		color: nc
 	},
 	{
-		tag: [/* @__PURE__ */ A.function(A.variableName), A.labelName],
+		tag: [/*@__PURE__*/ A.function(A.variableName), A.labelName],
 		color: sc
 	},
 	{
 		tag: [
 			A.color,
-			/* @__PURE__ */ A.constant(A.name),
-			/* @__PURE__ */ A.standard(A.name)
+			/*@__PURE__*/ A.constant(A.name),
+			/*@__PURE__*/ A.standard(A.name)
 		],
 		color: lc
 	},
 	{
-		tag: [/* @__PURE__ */ A.definition(A.name), A.separator],
+		tag: [/*@__PURE__*/ A.definition(A.name), A.separator],
 		color: ac
 	},
 	{
@@ -10586,7 +10586,7 @@ var Qs = /* @__PURE__ */ ye(Fs, { hideOn: Os }), $s = [
 			A.escape,
 			A.regexp,
 			A.link,
-			/* @__PURE__ */ A.special(A.string)
+			/*@__PURE__*/ A.special(A.string)
 		],
 		color: rc
 	},
@@ -10620,7 +10620,7 @@ var Qs = /* @__PURE__ */ ye(Fs, { hideOn: Os }), $s = [
 		tag: [
 			A.atom,
 			A.bool,
-			/* @__PURE__ */ A.special(A.variableName)
+			/*@__PURE__*/ A.special(A.variableName)
 		],
 		color: lc
 	},
@@ -10920,7 +10920,7 @@ function Zc(e, t) {
 }
 //#endregion
 //#region src/veditor.ts
-var Qc = "0.38.0", $c = /https?:\/\/[^\s)\]>]+/g;
+var Qc = "0.39.0", $c = /https?:\/\/[^\s)\]>]+/g;
 function el(e, t, n) {
 	$c.lastIndex = 0;
 	let r, i = null;
@@ -10955,11 +10955,11 @@ function dl() {
 }
 async function fl() {
 	let e = ul();
-	e && (await e.onSave(), ll(Ml()), pl());
+	e && (await e.onSave(), ll(Nl()), pl());
 }
 function pl() {
 	if (!Q) return;
-	let e = Nl(cl());
+	let e = Pl(cl());
 	Q.classList.toggle("veditor-dirty", e);
 }
 async function ml(e) {
@@ -11041,14 +11041,14 @@ function yl(e) {
 function bl(e, t) {
 	nl?.remove();
 	let n = document.createElement("button");
-	n.className = "veditor-mode-toggle", n.type = "button", n.addEventListener("click", () => Rl()), e.appendChild(n), nl = n, yl(t);
+	n.className = "veditor-mode-toggle", n.type = "button", n.addEventListener("click", () => zl()), e.appendChild(n), nl = n, yl(t);
 }
 function xl(e, t, n) {
 	if (e) {
 		n.onQuit();
 		return;
 	}
-	if (Nl(cl()) || n.isAppDirty?.()) {
+	if (Pl(cl()) || n.isAppDirty?.()) {
 		Sl(t, () => n.onQuit(), async () => {
 			await fl(), n.onQuit();
 		});
@@ -11263,7 +11263,7 @@ function Al() {
 		let e = ul();
 		e && Q && xl(!1, Q, e);
 	}), J.defineEx("cua", "cua", () => {
-		xc($) && setTimeout(() => Rl(), 0);
+		xc($) && setTimeout(() => zl(), 0);
 	}), J.defineEx("wrap", "wrap", () => {
 		let e = sl(), t = dl();
 		if (!e || !t) return;
@@ -11315,7 +11315,7 @@ function Al() {
 	}), J.mapCommand("gx", "action", "veditor_gx", {}, { context: "normal" }));
 }
 function jl(e, t, n, r) {
-	Fl(), Q = e, ol = r, e.classList.add("veditor-dirty-aware"), e.classList.remove("veditor-dirty");
+	Il(), Q = e, ol = r, e.classList.add("veditor-dirty-aware"), e.classList.remove("veditor-dirty");
 	let i = r?.storagePrefix ?? "veditor";
 	$ = i;
 	let a = xc(i);
@@ -11375,7 +11375,7 @@ function jl(e, t, n, r) {
 		let t = e.clipboardData?.getData("text/plain");
 		t && o.unnamedRegister.setText(t);
 	}, d), rl = new AbortController(), window.addEventListener("beforeunload", (e) => {
-		Nl(cl()) && (e.preventDefault(), e.returnValue = "");
+		Pl(cl()) && (e.preventDefault(), e.returnValue = "");
 	}, { signal: rl.signal }), bl(e, a);
 	let p = d, m = !1, h = 0, g = 0, _ = null;
 	return e.addEventListener("touchstart", (e) => {
@@ -11398,20 +11398,33 @@ function jl(e, t, n, r) {
 		m = !1, _ = null;
 	}, p), c.focus(), c;
 }
-function Ml() {
+function Ml(e) {
+	let t = sl();
+	if (!t) return;
+	let { from: n, to: r } = t.state.selection.main;
+	t.dispatch({
+		changes: {
+			from: n,
+			to: r,
+			insert: e
+		},
+		selection: { anchor: n + e.length }
+	});
+}
+function Nl() {
 	let e = sl();
 	return e ? e.state.doc.toString() : "";
 }
-function Nl(e) {
-	return Ml() !== e;
-}
-function Pl() {
-	sl()?.focus();
+function Pl(e) {
+	return Nl() !== e;
 }
 function Fl() {
-	Xc(), nl &&= (nl.remove(), null), Q &&= (Q.classList.remove("veditor-dirty", "veditor-dirty-aware", "veditor-vim-normal", "veditor-vim-insert"), null), rl &&= (rl.abort(), null), il &&= (il.abort(), null), al !== null && (clearTimeout(al), al = null), wl(), ol = void 0;
+	sl()?.focus();
 }
 function Il() {
+	Xc(), nl &&= (nl.remove(), null), Q &&= (Q.classList.remove("veditor-dirty", "veditor-dirty-aware", "veditor-vim-normal", "veditor-vim-insert"), null), rl &&= (rl.abort(), null), il &&= (il.abort(), null), al !== null && (clearTimeout(al), al = null), wl(), ol = void 0;
+}
+function Ll() {
 	let e = sl();
 	e && xc($) && e.contentDOM.dispatchEvent(new KeyboardEvent("keydown", {
 		key: "Escape",
@@ -11419,13 +11432,13 @@ function Il() {
 		bubbles: !0
 	}));
 }
-function Ll(e) {
+function Rl(e) {
 	let t = sl();
 	if (!t || !xc($)) return;
 	let n = pa(t);
 	n && J.handleEx(n, e);
 }
-function Rl() {
+function zl() {
 	let e = sl(), t = dl();
 	if (!e || !t) return xc($);
 	let n = !xc($);
@@ -11433,19 +11446,19 @@ function Rl() {
 	let r = Q ? vl(Q, $) : [];
 	return e.dispatch({ effects: [t.vim.reconfigure(n ? fa() : []), t.cua.reconfigure(n ? [] : r)] }), yl(n), n ? (Q?.classList.add("veditor-vim-normal"), Q?.classList.remove("veditor-vim-insert"), _l(e)) : Q?.classList.remove("veditor-vim-normal", "veditor-vim-insert"), e.focus(), n;
 }
-function zl() {
+function Bl() {
 	return xc($);
 }
-async function Bl() {
+async function Vl() {
 	await fl();
 }
-function Vl(e) {
+function Hl(e) {
 	let t = ul();
 	!t || !Q || xl(e ?? !1, Q, t);
 }
 //#endregion
 //#region src/vim-input.ts
-function Hl(e, t) {
+function Ul(e, t) {
 	let n = document.createElement("div");
 	n.className = "vim-input", e.appendChild(n);
 	let r = t?.storagePrefix ?? "veditor", i = xc(r), a = new d(), o = T.updateListener.of((e) => {
@@ -11527,51 +11540,51 @@ function Hl(e, t) {
 }
 //#endregion
 //#region src/logging.ts
-var Ul = "_app_debug_logs";
-function Wl() {
+var Wl = "_app_debug_logs";
+function Gl() {
 	try {
-		let e = localStorage.getItem(Ul);
+		let e = localStorage.getItem(Wl);
 		return e ? JSON.parse(e) : [];
 	} catch {
 		return [];
 	}
 }
-function Gl(e) {
+function Kl(e) {
 	try {
 		let t = e.slice(-1e3);
-		localStorage.setItem(Ul, JSON.stringify(t));
+		localStorage.setItem(Wl, JSON.stringify(t));
 	} catch {}
 }
-function Kl(e, t) {
+function ql(e, t) {
 	let n = {
 		timestamp: (/* @__PURE__ */ new Date()).toISOString(),
 		level: e,
 		message: t
-	}, r = Wl();
-	r.push(n), Gl(r), console[e === "warn" ? "warn" : e === "error" ? "error" : "log"](`[${e.toUpperCase()}] ${t}`);
-}
-function ql(e) {
-	Kl("error", e);
+	}, r = Gl();
+	r.push(n), Kl(r), console[e === "warn" ? "warn" : e === "error" ? "error" : "log"](`[${e.toUpperCase()}] ${t}`);
 }
 function Jl(e) {
-	Kl("warn", e);
+	ql("error", e);
 }
 function Yl(e) {
-	Kl("info", e);
+	ql("warn", e);
 }
 function Xl(e) {
-	Kl("debug", e);
+	ql("info", e);
 }
-function Zl() {
-	let e = Wl();
-	return e.length === 0 ? "(no logs)" : e.map((e) => `[${new Date(e.timestamp).toLocaleTimeString()}] ${e.level.toUpperCase()}: ${e.message}`).join("\n");
+function Zl(e) {
+	ql("debug", e);
 }
 function Ql() {
-	try {
-		localStorage.removeItem(Ul);
-	} catch {}
+	let e = Gl();
+	return e.length === 0 ? "(no logs)" : e.map((e) => `[${new Date(e.timestamp).toLocaleTimeString()}] ${e.level.toUpperCase()}: ${e.message}`).join("\n");
 }
 function $l() {
+	try {
+		localStorage.removeItem(Wl);
+	} catch {}
+}
+function eu() {
 	let e = document.createElement("div");
 	e.id = "log-viewer-modal", e.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    background: rgba(0, 0, 0, 0.7);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    z-index: 10000;\n  ";
 	let t = document.createElement("div");
@@ -11581,24 +11594,24 @@ function $l() {
 	let r = document.createElement("button");
 	r.textContent = "×", r.style.cssText = "\n    background: none;\n    border: none;\n    color: #e0e0e0;\n    font-size: 20px;\n    cursor: pointer;\n    padding: 0;\n    width: 30px;\n    height: 30px;\n  ", r.addEventListener("click", () => e.remove()), n.appendChild(r);
 	let i = document.createElement("textarea");
-	i.readOnly = !0, i.value = Zl(), i.style.cssText = "\n    flex: 1;\n    padding: 10px;\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: none;\n    font-family: monospace;\n    font-size: 12px;\n    resize: none;\n    overflow: auto;\n  ", i.scrollTop = i.scrollHeight;
+	i.readOnly = !0, i.value = Ql(), i.style.cssText = "\n    flex: 1;\n    padding: 10px;\n    background: #1e1e1e;\n    color: #e0e0e0;\n    border: none;\n    font-family: monospace;\n    font-size: 12px;\n    resize: none;\n    overflow: auto;\n  ", i.scrollTop = i.scrollHeight;
 	let a = document.createElement("div");
 	a.style.cssText = "\n    padding: 10px;\n    border-top: 1px solid #444;\n    display: flex;\n    gap: 10px;\n    justify-content: flex-end;\n  ";
 	let o = document.createElement("button");
 	o.textContent = "Clear Logs", o.style.cssText = "\n    padding: 6px 12px;\n    background: #d32f2f;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", o.addEventListener("click", () => {
-		Ql(), i.value = "(no logs)";
+		$l(), i.value = "(no logs)";
 	}), a.appendChild(o);
 	let s = document.createElement("button");
 	return s.textContent = "Refresh", s.style.cssText = "\n    padding: 6px 12px;\n    background: #1976d2;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 12px;\n  ", s.addEventListener("click", () => {
-		i.value = Zl(), i.scrollTop = i.scrollHeight;
+		i.value = Ql(), i.scrollTop = i.scrollHeight;
 	}), a.appendChild(s), t.appendChild(n), t.appendChild(i), t.appendChild(a), e.appendChild(t), e.addEventListener("click", (t) => {
 		t.target === e && e.remove();
 	}), e;
 }
 //#endregion
 //#region src/index.ts
-var eu = "0.38.0";
+var tu = "0.39.0";
 //#endregion
-export { eu as VERSION, Ql as clearLogs, jl as createEditor, $l as createLogViewer, Hl as createVimInput, Fl as destroyEditor, Ll as executeExCommand, Il as exitInsertMode, Pl as focusEditor, Dc as getAutoSaveMs, Ml as getEditorContent, Zl as getFormattedLogs, yc as hashTarget, Nl as isEditorDirty, zl as isVimMode, Xl as logDebug, ql as logError, Yl as logInfo, Jl as logWarn, Vl as requestQuit, Bl as requestSave, Rl as toggleVimMode };
+export { tu as VERSION, $l as clearLogs, jl as createEditor, eu as createLogViewer, Ul as createVimInput, Il as destroyEditor, Rl as executeExCommand, Ll as exitInsertMode, Fl as focusEditor, Dc as getAutoSaveMs, Nl as getEditorContent, Ql as getFormattedLogs, yc as hashTarget, Ml as insertAtCursor, Pl as isEditorDirty, Bl as isVimMode, Zl as logDebug, Jl as logError, Xl as logInfo, Yl as logWarn, Hl as requestQuit, Vl as requestSave, zl as toggleVimMode };
 
 //# sourceMappingURL=veditor.js.map
