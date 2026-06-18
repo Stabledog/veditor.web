@@ -5,6 +5,7 @@ export const VERSION = __APP_VERSION__;
 
 export {
   createEditor,
+  insertAtCursor,
   getEditorContent,
   isEditorDirty,
   focusEditor,

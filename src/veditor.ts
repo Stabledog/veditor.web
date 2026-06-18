@@ -905,6 +905,16 @@ export function createEditor(
   return view;
 }
 
+export function insertAtCursor(text: string): void {
+  const view = activeView();
+  if (!view) return;
+  const { from, to } = view.state.selection.main;
+  view.dispatch({
+    changes: { from, to, insert: text },
+    selection: { anchor: from + text.length },
+  });
+}
+
 export function getEditorContent(): string {
   const view = activeView();
   if (!view) return '';
