@@ -17,6 +17,8 @@ export interface BufferEntry {
   callbacks: VEditorCallbacks;
   compartments: ViewCompartments;
   vimModeListenerAttached?: boolean;
+  /** Tracks whether onDirty has already fired for the current clean->dirty streak, so it fires once per streak rather than on every keystroke. */
+  dirtyNotified?: boolean;
 }
 
 export interface DocEntry {
@@ -61,6 +63,7 @@ export function putBuffer(
     existing.label = label;
     existing.callbacks = callbacks;
     existing.compartments = compartments;
+    existing.dirtyNotified = false;
     return existing;
   }
   const entry: BufferEntry = { id, label, view, savedContent, callbacks, compartments };

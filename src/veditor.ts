@@ -1,5 +1,5 @@
 import { EditorView, keymap, highlightWhitespace } from '@codemirror/view';
-import { EditorState, Compartment, type Extension } from '@codemirror/state';
+import { EditorState, Compartment, Transaction, type Extension } from '@codemirror/state';
 import { vim, Vim, getCM } from '@replit/codemirror-vim';
 import { markdown } from '@codemirror/lang-markdown';
 import { languages } from '@codemirror/language-data';
@@ -11,7 +11,7 @@ import { getVimModePref, setVimModePref, getWrapPref, setWrapPref, getListPref, 
 import { urlDecorator } from './url-decorator';
 import {
   type DocEntry, type ViewCompartments,
-  getActiveBufferId, getActiveBuffer,
+  getActiveBufferId, getActiveBuffer, getBuffer,
   putBuffer, setActiveBufferId, removeBuffer,
   nextBufferId, prevBufferId, bufferCount, bufferIdByIndex, resetBuffers,
   listBufferEntries, detachActiveView, attachView,
@@ -32,6 +32,8 @@ export interface VEditorCallbacks {
   onListDocuments?: () => Promise<DocEntry[]>;
   onLoadDocument?: (id: string) => Promise<{ content: string; label: string; callbacks: VEditorCallbacks }>;
   onBufferSwitch?: (id: string, label: string) => void;
+  /** Fires once when this buffer transitions from clean to dirty (not on every keystroke). Resets after a save or setEditorContent(). */
+  onDirty?: () => void;
 }
 
 export interface HelpSection {
@@ -128,6 +130,8 @@ async function doSave(): Promise<void> {
   if (!cbs) return;
   await cbs.onSave();
   setActiveSavedContent(getEditorContent());
+  const buf = getActiveBuffer();
+  if (buf) buf.dirtyNotified = false;
   updateDirtyClass();
 }
 
@@ -154,6 +158,7 @@ async function switchToBuffer(targetId: string): Promise<void> {
     if (content !== currentBuf.savedContent) {
       await currentBuf.callbacks.onSave();
       currentBuf.savedContent = currentBuf.view.state.doc.toString();
+      currentBuf.dirtyNotified = false;
     }
     detachActiveView(editorParent);
   }
@@ -590,7 +595,26 @@ function buildEditorView(content: string, _callbacks: VEditorCallbacks): { view:
   exts.push(EditorView.updateListener.of((update) => {
     if (update.docChanged) {
       updateDirtyClass();
-      if (autoSaveMs > 0 && update.view.dom.parentNode) {
+
+      // Resolve by view identity (not getActiveBuffer's id) so a detached/background
+      // buffer's own dispatches (e.g. a programmatic setEditorContent) never get
+      // misattributed to whichever buffer happens to be active right now.
+      const buf = getActiveBuffer();
+      const owningBuf = buf && buf.view === update.view ? buf : undefined;
+      const dirty = owningBuf ? update.state.doc.toString() !== owningBuf.savedContent : true;
+
+      if (owningBuf) {
+        if (dirty && !owningBuf.dirtyNotified) {
+          owningBuf.dirtyNotified = true;
+          owningBuf.callbacks.onDirty?.();
+        } else if (!dirty) {
+          owningBuf.dirtyNotified = false;
+        }
+      }
+
+      // Skip autosave for changes that didn't actually move the doc away from
+      // savedContent (e.g. setEditorContent refreshing to the same content it set).
+      if (dirty && autoSaveMs > 0 && update.view.dom.parentNode) {
         if (autoSaveTimer !== null) clearTimeout(autoSaveTimer);
         autoSaveTimer = setTimeout(() => { doSave(); }, autoSaveMs);
       }
@@ -923,6 +947,30 @@ export function getEditorContent(): string {
 
 export function isEditorDirty(original: string): boolean {
   return getEditorContent() !== original;
+}
+
+/**
+ * Replace a buffer's content in place (e.g. to silently pull in an upstream refresh),
+ * preserving that buffer's view — unlike destroying and recreating the editor, this
+ * does not disturb any other open buffer, and keeps the cursor (clamped to the new
+ * document length). Defaults to the active buffer; pass bufferId to target another one.
+ * Not added to undo history, since it's not a user edit.
+ */
+export function setEditorContent(content: string, opts?: { bufferId?: string }): void {
+  const buf = opts?.bufferId ? getBuffer(opts.bufferId) : getActiveBuffer();
+  if (!buf) return;
+  const { view } = buf;
+  // Set savedContent/dirtyNotified *before* dispatching: the updateListener fires
+  // synchronously from dispatch(), and must see this as a clean change rather than
+  // a user edit (which would wrongly fire onDirty and schedule an autosave).
+  buf.savedContent = content;
+  buf.dirtyNotified = false;
+  view.dispatch({
+    changes: { from: 0, to: view.state.doc.length, insert: content },
+    selection: { anchor: Math.min(view.state.selection.main.head, content.length) },
+    annotations: Transaction.addToHistory.of(false),
+  });
+  updateDirtyClass();
 }
 
 export function focusEditor(): void {

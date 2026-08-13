@@ -7,6 +7,7 @@ export {
   createEditor,
   insertAtCursor,
   getEditorContent,
+  setEditorContent,
   isEditorDirty,
   focusEditor,
   destroyEditor,
