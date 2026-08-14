@@ -98,6 +98,7 @@ let modeToggleEl: HTMLButtonElement | null = null;
 let beforeunloadAbort: AbortController | null = null;
 let parentListenerAbort: AbortController | null = null;
 let autoSaveTimer: ReturnType<typeof setTimeout> | null = null;
+let quitPromptOpen = false;
 let editorOptions: VEditorOptions | undefined;
 
 function activeView(): EditorView | null {
@@ -316,6 +317,10 @@ function handleQuitRequest(
     return;
   }
   if (isEditorDirty(activeSavedContent()) || callbacks.isAppDirty?.()) {
+    // The prompt supersedes any pending autosave: firing a save while the
+    // prompt is up would silently resolve "Discard"/leave it referring to
+    // changes that no longer exist.
+    if (autoSaveTimer !== null) { clearTimeout(autoSaveTimer); autoSaveTimer = null; }
     showConfirmBar(parent,
       () => callbacks.onQuit(),
       async () => {
@@ -347,8 +352,9 @@ function showConfirmBar(
     <button class="veditor-confirm-btn veditor-confirm-no">${underline('Cancel', 0)}</button>
   `;
   parent.prepend(bar);
+  quitPromptOpen = true;
 
-  const dismiss = () => { bar.remove(); document.removeEventListener('keydown', onKey, true); };
+  const dismiss = () => { bar.remove(); quitPromptOpen = false; document.removeEventListener('keydown', onKey, true); };
   const onKey = (e: KeyboardEvent) => {
     if (e.key === 's' && onSaveQuit) { e.stopPropagation(); e.preventDefault(); dismiss(); onSaveQuit(); }
     else if (e.key === 'd') { e.stopPropagation(); e.preventDefault(); dismiss(); onDiscard(); }
@@ -614,7 +620,9 @@ function buildEditorView(content: string, _callbacks: VEditorCallbacks): { view:
 
       // Skip autosave for changes that didn't actually move the doc away from
       // savedContent (e.g. setEditorContent refreshing to the same content it set).
-      if (dirty && autoSaveMs > 0 && update.view.dom.parentNode) {
+      // Also skip while the quit confirm bar is up — it must stay in sync with
+      // whatever the user decides, not get silently resolved out from under them.
+      if (dirty && autoSaveMs > 0 && update.view.dom.parentNode && !quitPromptOpen) {
         if (autoSaveTimer !== null) clearTimeout(autoSaveTimer);
         autoSaveTimer = setTimeout(() => { doSave(); }, autoSaveMs);
       }
