@@ -11035,7 +11035,7 @@ function el(e, t) {
 }
 //#endregion
 //#region src/veditor.ts
-var tl = "0.43.0", nl = /https?:\/\/[^\s)\]>]+/g;
+var tl = "0.44.0", nl = /https?:\/\/[^\s)\]>]+/g;
 function rl(e, t, n) {
 	nl.lastIndex = 0;
 	let r, i = null;
@@ -11759,7 +11759,7 @@ function ou() {
 }
 //#endregion
 //#region src/index.ts
-var su = "0.43.0";
+var su = "0.44.0";
 //#endregion
 export { su as VERSION, au as clearLogs, Fl as createEditor, ou as createLogViewer, Yl as createVimInput, Hl as destroyEditor, Wl as executeExCommand, Ul as exitInsertMode, Vl as focusEditor, kc as getAutoSaveMs, Rl as getEditorContent, iu as getFormattedLogs, xc as hashTarget, Il as insertAtCursor, Ll as insertLineBelowCursor, zl as isEditorDirty, Kl as isVimMode, ru as logDebug, eu as logError, nu as logInfo, tu as logWarn, Jl as requestQuit, ql as requestSave, Bl as setEditorContent, Gl as toggleVimMode };
 
