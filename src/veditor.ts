@@ -947,6 +947,26 @@ export function insertAtCursor(text: string): void {
   });
 }
 
+/**
+ * Insert text on a new line below the line containing the cursor.
+ * If the cursor's line is blank, the text goes on that line instead of
+ * adding an empty line above it. Cursor lands at the end of the inserted
+ * text; the view is focused.
+ */
+export function insertLineBelowCursor(text: string): void {
+  const view = activeView();
+  if (!view) return;
+  const line = view.state.doc.lineAt(view.state.selection.main.head);
+  const blank = line.text.trim() === '';
+  const insert = blank ? text : '\n' + text;
+  const pos = blank ? line.from : line.to;
+  view.dispatch({
+    changes: { from: pos, to: pos, insert },
+    selection: { anchor: pos + insert.length },
+  });
+  view.focus();
+}
+
 export function getEditorContent(): string {
   const view = activeView();
   if (!view) return '';
