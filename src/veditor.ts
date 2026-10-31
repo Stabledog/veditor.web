@@ -10,7 +10,7 @@ import { hashTarget } from './util';
 import { getVimModePref, setVimModePref, getWrapPref, setWrapPref, getListPref, setListPref } from './prefs';
 import { urlDecorator } from './url-decorator';
 import {
-  type DocEntry, type ViewCompartments,
+  type BufferEntry, type DocEntry, type ViewCompartments,
   getActiveBufferId, getActiveBuffer, getBuffer,
   putBuffer, setActiveBufferId, removeBuffer,
   nextBufferId, prevBufferId, bufferCount, bufferIdByIndex, resetBuffers,
@@ -26,7 +26,13 @@ const VERSION = __APP_VERSION__;
 // ---------------------------------------------------------------------------
 
 export interface VEditorCallbacks {
-  onSave: () => Promise<void>;
+  /**
+   * Persist the buffer. Resolve `false` when nothing was saved (cancelled or
+   * failed): the buffer stays dirty. Resolving with nothing means saved. What
+   * gets marked saved is the content as of the call, so edits made while the
+   * save is in flight stay dirty.
+   */
+  onSave: () => Promise<void | boolean>;
   onQuit: () => void;
   isAppDirty?: () => boolean;
   onListDocuments?: () => Promise<DocEntry[]>;
@@ -34,6 +40,8 @@ export interface VEditorCallbacks {
   onBufferSwitch?: (id: string, label: string) => void;
   /** Fires once when this buffer transitions from clean to dirty (not on every keystroke). Resets after a save or setEditorContent(). */
   onDirty?: () => void;
+  /** Fires on every document change in this buffer, including setEditorContent() and changes back to clean. Read the text with getEditorContent(). */
+  onChange?: () => void;
 }
 
 export interface HelpSection {
@@ -109,11 +117,6 @@ function activeSavedContent(): string {
   return getActiveBuffer()?.savedContent ?? '';
 }
 
-function setActiveSavedContent(content: string): void {
-  const buf = getActiveBuffer();
-  if (buf) buf.savedContent = content;
-}
-
 function activeCallbacks(): VEditorCallbacks | null {
   return getActiveBuffer()?.callbacks ?? null;
 }
@@ -126,14 +129,22 @@ function activeCompartments(): ViewCompartments | null {
 // doSave — single helper for save + sync dirty state
 // ---------------------------------------------------------------------------
 
-async function doSave(): Promise<void> {
-  const cbs = activeCallbacks();
-  if (!cbs) return;
-  await cbs.onSave();
-  setActiveSavedContent(getEditorContent());
+/** Returns false when onSave reported nothing saved. */
+async function doSave(): Promise<boolean> {
   const buf = getActiveBuffer();
-  if (buf) buf.dirtyNotified = false;
+  if (!buf) return false;
+  return saveBuffer(buf);
+}
+
+// Snapshot before the await: text typed while onSave is in flight was not
+// saved, so it must stay dirty.
+async function saveBuffer(buf: BufferEntry): Promise<boolean> {
+  const snapshot = buf.view.state.doc.toString();
+  if ((await buf.callbacks.onSave()) === false) return false;
+  buf.savedContent = snapshot;
+  if (buf.view.state.doc.toString() === snapshot) buf.dirtyNotified = false;
   updateDirtyClass();
+  return true;
 }
 
 function updateDirtyClass(): void {
@@ -156,11 +167,7 @@ async function switchToBuffer(targetId: string): Promise<void> {
   const currentBuf = getActiveBuffer();
   if (currentBuf) {
     const content = currentBuf.view.state.doc.toString();
-    if (content !== currentBuf.savedContent) {
-      await currentBuf.callbacks.onSave();
-      currentBuf.savedContent = currentBuf.view.state.doc.toString();
-      currentBuf.dirtyNotified = false;
-    }
+    if (content !== currentBuf.savedContent && !(await saveBuffer(currentBuf))) return;
     detachActiveView(editorParent);
   }
 
@@ -254,7 +261,7 @@ function buildCuaKeymap(
       key: 'Mod-Shift-s',
       run: () => {
         (async () => {
-          await doSave();
+          if (!(await doSave())) return;
           const cbs = activeCallbacks();
           if (cbs) handleQuitRequest(false, parent, cbs);
         })();
@@ -324,8 +331,7 @@ function handleQuitRequest(
     showConfirmBar(parent,
       () => callbacks.onQuit(),
       async () => {
-        await doSave();
-        callbacks.onQuit();
+        if (await doSave()) callbacks.onQuit();
       },
     );
     return;
@@ -398,8 +404,7 @@ function showMobileContextMenu(
   };
 
   makeItem('Save & Close', 'veditor-cm-save', async () => {
-    await doSave();
-    activeCallbacks()?.onQuit();
+    if (await doSave()) activeCallbacks()?.onQuit();
   });
 
   makeItem('Save', 'veditor-cm-save', () => { doSave(); });
@@ -610,6 +615,7 @@ function buildEditorView(content: string, _callbacks: VEditorCallbacks): { view:
       const dirty = owningBuf ? update.state.doc.toString() !== owningBuf.savedContent : true;
 
       if (owningBuf) {
+        owningBuf.callbacks.onChange?.();
         if (dirty && !owningBuf.dirtyNotified) {
           owningBuf.dirtyNotified = true;
           owningBuf.callbacks.onDirty?.();
@@ -659,7 +665,7 @@ function registerExCommands(): void {
   });
 
   Vim.defineEx('wq', 'wq', async () => {
-    await doSave();
+    if (!(await doSave())) return;
     const cbs = activeCallbacks();
     if (cbs && editorParent) handleQuitRequest(false, editorParent, cbs);
   });
@@ -983,20 +989,26 @@ export function isEditorDirty(original: string): boolean {
  * does not disturb any other open buffer, and keeps the cursor (clamped to the new
  * document length). Defaults to the active buffer; pass bufferId to target another one.
  * Not added to undo history, since it's not a user edit.
+ *
+ * markSaved: false makes it an edit instead (e.g. restoring a local draft): the saved
+ * content is untouched, so the buffer is dirty, and undo returns to what was there.
  */
-export function setEditorContent(content: string, opts?: { bufferId?: string }): void {
+export function setEditorContent(content: string, opts?: { bufferId?: string; markSaved?: boolean }): void {
   const buf = opts?.bufferId ? getBuffer(opts.bufferId) : getActiveBuffer();
   if (!buf) return;
   const { view } = buf;
+  const markSaved = opts?.markSaved ?? true;
   // Set savedContent/dirtyNotified *before* dispatching: the updateListener fires
   // synchronously from dispatch(), and must see this as a clean change rather than
   // a user edit (which would wrongly fire onDirty and schedule an autosave).
-  buf.savedContent = content;
-  buf.dirtyNotified = false;
+  if (markSaved) {
+    buf.savedContent = content;
+    buf.dirtyNotified = false;
+  }
   view.dispatch({
     changes: { from: 0, to: view.state.doc.length, insert: content },
     selection: { anchor: Math.min(view.state.selection.main.head, content.length) },
-    annotations: Transaction.addToHistory.of(false),
+    annotations: Transaction.addToHistory.of(!markSaved),
   });
   updateDirtyClass();
 }
@@ -1068,8 +1080,9 @@ export function isVimMode(): boolean {
   return getVimModePref(currentPrefix);
 }
 
-export async function requestSave(): Promise<void> {
-  await doSave();
+/** Resolves false when onSave reported nothing saved. */
+export async function requestSave(): Promise<boolean> {
+  return doSave();
 }
 
 export function requestQuit(force?: boolean): void {
