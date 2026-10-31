@@ -989,20 +989,26 @@ export function isEditorDirty(original: string): boolean {
  * does not disturb any other open buffer, and keeps the cursor (clamped to the new
  * document length). Defaults to the active buffer; pass bufferId to target another one.
  * Not added to undo history, since it's not a user edit.
+ *
+ * markSaved: false makes it an edit instead (e.g. restoring a local draft): the saved
+ * content is untouched, so the buffer is dirty, and undo returns to what was there.
  */
-export function setEditorContent(content: string, opts?: { bufferId?: string }): void {
+export function setEditorContent(content: string, opts?: { bufferId?: string; markSaved?: boolean }): void {
   const buf = opts?.bufferId ? getBuffer(opts.bufferId) : getActiveBuffer();
   if (!buf) return;
   const { view } = buf;
+  const markSaved = opts?.markSaved ?? true;
   // Set savedContent/dirtyNotified *before* dispatching: the updateListener fires
   // synchronously from dispatch(), and must see this as a clean change rather than
   // a user edit (which would wrongly fire onDirty and schedule an autosave).
-  buf.savedContent = content;
-  buf.dirtyNotified = false;
+  if (markSaved) {
+    buf.savedContent = content;
+    buf.dirtyNotified = false;
+  }
   view.dispatch({
     changes: { from: 0, to: view.state.doc.length, insert: content },
     selection: { anchor: Math.min(view.state.selection.main.head, content.length) },
-    annotations: Transaction.addToHistory.of(false),
+    annotations: Transaction.addToHistory.of(!markSaved),
   });
   updateDirtyClass();
 }
