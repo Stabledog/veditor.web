@@ -10994,7 +10994,7 @@ function el(e, t) {
 	});
 }
 // src/veditor.ts
-var tl = "0.45.0", nl = /https?:\/\/[^\s)\]>]+/g;
+var tl = "0.46.0", nl = /https?:\/\/[^\s)\]>]+/g;
 function rl(e, t, n) {
 	nl.lastIndex = 0;
 	let r, i = null;
@@ -11708,7 +11708,7 @@ function ou() {
 	}), e;
 }
 // src/index.ts
-var su = "0.45.0";
+var su = "0.46.0";
 export { su as VERSION, au as clearLogs, Fl as createEditor, ou as createLogViewer, Yl as createVimInput, Hl as destroyEditor, Wl as executeExCommand, Ul as exitInsertMode, Vl as focusEditor, Ac as getAutoSaveMs, Rl as getEditorContent, iu as getFormattedLogs, Sc as hashTarget, Il as insertAtCursor, Ll as insertLineBelowCursor, zl as isEditorDirty, Kl as isVimMode, ru as logDebug, eu as logError, nu as logInfo, tu as logWarn, Jl as requestQuit, ql as requestSave, Bl as setEditorContent, Gl as toggleVimMode };
 
 //# sourceMappingURL=veditor.js.map
