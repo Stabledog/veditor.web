@@ -9,6 +9,7 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { hashTarget } from './util';
 import { getVimModePref, setVimModePref, getWrapPref, setWrapPref, getListPref, setListPref } from './prefs';
 import { urlDecorator } from './url-decorator';
+import { urlOnLine } from './links';
 import {
   type BufferEntry, type DocEntry, type ViewCompartments,
   getActiveBufferId, getActiveBuffer, getBuffer,
@@ -62,22 +63,8 @@ export interface VEditorOptions {
 }
 
 // ---------------------------------------------------------------------------
-// Shared URL regex
+// Link opening (detection lives in links.ts)
 // ---------------------------------------------------------------------------
-
-const URL_RE = /https?:\/\/[^\s)\]>]+/g;
-
-function urlOnLine(lineText: string, col: number, exact?: boolean): string | null {
-  URL_RE.lastIndex = 0;
-  let m;
-  let firstOnLine: string | null = null;
-  while ((m = URL_RE.exec(lineText)) !== null) {
-    if (!firstOnLine) firstOnLine = m[0];
-    if (col >= m.index && col < m.index + m[0].length) return m[0];
-    if (!exact && m.index >= col) return m[0];
-  }
-  return exact ? null : firstOnLine;
-}
 
 const clickableLinks = EditorView.domEventHandlers({
   click(event: MouseEvent, view: EditorView) {

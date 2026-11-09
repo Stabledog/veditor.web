@@ -1,12 +1,12 @@
 import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { Range } from '@codemirror/state';
+import { findLinks } from './links';
 
 /**
  * CodeMirror extension that decorates HTTP(S) URLs in the editor with styling.
+ * A markdown link `[text](url)` is decorated as one span, text included.
  * Makes URLs visually distinct (underlined, colored) so users discover the Ctrl+Click feature.
  */
-
-const urlPattern = /https?:\/\/[^\s)\]>]+/g;
 
 const urlDecoration = Decoration.mark({
   class: 'veditor-url',
@@ -18,12 +18,8 @@ function buildDecorations(view: EditorView): DecorationSet {
 
   for (let i = 1; i <= view.state.doc.lines; i++) {
     const line = view.state.doc.line(i);
-    let match;
-    urlPattern.lastIndex = 0;
-    while ((match = urlPattern.exec(line.text)) !== null) {
-      const urlStart = line.from + match.index;
-      const urlEnd = urlStart + match[0].length;
-      decorations.push(urlDecoration.range(urlStart, urlEnd));
+    for (const span of findLinks(line.text)) {
+      decorations.push(urlDecoration.range(line.from + span.from, line.from + span.to));
     }
   }
 
